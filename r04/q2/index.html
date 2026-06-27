@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>測量士試験 令和4年 午前 第2問〔座標系〕解説・解答｜測量士過去問</title>
+<meta name="description" content="測量士試験 令和4年 午前 第2問〔座標系〕の問題と解説・解答。点Pは、楕円体面上の点AからBまでの最短経路（測地線）をt=0からt=100秒にかけて等速で移動する。表2に示す座標から、時刻tと地心直交座標（X,Y,Z）の関係を表すグラフとして最も適当なも…">
+<link rel="canonical" href="https://sokuryo-kakomon.github.io/r04/q2/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="測量士試験 過去問解説">
+<meta property="og:title" content="測量士試験 令和4年 午前 第2問〔座標系〕解説・解答｜測量士過去問">
+<meta property="og:description" content="測量士試験 令和4年 午前 第2問〔座標系〕の問題と解説・解答。点Pは、楕円体面上の点AからBまでの最短経路（測地線）をt=0からt=100秒にかけて等速で移動する。表2に示す座標から、時刻tと地心直交座標（X,Y,Z）の関係を表すグラフとして最も適当なも…">
+<meta property="og:url" content="https://sokuryo-kakomon.github.io/r04/q2/">
+<meta name="twitter:card" content="summary">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f9fe;color:#333;font-size:18px;line-height:1.75}
+.pp-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center}
+.pp-overlay.open{display:flex}
+.pp-box{background:#fff;border-radius:16px;padding:28px 32px;max-width:520px;width:90%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.pp-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#aaa;line-height:1}
+.pp-close:hover{color:#333}
+.pp-box h2{font-size:1.05rem;font-weight:900;background:linear-gradient(135deg,#6c5ce7,#0984e3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+.pp-box h3{font-size:1.02rem;font-weight:800;color:#444;margin:14px 0 4px}
+.pp-box p{font-size:1rem;line-height:1.75;color:#666}
+.hdr{background:#fff;padding:10px 24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.08);display:flex;align-items:center;gap:16px;min-height:58px}
+.hdr-left{flex:1;min-width:0}
+.hdr h1{font-size:1.1rem;font-weight:900;display:flex;align-items:center;gap:5px;color:#333}
+.hdr-grad{background:linear-gradient(135deg,#6c5ce7,#0984e3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr p{font-size:.83rem;color:#999;margin-top:1px}
+.hdr-stats{display:flex;gap:8px;flex-shrink:0}
+.hdr-stat{background:#f0f0ff;border-radius:20px;padding:4px 12px;font-size:.93rem;color:#6c5ce7;font-weight:600;white-space:nowrap;border:1px solid #e0dcff}
+.hdr-stat b{font-weight:900}
+.ytabs{display:flex;gap:8px;padding:9px 16px;background:#f8f9fe;border-bottom:1px solid #eaeaee;position:sticky;top:58px;z-index:90;flex-wrap:wrap}
+.ytab{padding:6px 18px;border:2px solid #dde;border-radius:24px;background:#fff;color:#777;font-size:1rem;font-weight:700;cursor:pointer;transition:all .18s}
+.ytab.on{background:linear-gradient(135deg,#6c5ce7,#0984e3);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(108,92,231,.4)}
+.ytab:hover:not(.on){background:#f0f0ff;color:#6c5ce7;border-color:#c5b8ff}
+.layout{display:flex;min-height:calc(100vh - 104px)}
+.sb{width:178px;min-width:178px;background:#fff;border-right:1px solid #eaeaee;position:sticky;top:104px;height:calc(100vh - 104px);overflow-y:auto;padding:6px 0;flex-shrink:0;box-shadow:2px 0 8px rgba(0,0,0,.03)}
+.nch{padding:8px 12px 3px;font-size:1rem;font-weight:800;letter-spacing:.05em;margin-top:6px;display:flex;align-items:center;gap:4px}
+.ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
+.ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
+.main{flex:1;padding:14px 16px;min-width:0}
+.yp{display:none}.yp.on{display:block}
+.sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
+.ysec{display:block}
+.sumbar h2,.sec-hd h2{font-size:1.05rem;font-weight:900;color:#fff;margin-bottom:6px}
+.sumbar .pl,.sec-hd .pl{font-size:.87rem;color:rgba(255,255,255,.82);line-height:1.8}
+.sumbar .pl a,.sec-hd .pl a{color:rgba(255,255,255,.92);margin-right:12px;font-size:.87rem;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+.sumbar .pl a:hover,.sec-hd .pl a:hover{color:#fff;border-bottom-color:#fff}
+.aff-banner{background:#fff;border-radius:12px;padding:13px 18px;margin-bottom:12px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #e8e4ff;border-left:4px solid #6c5ce7}
+.aff-banner-txt{flex:1;min-width:0}
+.aff-banner-txt h3{font-size:1.02rem;font-weight:800;color:#6c5ce7;margin-bottom:3px}
+.aff-banner-txt p{font-size:.87rem;color:#777;line-height:1.6}
+.aff-banner-btn{padding:8px 18px;background:linear-gradient(135deg,#6c5ce7,#0984e3);color:#fff;border-radius:20px;font-size:.97rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 3px 10px rgba(108,92,231,.35);flex-shrink:0;transition:opacity .15s}
+.aff-banner-btn:hover{opacity:.85}
+.ad-slot{background:#f5f4ff;border-radius:10px;padding:14px;margin-bottom:12px;text-align:center;font-size:.87rem;color:#bbb;border:1.5px dashed #d0caff;min-height:52px;display:flex;align-items:center;justify-content:center}
+.card{background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden;transition:box-shadow .2s}
+.card:hover{box-shadow:0 6px 22px rgba(108,92,231,.13)}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;gap:10px}
+.card-hdr:hover{background:#fafaff}
+.card-hl{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.card-no{background:linear-gradient(135deg,#6c5ce7,#0984e3);color:#fff;font-size:.97rem;font-weight:900;padding:4px 12px;border-radius:16px;white-space:nowrap;flex-shrink:0;letter-spacing:.02em}
+.card-cat{padding:4px 11px;border-radius:16px;font-size:.86rem;font-weight:700;border-width:0!important;white-space:nowrap}
+.card-hr{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.card-tog{font-size:1rem;color:#bbb;transition:transform .22s;width:14px;text-align:center;display:inline-block}
+.card-tog.op{transform:rotate(180deg)}
+.card-body{display:none;padding:0 18px 16px;border-top:1px solid #f0eeff}
+.section-mondai{margin-top:14px}
+.sec-title{font-size:.93rem;font-weight:800;letter-spacing:.06em;padding:3px 10px;border-radius:12px;margin-bottom:9px;display:inline-block}
+.section-mondai .sec-title{background:#f0f0ff;color:#6c5ce7}
+.section-kaisetsu .sec-title{background:#e6f9f2;color:#00a878}
+.mondai-box{background:#fafaff;border:1.5px solid #e0dcff;border-radius:10px;padding:14px 16px}
+.q-stmt{margin-bottom:10px;line-height:1.85;font-size:1.02rem;color:#333}
+.q-opts{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.q-opt{padding:9px 13px;background:#fff;border-radius:8px;border:1.5px solid #ececff;font-size:1rem;line-height:1.75;transition:border-color .15s}
+.q-opt:hover{border-color:#b8b0ff}
+.q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
+.q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
+.q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
+.section-kaisetsu{margin-top:14px}
+.kaisetsu-box{padding:8px 0;font-size:.96rem;line-height:1.85;display:flex;flex-direction:column}
+.kaisetsu-box p{margin:5px 0;color:#555}
+.opt{padding:7px 12px;margin:4px 0;border-radius:8px;background:#f5f5f5;border-left:4px solid #ccc;line-height:1.72;box-sizing:border-box;width:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.opt.correct{background:#e6f9f2;border-left-color:#00b894;color:#006f58}
+.opt.wrong{background:#fff0f0;border-left-color:#ff6b81;color:#c0392b}
+.step{padding:7px 12px;margin:4px 0;border-radius:8px;background:#f0f0ff;border-left:4px solid #6c5ce7;font-family:monospace;font-size:.95em;box-sizing:border-box;width:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.conc{padding:8px 12px;margin:8px 0;border-radius:8px;background:#fff8f0;border-left:4px solid #f57c00;font-weight:700;color:#5a3e00;box-sizing:border-box;width:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.kaisetsu-box>p,.kaisetsu-box>div{box-sizing:border-box;max-width:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.kaisetsu-box{overflow-x:hidden}
+.card-body{overflow-x:hidden;box-sizing:border-box}
+.no-q{color:#aaa;font-style:italic;font-size:.93rem}
+.claude-box{order:-1;background:none;border:none;border-radius:0;padding:0;margin:0 0 10px 0}
+.claude-title{display:none}
+.claude-opt{display:none}
+.claude-step{display:none}
+.claude-memo{background:#fff8f0;border-left:3px solid #f57c00;border-radius:6px;padding:8px 12px;margin-top:8px;font-size:.93em;color:#5a3e00;line-height:1.65}
+.claude-point{background:linear-gradient(135deg,#6c5ce7,#0984e3);color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:.95em;line-height:1.62;box-shadow:0 3px 12px rgba(108,92,231,.28)}
+.c-ok{color:#5de8c4;font-weight:700}
+.c-ng{color:#ffb3bc;font-weight:700}
+.claude-rich{margin-top:6px;font-size:1em;line-height:1.85}
+.exp-ok{background:#e6f9f2;border-left:4px solid #00b894;border-radius:8px;padding:9px 13px;margin:6px 0;color:#005e46}
+.exp-ng{background:#fff0f2;border-left:4px solid #ff6b81;border-radius:8px;padding:9px 13px;margin:6px 0;color:#b5002a}
+.exp-calc{background:#f0f0ff;border-left:4px solid #6c5ce7;border-radius:8px;padding:9px 13px;margin:6px 0;color:#38297a;font-family:monospace;font-size:.95em;white-space:pre-wrap}
+.exp-tip{background:#fff8f0;border-left:4px solid #f57c00;border-radius:8px;padding:8px 13px;margin:6px 0;font-size:.95em;color:#5a3e00}
+.ftr{text-align:center;padding:22px;font-size:.85rem;color:#bbb;background:#fff;border-top:1px solid #eaeaee;margin-top:20px}
+.ftr a{color:#6c5ce7;text-decoration:none}
+.ftr a:hover{text-decoration:underline}
+@media(max-width:750px){.sb{display:none}.layout{display:block}.main{padding:10px}.hdr-stats{display:none}.hdr h1{font-size:.95rem}.card-cat{font-size:.68rem}.aff-banner{flex-direction:column;align-items:flex-start;gap:10px}.aff-banner-btn{align-self:flex-start}}
+
+/* === PROGRESS BAR === */
+.prog-wrap{position:sticky;top:104px;z-index:85;background:#fff;border-bottom:2px solid #eaeaee;padding:8px 18px}
+.prog-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.prog-label{font-size:.88rem;font-weight:700;color:#6c5ce7;white-space:nowrap}
+.prog-track{flex:1;min-width:60px;height:8px;background:#e8e4ff;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#6c5ce7,#0984e3);border-radius:4px;transition:width .4s}
+.prog-rate{font-size:.88rem;font-weight:700;color:#00b894;white-space:nowrap}
+.prog-btn{padding:5px 14px;border-radius:16px;border:1.5px solid;font-size:.82rem;font-weight:700;cursor:pointer;background:#fff;transition:all .15s;white-space:nowrap}
+.prog-btn-rv{border-color:#ff6b81;color:#ff6b81}
+.prog-btn-rv.on{background:#ff6b81;color:#fff}
+.prog-btn-rs{border-color:#ccc;color:#aaa}
+.prog-btn-rs:hover{border-color:#ff6b81;color:#ff6b81}
+/* === SIDEBAR & LAYOUT OVERRIDE for sticky progbar === */
+.sb{top:160px!important;height:calc(100vh - 160px)!important}
+.layout{min-height:calc(100vh - 160px)!important}
+/* === CARD STATUS BADGE === */
+.card-status{font-size:1rem;width:22px;text-align:center;flex-shrink:0}
+.card.c-ok{border-left:4px solid #00b894}
+.card.c-ng{border-left:4px solid #ff6b81}
+/* === QUIZ AREA === */
+.quiz-area{margin-top:12px;padding:14px 0 8px;border-top:2px dashed #e0dcff}
+.quiz-prompt{font-size:.92rem;font-weight:700;color:#6c5ce7;margin-bottom:10px}
+.quiz-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.q-btn{width:48px;height:48px;border:2px solid #6c5ce7;border-radius:10px;background:#fff;color:#6c5ce7;font-size:1.1rem;font-weight:900;cursor:pointer;transition:all .15s;flex-shrink:0}
+.q-btn:hover:not(:disabled){background:#f0f0ff;transform:translateY(-2px);box-shadow:0 3px 8px rgba(108,92,231,.25)}
+.q-btn:disabled{cursor:default;transform:none}
+.q-btn.ans-ok{background:#00b894;border-color:#00b894;color:#fff;box-shadow:0 3px 10px rgba(0,184,148,.3)}
+.q-btn.ans-ng{background:#ff6b81;border-color:#ff6b81;color:#fff}
+.q-btn.ans-reveal{background:#f0f0ff;border-color:#c5b8ff;color:#9580ff}
+.q-skip{font-size:.82rem;color:#bbb;text-decoration:underline;cursor:pointer;border:none;background:none;padding:0 6px;margin-left:4px}
+.q-skip:hover{color:#6c5ce7}
+.quiz-result{margin-top:10px;padding:10px 14px;border-radius:8px;font-weight:700;font-size:.95rem;display:none}
+.quiz-result.r-ok{background:#e6f9f2;color:#005e46;display:block}
+.quiz-result.r-ng{background:#fff0f2;color:#b5002a;display:block}
+.quiz-result.r-skip{background:#f0f0ff;color:#6c5ce7;display:block}
+/* hide kaisetsu until answered */
+.section-kaisetsu.qa-locked{display:none!important}
+/* review mode */
+.card.rv-hidden{display:none}
+/* === wrong-count tracking === */
+.prog-weak{font-size:.85rem;font-weight:700;color:#ff8a65;white-space:nowrap}
+.prog-btn-wk{border-color:#ff8a65;color:#ff8a65}
+.prog-btn-wk.on{background:#ff8a65;color:#fff}
+.card-status{min-width:22px;width:auto;display:inline-flex;align-items:center}
+.card-status .nx{font-size:.72rem;color:#ff6b81;font-weight:900;margin-left:1px}
+.card-status .ok-streak{font-size:.72rem;color:#00b894;font-weight:900;margin-left:1px}
+/* === resizable sidebar === */
+:root{--sb-width:178px}
+.sb{width:var(--sb-width)!important;min-width:var(--sb-width)!important}
+#sb-resizer{position:fixed;top:160px;bottom:0;width:8px;cursor:col-resize;background:transparent;z-index:96;transition:background .15s}
+#sb-resizer::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:40px;background:#dde;border-radius:2px;transition:background .15s}
+#sb-resizer:hover{background:rgba(108,92,231,.12)}
+#sb-resizer:hover::after,#sb-resizer.dragging::after{background:#6c5ce7;width:3px;height:60px}
+#sb-resizer.dragging{background:rgba(108,92,231,.18)}
+@media(max-width:750px){#sb-resizer{display:none}}
+/* === Figure modal === */
+.fig-btn{display:inline-block;font-size:.78rem;font-weight:700;color:#0984e3;background:#e3f2fd;border:1.5px solid #0984e3;border-radius:14px;padding:3px 10px;cursor:pointer;margin-left:6px;transition:all .15s;white-space:nowrap}
+.fig-btn:hover{background:#0984e3;color:#fff}
+.fig-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;align-items:center;justify-content:center;flex-direction:column}
+.fig-overlay.open{display:flex}
+.fig-close{position:absolute;top:14px;right:18px;background:rgba(255,255,255,.95);border:none;font-size:1.8rem;cursor:pointer;color:#333;width:42px;height:42px;border-radius:50%;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2003}
+.fig-close:hover{background:#fff;color:#000}
+.fig-img-wrap{max-width:96vw;max-height:88vh;overflow:auto;background:#fff;border-radius:10px;padding:10px;box-shadow:0 12px 50px rgba(0,0,0,.4)}
+.fig-img-wrap img{display:block;max-width:100%;height:auto}
+.fig-nav{display:flex;align-items:center;gap:12px;margin-top:12px;background:rgba(255,255,255,.95);border-radius:24px;padding:8px 16px;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.fig-nav button{background:#6c5ce7;color:#fff;border:none;font-size:1rem;font-weight:700;padding:6px 16px;border-radius:18px;cursor:pointer;transition:opacity .15s}
+.fig-nav button:hover:not(:disabled){opacity:.85}
+.fig-nav button:disabled{background:#ccc;cursor:default}
+.fig-nav .fig-info{font-size:.93rem;font-weight:700;color:#333;min-width:80px;text-align:center}
+.fig-nav .fig-year{font-size:.82rem;color:#888;margin-right:6px}
+.fig-loading{color:#fff;font-size:.95rem;padding:30px}
+/* === Inline original-PDF figure === */
+.orig-fig-wrap{margin-top:10px;background:#fafaff;border:1.5px dashed #c5b8ff;border-radius:10px;padding:10px;text-align:center}
+.orig-fig-label{font-size:.8rem;color:#9580ff;font-weight:700;margin-bottom:6px;display:block}
+.orig-fig{max-width:100%;max-height:600px;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:transform .15s}
+.orig-fig:hover{transform:scale(1.02);box-shadow:0 4px 14px rgba(108,92,231,.25)}
+/* === Hide text problem (PDF image is now primary) === */
+.mondai-box .q-stmt{display:none}
+.mondai-box .q-opts{display:none}
+.mondai-box{border:none;padding:0;background:transparent;min-height:0}
+.section-mondai .sec-title{margin-bottom:8px}
+/* === Hide q-sels (was outside q-opts) === */
+.mondai-box .q-sels{display:none}
+.mondai-box .q-opts-plain{display:none}
+/* === Bigger inline image with nav === */
+.orig-fig-wrap{position:relative}
+.orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.fig-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap}
+.fig-nav-btn{padding:5px 14px;border-radius:14px;border:1.5px solid #6c5ce7;background:#fff;color:#6c5ce7;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .12s}
+.fig-nav-btn:hover{background:#6c5ce7;color:#fff}
+.fig-nav-btn:disabled{opacity:.3;cursor:default;border-color:#ccc;color:#aaa}
+.fig-nav-btn:disabled:hover{background:#fff;color:#aaa}
+.fig-page-info{font-size:.82rem;color:#666;padding:0 8px;font-weight:600}
+/* === SVG zoom modal (for explanation diagrams) === */
+.claude-box svg{cursor:zoom-in;transition:transform .15s,box-shadow .15s}
+.claude-box svg:hover{transform:scale(1.02);box-shadow:0 4px 14px rgba(108,92,231,.25)}
+#svgZoomOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;padding:30px}
+#svgZoomOverlay.open{display:flex}
+#svgZoomOverlay .svg-zoom-content{background:#fff;border-radius:10px;padding:20px;max-width:95vw;max-height:95vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#svgZoomOverlay .svg-zoom-content svg{max-width:90vw!important;max-height:88vh!important;width:auto!important;height:auto!important;cursor:default!important}
+#svgZoomOverlay .svg-zoom-content svg:hover{transform:none!important;box-shadow:none!important}
+#svgZoomClose{position:absolute;top:18px;right:24px;font-size:2.4rem;color:#fff;background:none;border:none;cursor:pointer;line-height:1;padding:4px 12px;border-radius:6px}
+#svgZoomClose:hover{background:rgba(255,255,255,.15)}
+/* === Official PDF reference links === */
+.sumbar .pl{font-size:.85rem;line-height:2}
+.sumbar .pl a{display:inline-block;margin:3px 8px 3px 0;padding:4px 10px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.5);border-radius:14px;font-size:.85rem}
+.sumbar .pl a:hover{background:rgba(255,255,255,.35);border-color:#fff}
+/* === Law reference popup (測量法・準則 条文) === */
+.lawref{color:#1565c0;border-bottom:1px dashed #1565c0;cursor:pointer;font-weight:600;white-space:nowrap}
+.lawref:hover{background:#e3f2fd}
+#lawOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;align-items:center;justify-content:center;padding:16px}
+#lawOverlay.open{display:flex}
+#lawCard{background:#fff;border-radius:12px;max-width:460px;width:100%;padding:22px 24px;box-shadow:0 12px 40px rgba(0,0,0,.4);position:relative}
+#lawCard h3{margin:0 0 2px;font-size:1.15rem;color:#0d47a1}
+#lawCard .law-name{font-size:.8rem;color:#777;margin-bottom:12px}
+#lawCard .law-sum{font-size:.95rem;line-height:1.75;color:#222;background:#f5f7fa;border-left:4px solid #1565c0;padding:12px 14px;border-radius:6px;margin-bottom:16px}
+#lawCard .law-link{display:inline-block;padding:9px 16px;background:#1565c0;color:#fff;border-radius:8px;font-size:.88rem;text-decoration:none}
+#lawCard .law-link:hover{background:#0d47a1}
+#lawCard .law-note{font-size:.72rem;color:#9e9e9e;margin-top:12px;line-height:1.5}
+#lawClose{position:absolute;top:8px;right:14px;font-size:1.7rem;color:#999;background:none;border:none;cursor:pointer;line-height:1}
+#lawClose:hover{color:#333}
+
+/* 個別ページ用の上書き */
+body{padding:0}
+.qpage{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.qtop{background:#fff;padding:12px 16px;box-shadow:0 2px 12px rgba(0,0,0,.08);position:sticky;top:0;z-index:50}
+.qtop a{color:#6c5ce7;text-decoration:none;font-weight:800;font-size:1rem}
+.crumb{font-size:.85rem;color:#888;margin:14px 0 6px}
+.crumb a{color:#6c5ce7;text-decoration:none}
+.qh1{font-size:1.25rem;font-weight:900;margin:4px 0 12px;line-height:1.5}
+.qh1 .hdr-grad{background:linear-gradient(135deg,#6c5ce7,#0984e3);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.qpdf{background:#f5f4ff;border:1px solid #e0dcff;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:.9rem}
+.qpdf a{color:#6c5ce7;text-decoration:none;margin-right:14px;border-bottom:1px solid #c5b8ff}
+.card-body{display:block!important;border-top:none}
+.card{box-shadow:none;border:1px solid #eee}
+.card-hdr{cursor:default}
+.card-tog{display:none}
+.qnav{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
+.qnav a{flex:1;padding:12px 14px;background:#fff;border:1.5px solid #e0dcff;border-radius:12px;color:#6c5ce7;text-decoration:none;font-weight:700;text-align:center;font-size:.95rem}
+.qnav a:hover{background:#f0f0ff}
+.qnav a.disabled{opacity:.35;pointer-events:none}
+.qall{display:block;text-align:center;margin-top:18px}
+.qall a{color:#6c5ce7;text-decoration:none;font-weight:800;border-bottom:1px solid #c5b8ff}
+.qfoot{text-align:center;color:#aaa;font-size:.8rem;margin-top:36px}
+.orig-fig{max-width:100%;height:auto;border-radius:8px;border:1px solid #eee}
+.orig-fig-wrap{margin:12px 0}
+.orig-fig-label{display:inline-block;font-size:.85rem;color:#888;margin-bottom:4px}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "トップ",
+      "item": "https://sokuryo-kakomon.github.io/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "令和4年 測量士試験",
+      "item": "https://sokuryo-kakomon.github.io/#r04"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "第2問 座標系",
+      "item": "https://sokuryo-kakomon.github.io/r04/q2/"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<div class="qtop"><a href="/">← 測量士 過去問解説トップ</a></div>
+<div class="qpage">
+  <nav class="crumb"><a href="/">トップ</a> ／ <a href="/#r04">令和4年</a> ／ 第2問</nav>
+  <h1 class="qh1"><span class="hdr-grad">測量士試験 令和4年 午前 第2問</span><br>〔座標系〕の解説・解答</h1>
+  <div class="qpdf">📅 2022年5月22日実施 ／
+    <a href="https://www.gsi.go.jp/common/000235078.pdf" target="_blank" rel="noopener">📄 公式問題PDF</a>
+    <a href="https://www.gsi.go.jp/common/000236078.pdf" target="_blank" rel="noopener">📋 公式解答PDF</a>
+  </div>
+  <div class='card' id='r04-q2' data-answer='1'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第2問</span>
+      <span class='card-cat' style='background:#E8EAF6;color:#283593;border-color:#283593'>🌐 座標系</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>点Pは、楕円体面上の点AからBまでの最短経路（測地線）をt=0からt=100秒にかけて等速で移動する。表2に示す座標から、時刻tと地心直交座標（X,Y,Z）の関係を表すグラフとして最も適当なものを選べ。（点Aは北緯0°・東経135°、点Bは北緯60°・東経135°）</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 選択肢1（X値が常に負で0に近づく、Z値が正方向に増加するグラフ）<div class='q-opt'><b>b．</b> 選択肢2（X値が正になるグラフ）</div><div class='q-opt'><b>c．</b> 選択肢3（Z値が負になるグラフ）</div><div class='q-opt'><b>d．</b> 選択肢4（別の組合せ）</div><div class='q-opt'><b>e．</b> 選択肢5（Z値が0から始まらないグラフ）</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q2' src='/sokuryo_figures/r04_p04.png' loading='lazy' alt='元問題' data-qid='r04-q2'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>地心直交座標系で、楕円体面上の点 A から点 B へ等速移動する点 P の X・Y・Z 座標の時間変化を判定する問題。</p>
+<div class='step'>① 地心直交座標系の定義（平成14年告示第185号）</div>
+<p>・X軸：経度 0°（本初子午線）と赤道の交点方向が正</p>
+<p>・Y軸：東経 90°の子午線と赤道の交点方向が正</p>
+<p>・Z軸：地球自転軸方向（北）が正</p>
+<div class='step'>② 点 A・B の位置（東経 135°）</div>
+<p>・A：緯度 0°、東経 135°（赤道上）　・B：緯度 60°、東経 135°（北側）</p>
+<div class='step'>③ Z 軸の挙動</div>
+<p>赤道（緯度 0°）→ 北緯 60° へ動くため、Z 座標は <b>0 から正の値へ単調増加</b>。Z = 0 のグラフから上向きに伸びる選択肢に絞る。</p>
+<div class='step'>④ X 軸の挙動</div>
+<p>X 軸が正となる範囲は経度 −90°〜+90°。東経 135°はこの範囲<b>外</b>のため、X 座標は<b>常に負</b>。北緯 90°で X = 0 になるため、緯度上昇に伴い負の値→0 に近づく（絶対値が減少）。</p>
+<div class='step'>⑤ Y 軸の挙動</div>
+<p>東経 135°は東経 90°（最大値）から離れた位置。北極に近づくにつれ Y の絶対値も減少。</p>
+<div class='conc'>これらすべての条件を満たすグラフは <b>選択肢 1</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 1 — 地心直交座標系</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q3' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第3問</span>
+      <span class='card-cat' style='background:#E0F2F1;color:#00695C;border-color:#00695C'>📊 地理情報</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>JPGISについて述べた文の空欄ア～オに入る語句の組合せとして最も適当なものを選ぶ問題。JPGISとは、地理情報に関する国際規格（ISO規格）及び日本産業規格の中から、地理空間情報の概念【ア】を記述し符号化するために必要となる基本的な【イ】を抽出し、【ウ】したものであり、測量計画機関は測量成果の種類等を示すため、JPGISに準拠して【エ】で定義された地理空間データが満たすべき品質水準と、その品質水準を検証するための方法を示す【オ】を定めなければならない。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> ア=オブジェクト、イ=要素、ウ=記号化、エ=プロファイル、オ=製品仕様書</div><div class='q-opt'><b>b．</b> ア=オブジェクト、イ=内容、ウ=記号化、エ=プロファイル、オ=作業規程の準則</div><div class='q-opt'><b>c．</b> ア=スキーマ、イ=内容、ウ=体系化、エ=オブジェクト、オ=作業規程の準則</div><div class='q-opt'><b>d．</b> ア=スキーマ、イ=要素、ウ=体系化、エ=オブジェクト、オ=製品仕様書</div><div class='q-opt'><b>e．</b> ア=スキーマ、イ=要素、ウ=記号化、エ=プロファイル、オ=製品仕様書</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q3' src='/sokuryo_figures/r04_p06.png' loading='lazy' alt='元問題' data-qid='r04-q3'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>地理情報標準プロファイル（JPGIS）の定義・構成要素を当てはめる穴埋め問題。</p>
+<div class='step'>ア = スキーマ</div>
+<p>JPGIS は地理空間情報の概念<b>スキーマ</b>を記述・符号化する標準。応用スキーマ・空間スキーマ・時間スキーマ等のデータ構造を扱う。</p>
+<div class='step'>イ = 要素</div>
+<p>ISO 19100 シリーズ・JIS X 7100 シリーズから抽出された実利用に必要な基本的<b>要素</b>を整理した標準。</p>
+<div class='step'>ウ = 体系化</div>
+<p>抽出された要素を分かりやすく<b>体系化</b>したものが JPGIS。データの互換性・品質確保のための共通基盤。</p>
+<div class='step'>エ = オブジェクト</div>
+<p>地球上の位置と直接的または間接的に関連付けられた<b>オブジェクト</b>または現象に関する情報処理技術の実用標準。</p>
+<div class='step'>オ = 製品仕様書</div>
+<p>測量計画機関が公共測量を実施する際は、得ようとする成果の種類・内容・構造・品質を示すため <b>製品仕様書</b>を JPGIS に準拠して作成する必要がある（省略不可）。</p>
+<div class='conc'>ア=スキーマ、イ=要素、ウ=体系化、エ=オブジェクト、オ=製品仕様書 の組合せ = <b>選択肢 4</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 地理情報標準プロファイル（JPGIS）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q4' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第4問</span>
+      <span class='card-cat' style='background:#E8EAF6;color:#283593;border-color:#283593'>🌐 座標系</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>三次元直交座標系において、ある点（x, y, z）をz軸のまわりにεzだけ回転させたときの変換式4を参考に、x軸まわりにεxだけ回転させたときの変換行列Rxと、y軸まわりにεyだけ回転させたときの変換行列Ryを表す式の組合せとして最も適当なものを選べ。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 選択肢1（異なる行列の組合せ）</div><div class='q-opt'><b>b．</b> 選択肢2（異なる行列の組合せ）</div><div class='q-opt'><b>c．</b> 選択肢3（異なる行列の組合せ）</div><div class='q-opt'><b>d．</b> 選択肢4（正しいRx・Ry行列の組合せ）</div><div class='q-opt'><b>e．</b> 選択肢5（異なる行列の組合せ）</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q4' src='/sokuryo_figures/r04_p07.png' loading='lazy' alt='元問題' data-qid='r04-q4'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>三次元直交座標の回転行列（座標変換）に関する計算問題。z 軸まわりの回転式が与えられ、x 軸まわり (R_x) と y 軸まわり (R_y) の回転行列を求める。</p>
+<div class='step'>① 回転行列の覚え方</div>
+<p>各軸まわりの回転では、その軸の成分は不変なため、対角の対応位置に「1」が入る：</p>
+<p>・x 軸まわり (R_x) → 左上に 1（x 不変）</p>
+<p>・y 軸まわり (R_y) → 真ん中に 1（y 不変）</p>
+<p>・z 軸まわり → 右下に 1（z 不変／問題の式）</p>
+<div class='step'>② sin の符号位置（マイナスの場所）</div>
+<p>右手系の正回転（反時計回り）では、sin に付くマイナスの位置が決まる：</p>
+<p>・R_x = [[1, 0, 0], [0, cos ε_x, sin ε_x], [0, −sin ε_x, cos ε_x]]</p>
+<p>・R_y = [[cos ε_y, 0, −sin ε_y], [0, 1, 0], [sin ε_y, 0, cos ε_y]]</p>
+<div class='step'>③ 選択肢と照合</div>
+<p>「軸成分=1、対角要素=cos、他の 2 行 2 列に sin（うち 1 つは負）」のパターンに合致する組合せが <b>選択肢 4</b>。</p>
+<div class='conc'>よって <b>選択肢 4</b>。「軸成分=1、sin の符号で回転方向を判別」を覚える。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 三次元直交座標系（座標回転）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q5' data-answer='2'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第5問</span>
+      <span class='card-cat' style='background:#FCE4EC;color:#C62828;border-color:#C62828'>🔢 統計・誤差</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>100点満点の試験で、受験者の得点が平均60点、標準偏差10点の正規分布に従う。1,000人が受験し、上位3%が合格する場合、最低合格点は何点か。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 74点</div><div class='q-opt'><b>b．</b> 79点</div><div class='q-opt'><b>c．</b> 84点</div><div class='q-opt'><b>d．</b> 89点</div><div class='q-opt'><b>e．</b> 94点</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q5' src='/sokuryo_figures/r04_p08.png' loading='lazy' alt='元問題' data-qid='r04-q5'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>正規分布する集団のうち上位 3% に入る最低点を求める計算問題。1,000 人受験、平均 μ = 60、標準偏差 σ = 10。</p>
+<div class='step'>① 上位 3% に対応する z 値を表 5 から求める</div>
+<p>標準正規分布の上側確率 Q(u) = 0.03 となる u の値を表 5 で検索する：</p>
+<div class='conc'>Q(1.88) ≒ 0.0301 ≒ 0.03 → u = <b>1.88</b></div>
+<div class='step'>② 標準化の逆変換で点数を求める</div>
+<p>標準化の式：z = (x − μ) / σ を x について解くと：</p>
+<div class='conc'>x = u × σ + μ = 1.88 × 10 + 60 = <b>78.8 点</b></div>
+<div class='step'>③ 選択肢と照合</div>
+<p>78.8 点に最も近いのは <b>選択肢 2</b>（79 点）。</p>
+<div class='conc'>よって <b>選択肢 2</b>。「上位 X% → 上側確率 X/100 → 表から u → x = uσ+μ」が解法。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 2 — 標準偏差（正規分布）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q6' data-answer='2'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第6問</span>
+      <span class='card-cat' style='background:#ECEFF1;color:#37474F;border-color:#37474F'>⚙️ 測量基準</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>次のａ～ｅの文は，我が国における測量の基準について述べたものである。明らかに間違っているものだけの組合せはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 基本測量及び公共測量において，位置は，地理学的経緯度及び楕円体高で表示する。ただし，場合により直角座標及び平均海面からの高さ，極座標及び平均海面からの高さ又は地心直交座標で表示することができる。</div><div class='q-opt'><b>b．</b> 世界測地系では，回転楕円体の中心は地球の重心と一致し，短軸は地球の自転軸と一致している。</div><div class='q-opt'><b>c．</b> 基本測量及び公共測量において，土地の距離及び面積は，回転楕円体の表面上の値で表示する。</div><div class='q-opt'><b>d．</b> 平成23年（2011年）東北地方太平洋沖地震による地殻変動に伴い，測量の原点の位置が移動したことから，原点数値を改正するとともに，日本全国の電子基準点の成果を改定した。</div><div class='q-opt'><b>e．</b> ジオイドは，平均海面を陸地内部まで仮想的に延長してできる面で，地球の重力の影響により，凹凸を持ち複雑な形状となっている。</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q6' src='/sokuryo_figures/r04_p10.png' loading='lazy' alt='元問題' data-qid='r04-q6'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>測量の基準（測量法 第11条）に関する正誤判定。</p>
+<div class='opt wrong'>a. 誤り（第11条1-1）。</div>
+<p>基本測量・公共測量での位置は、地理学的経緯度＋<b>平均海面からの高さ</b>で表示する。問題文の「楕円体高」は誤り。標高（平均海面基準）と楕円体高は別の高さの概念。</p>
+<div class='opt correct'>b. 正しい（第11条3）。世界測地系では、回転楕円体の中心が地球の重心と一致し、短軸が地球の自転軸と一致する。</div>
+<div class='opt correct'>c. 正しい（第11条2）。距離・面積は回転楕円体の表面上の値で表示する。</div>
+<div class='opt wrong'>d. 誤り。</div>
+<p>東日本大震災（2011年）に伴い経緯度原点・水準原点の数値は改正されたが、電子基準点の成果改定は<b>東日本地域のみ</b>。北海道や西日本では従来の「測地成果2000」を継続使用している。問題文の「日本全国」は誤り。</p>
+<div class='opt correct'>e. 正しい。ジオイドは平均海面を陸地内部まで仮想的に延長してできる面。地球の重力が場所ごとに異なるため凹凸を持つ複雑な形状となる。</div>
+<div class='conc'>誤りは a, d の組合せ = <b>選択肢 2</b>（a, d）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 2 — 測量の基準</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q7' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第7問</span>
+      <span class='card-cat' style='background:#FFF3E0;color:#E65100;border-color:#E65100'>🎯 基準点測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量におけるトータルステーション（TS）を用いた基準点測量の精度管理について、明らかに間違っているものを選択せよ。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 観測に使用する機器の点検は、観測着手前及び観測期間中に適宜行い、必要に応じて機器の調整を行う。</div><div class='q-opt'><b>b．</b> 距離測定の気象補正に使用する気温及び気圧の測定は、TSを整置した測点で、距離測定の開始直前又は終了直後に行う。</div><div class='q-opt'><b>c．</b> 観測点における角観測の良否を判定するため、倍角差、観測差、高度定数の較差を点検する。</div><div class='q-opt'><b>d．</b> 偏心点を設ける場合、偏心距離は測点間距離の5分の1以下を標準とする。</div><div class='q-opt'><b>e．</b> 厳密水平網平均計算及び厳密高低網平均計算による新点水平位置の標準偏差の許容範囲は100mm、新点標高は200mmを標準とする。</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q7' src='/sokuryo_figures/r04_p11.png' loading='lazy' alt='元問題' data-qid='r04-q7'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>TS（トータルステーション）を用いた基準点測量の精度管理に関する正誤判定（根拠はいずれも作業規程の準則）。</p>
+<div class='opt correct'>1. 正しい（第36条）。観測に使用する機器の点検は、観測着手前と観測期間中に適宜行い、必要に応じて調整する。</div>
+<div class='opt correct'>2. 正しい（第37条 2 項ヘ）。気象補正に使う気温・気圧の測定は、TS を整置した測点（観測点）で、距離測定の開始直前または終了直後に実施する。</div>
+<div class='opt correct'>3. 正しい。観測値の点検では、水平角は倍角差・観測差、鉛直角は高度定数の較差、距離は 1 セット内・各セット平均値の較差を確認し、許容範囲超過時は再測。</div>
+<div class='opt wrong'>4. 誤り（第23条 2 項、結合多角方式）。</div>
+<p>偏心点を設ける場合、偏心距離は<b>測点間距離の 6 分の 1 以下</b>（e ≤ S/6）を標準とする。問題文の「5 分の 1 以下」は誤り。</p>
+<div class='opt correct'>5. 正しい（第43条）。1〜4 級基準点測量で、新点水平位置の標準偏差の許容範囲は 100 mm、新点標高は 200 mm を標準とする。</div>
+<div class='conc'>誤りは 4。<b>選択肢 4</b>。「偏心距離 ≤ S/6」が要点。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 基準点測量の精度管理</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q8' data-answer='5'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第8問</span>
+      <span class='card-cat' style='background:#FFF3E0;color:#E65100;border-color:#E65100'>🎯 基準点測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>基準点A，B間の距離を測定する際、障害物があったため偏心点A1，B1で観測を実施。与えられた観測値から基準点A，B間の基準面上の距離Sを求めよ。（S1=1,000.000m、e1=20.000m、α1=300°00'00"、e2=50.000m、α2=315°00'00"）</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 953.190 m</div><div class='q-opt'><b>b．</b> 954.617 m</div><div class='q-opt'><b>c．</b> 954.644 m</div><div class='q-opt'><b>d．</b> 955.450 m</div><div class='q-opt'><b>e．</b> 956.097 m</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q8' src='/sokuryo_figures/r04_p12.png' loading='lazy' alt='元問題' data-qid='r04-q8'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>基準点 A・B 間の距離測定で、両端に偏心点 A1・B1 を設置して観測した結果から、A〜B 間の基準面上の距離 S を求める「相互偏心計算」問題。</p>
+<div class='step'>① 与えられた観測値</div>
+<p>・S₁ = 1,000.000 m（A1〜B1 の距離、観測値）　・e₁ = 20.000 m（A→A1）　・α₁ = 300°00'00"</p>
+<p>・e₂ = 50.000 m（B→B1）　・α₂ = 315°00'00"</p>
+<div class='step'>② 相互偏心の計算式（作業規程の準則 付録6）</div>
+<p>X 成分 = S₁ − e₁·cos α₁ − e₂·cos α₂</p>
+<p>Y 成分 = e₁·sin α₁ + e₂·sin α₂</p>
+<div class='step'>③ 数値代入</div>
+<p>X = 1000.000 − 20 × cos 300° − 50 × cos 315°</p>
+<p>　 = 1000.000 − 20 × 0.5 − 50 × 0.70711</p>
+<p>　 = 1000 − 10 − 35.356 = <b>954.644</b></p>
+<p>Y = 20 × sin 300° + 50 × sin 315°</p>
+<p>　 = 20 × (−0.86603) + 50 × (−0.70711)</p>
+<p>　 = −17.321 − 35.356 = <b>−52.676</b></p>
+<div class='step'>④ 距離 S を求める</div>
+<div class='conc'>S = √(954.644² + 52.676²) = √(911,346 + 2,774) ≒ <b>956.097 m</b></div>
+<div class='conc'>よって、最も近いのは <b>選択肢 5</b>（956.097 m）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 5 — 基準点測量（偏心補正計算）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q9' data-answer='5'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第9問</span>
+      <span class='card-cat' style='background:#FFF3E0;color:#E65100;border-color:#E65100'>🎯 基準点測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>GNSS衛星及び公共測量におけるGNSS測量機を用いた基準点測量について、明らかに間違っているものはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 準天頂衛星はGPS衛星と同等の衛星として扱うことができる</div><div class='q-opt'><b>b．</b> 異なる衛星測位システムを組み合わせることで、測量できる場所や時間帯を拡大できる</div><div class='q-opt'><b>c．</b> 準天頂衛星の測位信号は日本以外でも東南アジア、オセアニア地域で受信可能</div><div class='q-opt'><b>d．</b> GLONASS衛星の軌道傾斜角はGPS衛星よりも大きい</div><div class='q-opt'><b>e．</b> GPS衛星2機、準天頂衛星2機及びGLONASS衛星1機の組合せでスタティック法による10km以上の観測ができる</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q9' src='/sokuryo_figures/r04_p13_top.png' loading='lazy' alt='元問題' data-qid='r04-q9'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>GNSS 衛星と準天頂衛星の特性・運用に関する正誤判定。</p>
+<div class='opt correct'>1. 正しい。準天頂衛星は GPS 衛星と同等の信号を送信し、GPS と統合運用できる。作業規程の準則では「GPS・準天頂衛星」と一括表記。</div>
+<div class='opt correct'>2. 正しい。異なる衛星測位システムを組み合わせて使用することで、観測可能な場所・時間帯が拡大される。</div>
+<div class='opt correct'>3. 正しい。準天頂衛星の軌道は南北非対称の 8 の字を描き、日本上空のほか東南アジア・オセアニア地域でも受信可能。</div>
+<div class='opt correct'>4. 正しい。GLONASS の軌道傾斜角（約 64.8°）は GPS（約 55°）より大きく、高緯度地域での観測条件が良い。</div>
+<div class='opt wrong'>5. 誤り。</div>
+<p>スタティック法で <b>10 km 以上</b>の観測を行う場合、GPS・準天頂・GLONASS 衛星を組み合わせて使用するなら <b>6 衛星以上</b>必要（作業規程の準則 第37条）。問題文の「GPS 2機＋準天頂 2機＋GLONASS 1機＝5機」では基準を満たさない。</p>
+<div class='conc'>誤りは 5。<b>選択肢 5</b>。「10km以上＋GLONASS併用＝6衛星以上」が要点。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 5 — GNSS基準点測量</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q10' data-answer='5'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第10問</span>
+      <span class='card-cat' style='background:#FFF3E0;color:#E65100;border-color:#E65100'>🎯 基準点測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>既知点Aおよび新点Bにおいて公共測量におけるGNSS測量による基準点測量を実施。既知点Aから新点Bまでの距離8,000.00m、新点Bの楕円体高51.67mが得られた。新点Bの標高を求めよ。既知点Aの標高は328.77m、楕円体高は366.79m。ジオイドは楕円体面に対し既知点Aから新点B方向へ距離1,000.00m当たり-0.04mの一様な傾斜。距離は楕円体面上の距離とする。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 13.33 m</div><div class='q-opt'><b>b．</b> 13.65 m</div><div class='q-opt'><b>c．</b> 13.69 m</div><div class='q-opt'><b>d．</b> 13.77 m</div><div class='q-opt'><b>e．</b> 13.97 m</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q10' src='/sokuryo_figures/r04_p13_bot.png' loading='lazy' alt='元問題' data-qid='r04-q10'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>GNSS 観測値（楕円体高）から、ジオイドの傾斜を考慮して新点 B の標高を求める計算問題。</p>
+<div class='step'>① 基本関係式</div>
+<div class='conc'>標高 h = 楕円体高 H − ジオイド高 N</div>
+<div class='step'>② 既知点 A のジオイド高</div>
+<p>A の楕円体高 H_A = 366.79 m、標高 h_A = 328.77 m から：</p>
+<div class='conc'>N_A = H_A − h_A = 366.79 − 328.77 = <b>38.02 m</b></div>
+<div class='step'>③ A→B 間のジオイド傾斜量</div>
+<p>1,000 m あたり −0.04 m の傾斜（A→B 方向に下がる）。AB 間距離 8,000 m なので：</p>
+<div class='conc'>ΔN = 8,000 × (−0.04 / 1,000) = <b>−0.32 m</b></div>
+<p>→ B 点のジオイド高：N_B = N_A + ΔN = 38.02 − 0.32 = <b>37.70 m</b></p>
+<div class='step'>④ B 点の標高</div>
+<p>B の楕円体高 H_B = 51.67 m を使い：</p>
+<div class='conc'>h_B = H_B − N_B = 51.67 − 37.70 = <b>13.97 m</b></div>
+<div class='conc'>よって、最も近いのは <b>選択肢 5</b>（13.97 m）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 5 — GNSS測量による基準点測量（標高計算）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q11' data-answer='1'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第11問</span>
+      <span class='card-cat' style='background:#E0F7FA;color:#006064;border-color:#006064'>📏 水準測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>「GNSS測量機による水準測量について述べた文のうち、明らかに間違っているものだけの組合せはどれか」</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> GNSS水準測量では、2級水準点及び3級水準点を設置することができる</div><div class='q-opt'><b>b．</b> GNSS水準測量を実施できるのは、国土地理院のジオイド・モデルが提供されている地域である</div><div class='q-opt'><b>c．</b> GNSS水準測量の既知点として、全ての電子基準点が使用できる</div><div class='q-opt'><b>d．</b> GNSS水準測量では、観測距離は6km以上、かつ40km以下である</div><div class='q-opt'><b>e．</b> 観測距離が10km未満の観測は、2級GNSS測量機により行うことができる</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q11' src='/sokuryo_figures/r04_p14.png' loading='lazy' alt='元問題' data-qid='r04-q11'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>GNSS 水準測量に関する正誤判定。</p>
+<div class='opt wrong'>a. 誤り。</div>
+<p>GNSS 水準測量は<b>3 級水準測量</b>に相当し、設置できるのは<b>3 級水準点のみ</b>（作業規程の準則 第47条 3 項・第74条 2 項）。問題文の「2 級水準点も設置できる」は誤り。</p>
+<div class='opt correct'>b. 正しい。GNSS 水準測量の適用範囲は、国土地理院のジオイド・モデル提供地域に限定される。GNSS で得られる楕円体高からジオイド高を引いて標高を求めるため、ジオイドモデルが必要。</div>
+<div class='opt wrong'>c. 誤り。</div>
+<p>既知点として使用できるのは「<b>標高区分が「水準測量による」</b>に該当する電子基準点」のみ。すべての電子基準点が使えるわけではない。標高区分は「水準測量による」と「GNSS測量による」「概略」などの区分がある。</p>
+<div class='opt correct'>d. 正しい。観測距離は 6 km 以上、かつ 40 km 以下が標準（新点間距離も含む）。路線長は 60 km 以下。</div>
+<div class='opt correct'>e. 正しい。1 級 GNSS 測量機が基本だが、観測距離が 10 km 未満なら 2 級 GNSS 測量機でも可。</div>
+<div class='conc'>誤りは a, c の組合せ = <b>選択肢 1</b>（a, c）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 1 — GNSS水準測量</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q12' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第12問</span>
+      <span class='card-cat' style='background:#E0F7FA;color:#006064;border-color:#006064'>📏 水準測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量における1級水準測量の観測について、ア～エに入る語句の組合せとして最も適当なものを選べ。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> ア=50m, イ=0.1mm, ウ=後視→後視→前視→前視, エ=下方</div><div class='q-opt'><b>b．</b> ア=60m, イ=0.1mm, ウ=後視→後視→前視→前視, エ=上方</div><div class='q-opt'><b>c．</b> ア=60m, イ=1mm, ウ=後視→後視→前視→前視, エ=下方</div><div class='q-opt'><b>d．</b> ア=50m, イ=0.1mm, ウ=後視→前視→前視→後視, エ=下方</div><div class='q-opt'><b>e．</b> ア=50m, イ=1mm, ウ=後視→前視→前視→後視, エ=上方</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q12' src='/sokuryo_figures/r04_p15.png' loading='lazy' alt='元問題' data-qid='r04-q12'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>1 級水準測量の観測方法に関する穴埋め問題（作業規程の準則 第64条）。</p>
+<div class='step'>ア = 50 m</div>
+<p>1 級水準測量におけるレベルと標尺との距離は、最大<b>50 m</b>を標準とする（2 級水準測量では 60 m）。問題文は 1 級なので 50 m。</p>
+<div class='step'>イ = 0.1 mm</div>
+<p>1 級水準測量における標尺目盛の読定単位は <b>0.1 mm</b>を標準とする（2 級以下は 1 mm）。電子レベルでの読取精度の規定。</p>
+<div class='step'>ウ = 後視 → 前視 → 前視 → 後視</div>
+<p>三脚の沈下による誤差を相殺するため、時間対称となる順序 <b>後視 → 前視 → 前視 → 後視</b>で読み取る（電子レベルの 1 視準 1 読定で）。2 級は「後視 → 後視 → 前視 → 前視」と異なる。</p>
+<div class='step'>エ = 下方</div>
+<p>1 級水準測量では、標尺の<b>下方 20 cm 以下を読定しない</b>（第64条 2 項七）。地表面付近の大気屈折（レフラクション）誤差を避けるため。</p>
+<div class='conc'>ア=50 m、イ=0.1 mm、ウ=後視→前視→前視→後視、エ=下方 の組合せ = <b>選択肢 4</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 1級水準測量の観測</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q13' data-answer='5'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第13問</span>
+      <span class='card-cat' style='background:#E0F7FA;color:#006064;border-color:#006064'>📏 水準測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>水準点A～Dにおいて6路線で水準測量を実施し、表示された観測高低差から環閉合差を点検する問題。許容範囲は「5mm√S」（S=観測距離km）。再測すべき路線を選択せよ。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 路線(1)</div><div class='q-opt'><b>b．</b> 路線(2)</div><div class='q-opt'><b>c．</b> 路線(4)</div><div class='q-opt'><b>d．</b> 路線(5)</div><div class='q-opt'><b>e．</b> 路線(6)</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q13' src='/sokuryo_figures/r04_p16.png' loading='lazy' alt='元問題' data-qid='r04-q13'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>水準環の閉合差を計算し、許容範囲を超えた環の共通路線を再測対象として特定する問題。許容範囲 = 5 mm √S。</p>
+<div class='step'>① 各環の許容閉合差</div>
+<p>・外周（(1)+(2)+(3) S=18+32+48=98 km）：5√98 ≒ <b>49 mm</b></p>
+<p>・右上環（(3)+(5)+(4) S=48+12+9=69 km）：5√69 ≒ <b>42 mm</b></p>
+<p>・下環（(2)+(6)+(5) S=32+16+12=60 km）：5√60 ≒ <b>39 mm</b></p>
+<p>・左上環（(1)+(4)+(6) S=18+9+16=43 km）：5√43 ≒ <b>33 mm</b></p>
+<div class='step'>② 各環の閉合差（観測方向に注意して符号を決める）</div>
+<p>・外周環：−(3)−(2)−(1) = −23.984 + 38.341 − 14.393 = <b>−36 mm</b>（許容内）</p>
+<p>・右上環：−(3)−(5)−(4) = −23.984 + 31.158 − 7.185 = <b>−11 mm</b>（許容内）</p>
+<p>・下環：−(2)−(6)+(5) = +38.341 − 7.270 − 31.158 = <b>−87 mm</b>（<b>許容超過</b>）</p>
+<p>・左上環：−(1)+(4)+(6) = −14.393 + 7.185 + 7.270 = <b>+62 mm</b>（<b>許容超過</b>）</p>
+<div class='step'>③ 共通路線の特定</div>
+<p>許容超過は「下環」と「左上環」。これらに<b>共通する路線</b>を見ると <b>路線 (6)</b>。他の路線（1, 2, 4, 5）は許容内の環にも含まれるため、異常がないと判定できる。</p>
+<div class='conc'>再測すべきは <b>路線 (6)</b> = <b>選択肢 5</b>。</div>
+        <div class='claude-box'><svg viewBox="0 0 440 300" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;background:#e3f2fd;border-radius:8px;border:1px solid #90caf9"><text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">水準網（水準点A〜D・6路線・環閉合差の点検）</text><line x1="134" y1="92" x2="326" y2="92" stroke="#555" stroke-width="3"/><line x1="110" y1="116" x2="110" y2="204" stroke="#555" stroke-width="3"/><line x1="350" y1="116" x2="350" y2="204" stroke="#555" stroke-width="3"/><line x1="134" y1="228" x2="326" y2="228" stroke="#555" stroke-width="3"/><line x1="130" y1="110" x2="330" y2="210" stroke="#555" stroke-width="3"/><line x1="130" y1="210" x2="330" y2="110" stroke="#c62828" stroke-width="4"/><text x="222" y="82" font-size="15" font-weight="bold" fill="#555" font-family="sans-serif">&#9312;</text><text x="84" y="166" font-size="15" font-weight="bold" fill="#555" font-family="sans-serif">&#9313;</text><text x="356" y="166" font-size="15" font-weight="bold" fill="#555" font-family="sans-serif">&#9316;</text><text x="222" y="250" font-size="15" font-weight="bold" fill="#555" font-family="sans-serif">&#9317;</text><text x="252" y="140" font-size="15" font-weight="bold" fill="#555" font-family="sans-serif">&#9315;</text><circle cx="110" cy="92" r="22" fill="#1565c0"/><text x="103" y="98" font-size="16" font-weight="bold" fill="#fff" font-family="sans-serif">A</text><circle cx="350" cy="92" r="22" fill="#1565c0"/><text x="343" y="98" font-size="16" font-weight="bold" fill="#fff" font-family="sans-serif">B</text><circle cx="110" cy="228" r="22" fill="#1565c0"/><text x="103" y="234" font-size="16" font-weight="bold" fill="#fff" font-family="sans-serif">C</text><circle cx="350" cy="228" r="22" fill="#1565c0"/><text x="343" y="234" font-size="16" font-weight="bold" fill="#fff" font-family="sans-serif">D</text><text x="128" y="268" font-size="14" font-weight="bold" fill="#c62828" font-family="sans-serif">&#9314; &#9733;再測</text><text x="20" y="290" font-size="12.5" fill="#c62828" font-family="sans-serif">&#9314;が複数の環に共通 &#8594; 共通路線が誤差の原因 &#8594; 再測対象</text></svg><div class='claude-memo'>💡 正解: 5 — 水準測量（環閉合差の計算）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q14' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第14問</span>
+      <span class='card-cat' style='background:#E8F5E9;color:#2E7D32;border-color:#2E7D32'>🗾 地形測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>GNSS測量機を用いた現地測量について、明らかに間違っているものはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> GNSS測量機は2級GNSS測量機と同等以上のものを標準とする</div><div class='q-opt'><b>b．</b> キネマティック法またはRTK法によるTS点設置は基準点に整置し、放射法により2セット観測する</div><div class='q-opt'><b>c．</b> キネマティック法またはRTK法による地形・地物測定は5衛星以上を標準とする</div><div class='q-opt'><b>d．</b> キネマティック法またはRTK法による地形・地物測定は1セット行い、FIX解から「5エポック以上」を標準とする</div><div class='q-opt'><b>e．</b> ネットワーク型RTK法は間接観測法または単点観測法により1セット観測する</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q14' src='/sokuryo_figures/r04_p17_top.png' loading='lazy' alt='元問題' data-qid='r04-q14'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>GNSS 測量機を用いた現地測量（TS 点設置等）に関する正誤判定。</p>
+<div class='opt correct'>1. 正しい。使用する GNSS 測量機は 2 級 GNSS 測量機と同等以上のものを標準とする。</div>
+<div class='opt correct'>2. 正しい（第119条）。キネマティック法・RTK 法による TS 点の設置は、基準点に GNSS 測量機を整置し、放射法で 2 セット行う。1 セット目を採用値、2 セット目を点検値とする。</div>
+<div class='opt correct'>3. 正しい。観測に使用する衛星数は 5 衛星以上（GLONASS 併用時は 6 衛星以上）が標準。</div>
+<div class='opt wrong'>4. 誤り。</div>
+<p>キネマティック法・RTK 法による地形・地物等の測定は 1 セット行い、セット内の観測回数は <b>FIX 解を得てから 10 エポック以上</b>を標準とする。問題文の「5 エポック以上」は誤り。</p>
+<div class='opt correct'>5. 正しい（第124条）。ネットワーク型 RTK 法による地形・地物等の測定は、間接観測法または単点観測法により 1 セット行う。</div>
+<div class='conc'>誤りは 4。<b>選択肢 4</b>。「FIX 解後 10 エポック以上」が要点。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — GNSS測量機を用いた現地測量</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q15' data-answer='1'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第15問</span>
+      <span class='card-cat' style='background:#E8F5E9;color:#2E7D32;border-color:#2E7D32'>🗾 地形測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量における地上レーザスキャナを用いた地形測量について、明らかに間違っているものはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 傾斜地形の計測時、観測方向は「高い方から低い方」を原則とする</div><div class='q-opt'><b>b．</b> 局地座標系観測では、相似変換または後方交会による方法を用いる</div><div class='q-opt'><b>c．</b> 標定点は地上レーザ観測の有効範囲外に設置することを原則とする</div><div class='q-opt'><b>d．</b> 同一箇所から複数回観測する場合、器械高を変えることを原則とする</div><div class='q-opt'><b>e．</b> 距離観測方法はTOF方式または位相差方式とする</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q15' src='/sokuryo_figures/r04_p17_bot.png' loading='lazy' alt='元問題' data-qid='r04-q15'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>公共測量における地上レーザスキャナを用いた測量に関する正誤判定。</p>
+<div class='opt wrong'>1. 誤り。</div>
+<p>地上レーザスキャナの観測方向は、<b>地形の低い方から高い方</b>への向き（仰角方向）を原則とする（第144条 2 項）。高い方から低い方への観測は、レーザのスポット長径が大きくなり点群間隔が広がるため精度低下を招く。問題文では方向の取り方が逆になっており誤り。</p>
+<div class='opt correct'>2. 正しい（第144条 5 項二）。局地座標系で観測する場合は、相似変換による方法または後方交会による方法を使用するのが原則。</div>
+<div class='opt correct'>3. 正しい（第138条 2 項）。標定点は地上レーザ観測の有効範囲の外に設置することを原則とする。スキャナを中心に等角度配置するのが望ましい。</div>
+<div class='opt correct'>4. 正しい（第144条 9 項）。同一箇所から複数回観測する場合は、それぞれの観測で器械高を変えることが原則。同じ器械高では同じ死角が残るため。</div>
+<div class='opt correct'>5. 正しい（第143条一）。地上レーザスキャナの距離観測方法は、<b>TOF（タイム・オブ・フライト）方式または位相差方式</b>とする。</div>
+<div class='conc'>誤りは 1。<b>選択肢 1</b>。「低い方から高い方へ」が観測方向の原則。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 1 — 地上レーザスキャナを用いた地形測量</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q16' data-answer='3'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第16問</span>
+      <span class='card-cat' style='background:#FCE4EC;color:#C62828;border-color:#C62828'>🔢 統計・誤差</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>トータルステーション（TS）を用いた高低差測定における標準偏差の計算問題。高低差Z=D·sinθの式から、斜距離D=100m、高低角θ=30°のとき、空欄ア～オに適切な数値を選択せよ。距離測定精度は(5+5×10⁻⁶D)mm、角度測定精度は5"。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> ア=0.5, イ=2.75, ウ=50,000, エ=0.000025, オ=1.86</div><div class='q-opt'><b>b．</b> ア=0.5, イ=5.5, ウ=50,000, エ=0.000025, オ=3.02</div><div class='q-opt'><b>c．</b> ア=0.5, イ=5.5, ウ=86,603, エ=0.000025, オ=3.50</div><div class='q-opt'><b>d．</b> ア=0.87, イ=2.75, ウ=86,603, エ=0.000050, オ=4.95</div><div class='q-opt'><b>e．</b> ア=0.87, イ=10.0, ウ=50,000, エ=0.000050, オ=9.05</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q16' src='/sokuryo_figures/r04_p18.png' loading='lazy' alt='元問題' data-qid='r04-q16'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>TS による高低差 Z = D · sin θ の<b>標準偏差 σ_Z</b> を、誤差伝播の法則で求める計算問題。式 16-2 の各空欄を順に求める。</p>
+<div class='step'>① ア = 0.5（D で偏微分）</div>
+<p>f(D, θ) = D × sin θ → ∂f/∂D = sin θ</p>
+<p>θ₀ = 30° を代入：sin 30° = <b>0.5</b></p>
+<div class='step'>② イ = 5.5（距離 σ_D を計算）</div>
+<p>距離測定精度 σ_D = 5 + 5×10⁻⁶ × D（mm）。D₀ = 100,000 mm を代入：</p>
+<div class='conc'>σ_D = 5 + 5×10⁻⁶ × 100,000 = 5 + 0.5 = <b>5.5 mm</b></div>
+<div class='step'>③ ウ = 86,603（θ で偏微分）</div>
+<p>∂f/∂θ = D × cos θ。D₀ = 100,000 mm、θ₀ = 30° を代入：</p>
+<div class='conc'>D₀ · cos 30° = 100,000 × 0.86603 = <b>86,603</b></div>
+<div class='step'>④ エ = 0.000025（角度 σ_θ を rad 換算）</div>
+<p>角度測定精度 σ_θ = 5"。1 rad = 2×10⁵ 秒なので：</p>
+<div class='conc'>σ_θ = 5 / (2×10⁵) = <b>0.000025 rad</b></div>
+<div class='step'>⑤ オ = 3.50（最終 σ_Z）</div>
+<p>σ_Z² = (0.5)² × (5.5)² + (86,603)² × (0.000025)²</p>
+<p>　 = 0.25 × 30.25 + 7,500,079,609 × 6.25×10⁻¹⁰</p>
+<p>　 = 7.5625 + 4.6875 ≒ 12.25</p>
+<div class='conc'>σ_Z = √12.25 = <b>3.50 mm</b></div>
+<div class='conc'>ア=0.5、イ=5.5、ウ=86,603、エ=0.000025、オ=3.50 の組合せ = <b>選択肢 3</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 3 — 標準偏差の計算（誤差伝播の法則）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q17' data-answer='2'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第17問</span>
+      <span class='card-cat' style='background:#F3E5F5;color:#7B1FA2;border-color:#7B1FA2'>📷 写真測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量におけるUAV写真測量について、以下の文のア～ウに入る語句の組合せとして最も適当なものはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> ア=焦点距離、イ=中央、ウ=直線状</div><div class='q-opt'><b>b．</b> ア=焦点距離、イ=四隅、ウ=直線状にならないようジグザグ</div><div class='q-opt'><b>c．</b> ア=撮影縮尺、イ=四隅、ウ=直線状</div><div class='q-opt'><b>d．</b> ア=撮影縮尺、イ=中央、ウ=直線状にならないようジグザグ</div><div class='q-opt'><b>e．</b> ア=基線長、イ=中央、ウ=直線状</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q17' src='/sokuryo_figures/r04_p20.png' loading='lazy' alt='元問題' data-qid='r04-q17'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>UAV 写真測量の撮影計画・標定点配置に関する穴埋め問題（作業規程の準則 第228条等）。</p>
+<div class='step'>ア = 焦点距離</div>
+<p>UAV の対地高度の算出式は次の通り：</p>
+<div class='conc'>対地高度 = (地上画素寸法 ÷ 1画素のサイズ) × <b>焦点距離</b></div>
+<p>レンズの中心から像を結ぶ地点までの距離（焦点距離）が写真の縮尺を決める。撮影縮尺や基線長は撮影計画の結果値であり、カメラ固有のパラメータではない。</p>
+<div class='step'>イ = 四隅</div>
+<p>複数コースの撮影では、水平位置の標定点を<b>ブロックの四隅</b>に必ず配置する。両端のコースは 6 ステレオモデルに 1 点、内部は 3 コースごとの両端ステレオモデルに 1 点、ブロック内は 30 ステレオモデルに 1 点が標準（第221条）。四隅で全体を抑え込むのが基本。</p>
+<div class='step'>ウ = 直線状にならないようジグザグ</div>
+<p>タイポイントは 1 モデルごとに等間隔かつ<b>直線状にならないようジグザグ</b>に配置する（第235条 4 項）。直線配置だとバンドル調整時の整合が不安定になるため、ジグザグで配置して堅牢性を確保。パスポイントは同一コース内、タイポイントはコース間の接続点。</p>
+<div class='conc'>ア=焦点距離、イ=四隅、ウ=直線状にならないようジグザグ の組合せ = <b>選択肢 2</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 2 — UAV写真測量</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q18' data-answer='3'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第18問</span>
+      <span class='card-cat' style='background:#F3E5F5;color:#7B1FA2;border-color:#7B1FA2'>📷 写真測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量における写真地図の作成について述べた5つの文a～eのうち、「明らかに間違っているものだけの組合せ」を選ぶ問題。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 都市部での影を少なくするため、太陽高度の高い時間帯に空中写真撮影を実施</div><div class='q-opt'><b>b．</b> 建物の倒れ込み影響を減らすため、重複度を大きくするよう撮影計画を立案</div><div class='q-opt'><b>c．</b> 撮影縮尺1/30,000、グリッド間隔50m、標高点標準偏差5mのDEMで地図情報レベル2500を作成</div><div class='q-opt'><b>d．</b> モザイク作成は隣接空中写真をデジタル処理で結合し、正射変換して正射投影画像を作成</div><div class='q-opt'><b>e．</b> 段差の大きい人工斜面や高架橋にはブレークライン法を適用してDEM作成</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q18' src='/sokuryo_figures/r04_p21.png' loading='lazy' alt='元問題' data-qid='r04-q18'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>写真地図（オルソ画像）の作成に関する正誤判定。</p>
+<div class='opt correct'>a. 正しい。高層建物による影を小さくするには、太陽高度が高い時間帯（太陽が天頂に近い時間）を選んで撮影する。</div>
+<div class='opt correct'>b. 正しい。建物の倒れ込みの影響を抑えるには、同一コース内・隣接コース間の重複度を大きく確保する。中心投影写真は写真主点から離れるほど倒れ込みが大きい。</div>
+<div class='opt wrong'>c. 誤り。</div>
+<p>地図情報レベル 2500 の写真地図には、<b>撮影縮尺 1/10,000〜1/12,500、グリッド間隔 25 m 以内、標高点標準偏差 1.0 m 以内</b>が必要。問題文の「撮影縮尺 1/30,000、グリッド 50 m、標高偏差 5 m」では精度不足。</p>
+<div class='opt wrong'>d. 誤り。</div>
+<p>「モザイク」とは、<b>隣接する正射投影画像</b>をデジタル処理で結合してモザイク画像を作成する作業（第408条）。問題文の「隣接する空中写真を結合し、モザイク画像を正射変換して正射投影画像を作成」は手順が逆。先にオルソ化してからモザイク化するのが正しい。</p>
+<div class='opt correct'>e. 正しい。段差の大きい人工斜面や高架橋の存在する地域では、ブレークライン法で地性線を取得して DTM を作成する（第401条 3 項）。</div>
+<div class='conc'>誤りは c, d の組合せ = <b>選択肢 3</b>（c, d）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 3 — 写真地図の作成</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q19' data-answer='5'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第19問</span>
+      <span class='card-cat' style='background:#F3E5F5;color:#7B1FA2;border-color:#7B1FA2'>📷 写真測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量におけるデジタル航空カメラを鉛直下に向けた空中写真撮影を行うに当たり、標高が200mから600mまでの範囲にある土地を撮影範囲全体にわたって同一コース内の隣接空中写真間の重複度が最小で60%となるように計画した。撮影基準面の標高を200mとするとき、撮影基準面における同一コース内の隣接空中写真間の重複度は何%となるか。（使用カメラ仕様：画面距離9cm、画面14,000×11,000画素、素子寸法7μm、撮影基準面での地上画素寸法10cm）</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 59%</div><div class='q-opt'><b>b．</b> 60%</div><div class='q-opt'><b>c．</b> 63%</div><div class='q-opt'><b>d．</b> 67%</div><div class='q-opt'><b>e．</b> 72%</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q19' src='/sokuryo_figures/r04_p22_top.png' loading='lazy' alt='元問題' data-qid='r04-q19'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>撮影基準面（標高 200 m）における<b>オーバーラップ率</b>を求める計算問題。標高 600 m の地点で 60% の重複度になるよう計画。</p>
+<div class='step'>① 撮影高度 H（撮影基準面から撮影位置まで）</div>
+<p>地上画素寸法 = (H × 素子寸法) ÷ 画面距離 から逆算：</p>
+<div class='conc'>H = (画面距離 × 地上画素寸法) ÷ 素子寸法 = (0.09 × 0.10) ÷ (7×10⁻⁶) ≒ <b>1,286 m</b></div>
+<div class='step'>② 撮影基準面における撮影範囲</div>
+<p>幅 = 画素数 × 地上画素寸法 = 11,000 × 0.10 = <b>1,100 m</b></p>
+<div class='step'>③ 標高 600 m 地点（H' = 1,286 − 400 = 886 m）の撮影範囲</div>
+<p>相似比から：1,100 × (886 / 1,286) ≒ <b>758 m</b></p>
+<div class='step'>④ 標高 600 m での重複部・非重複部</div>
+<p>重複部 = 758 × 0.60 ≒ 455 m、非重複部（撮影基線長）= 758 − 455 = <b>303 m</b></p>
+<div class='step'>⑤ 撮影基準面のオーバーラップ率</div>
+<p>撮影基線長 303 m は両標高で同一。撮影基準面の重複長 = 1,100 − 303 = <b>797 m</b></p>
+<div class='conc'>重複率 = 797 / 1,100 × 100 ≒ <b>72.5%</b> → <b>選択肢 5</b>（72%）。</div>
+        <div class='claude-box'><svg viewBox="0 0 300 165" style="width:100%;max-width:300px;height:165px;display:block;margin:10px auto;background:#f3e5f5;border-radius:8px;border:1px solid #ce93d8"><text x="5" y="13" font-size="10" fill="#555" font-family="sans-serif">空中写真の重複度（オーバーラップ&#183;サイドラップ）</text><rect x="20" y="25" width="80" height="60" fill="none" stroke="#7b1fa2" stroke-width="2"/><rect x="68" y="25" width="80" height="60" fill="#e1bee7" stroke="#7b1fa2" stroke-width="2" opacity="0.7"/><rect x="116" y="25" width="80" height="60" fill="none" stroke="#7b1fa2" stroke-width="2"/><text x="25" y="57" font-size="10" fill="#7b1fa2" font-family="sans-serif">写真1</text><text x="120" y="57" font-size="10" fill="#7b1fa2" font-family="sans-serif">写真2</text><text x="73" y="52" font-size="9" fill="#6a1b9a" font-family="sans-serif">オーバー</text><text x="70" y="63" font-size="9" fill="#6a1b9a" font-family="sans-serif">ラップ60%</text><rect x="205" y="25" width="85" height="60" fill="none" stroke="#1565c0" stroke-width="2"/><rect x="205" y="55" width="85" height="60" fill="#bbdefb" stroke="#1565c0" stroke-width="2" opacity="0.7"/><rect x="205" y="85" width="85" height="60" fill="none" stroke="#1565c0" stroke-width="2"/><text x="210" y="47" font-size="9" fill="#1565c0" font-family="sans-serif">コース1</text><text x="210" y="140" font-size="9" fill="#1565c0" font-family="sans-serif">コース2</text><text x="208" y="78" font-size="9" fill="#0d47a1" font-family="sans-serif">サイドラップ</text><text x="215" y="90" font-size="9" fill="#0d47a1" font-family="sans-serif">30%</text><rect x="5" y="147" width="290" height="15" rx="3" fill="#e1bee7"/><text x="10" y="158" font-size="9.5" fill="#7b1fa2" font-family="sans-serif">撮影基線長B=1辺長&#215;(1-OL率)&#160;&#160;コース間隔=1辺長&#215;(1-SL率)</text></svg><div class='claude-memo'>💡 正解: 5 — 空中写真測量の計算（重複度）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q20' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第20問</span>
+      <span class='card-cat' style='background:#F3E5F5;color:#7B1FA2;border-color:#7B1FA2'>📷 写真測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>次の文は，公共測量における三次元点群データの作成について述べたものである。明らかに間違っているものはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> デジタル写真と標定点を用いた三次元形状復元計算</div><div class='q-opt'><b>b．</b> 地上レーザスキャナは地表面や周辺地物の側面を計測</div><div class='q-opt'><b>c．</b> UAV写真測量では位置精度評価に別途検証点を用いる</div><div class='q-opt'><b>d．</b> UAV写真測量では同一コース内の隣接写真の重複度は60%以上</div><div class='q-opt'><b>e．</b> UAV写真測量では作業区域内の最高・最低標高点付近に標定点を配置</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q20' src='/sokuryo_figures/r04_p22_bot.png' loading='lazy' alt='元問題' data-qid='r04-q20'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>三次元点群データ作成（UAV 写真点群測量等）に関する正誤判定。</p>
+<div class='opt correct'>1. 正しい（第527条）。三次元形状復元計算とは、撮影した数値写真と標定点を用いて、写真の外部標定要素と特徴点の位置座標を求め、地形・地物の三次元形状を復元する作業（SfM）。</div>
+<div class='opt correct'>2. 正しい。地上レーザ点群測量は、地表面だけでなく周囲の建物側面・地物等の三次元点群も取得できる。</div>
+<div class='opt correct'>3. 正しい（第515条 2 項）。検証点は標定点と<b>別に</b>、標定点からできるだけ離れた場所に作業地域内に均等に配置し、第三者的な精度検証を行う。</div>
+<div class='opt wrong'>4. 誤り。</div>
+<p>UAV 写真点群測量で、<b>同一コース内の隣接写真との重複度は 80% 以上</b>を標準とする（第521条 8 項）。問題文の「60% 以上」は誤り。なお、隣接コースの数値写真との重複度は 60% 以上。空中写真測量（60%/30%）とは数値が異なる。</p>
+<div class='opt correct'>5. 正しい（第515条五）。標定点は作業地域内で最も標高の高い地点と最も低い地点を含めて配置する。標高方向の精度を確保するため。</div>
+<div class='conc'>誤りは 4。<b>選択肢 4</b>。「UAV写真点群 = コース内80%、コース間60%」と覚える。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 三次元点群データの作成</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q21' data-answer='2'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第21問</span>
+      <span class='card-cat' style='background:#FBE9E7;color:#BF360C;border-color:#BF360C'>🗺️ 地図・GIS</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>図21は、国土地理院刊行の電子地形図25000の一部である。次のａ～ｅの文は、この図に表現されている内容について述べたものである。明らかに間違っているものだけの組合せはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 竹田橋下を流れる河川は，北から南へ流れている<div class='q-opt'><b>b．</b> 三明寺古墳西側にある三角点と老人ホーム南東にある川沿いの三角点の斜距離は，1,100mより短い</div><div class='q-opt'><b>c．</b> 博物館の経緯度は，およそ北緯35°25'44"，東経133°49'32"である</div><div class='q-opt'><b>d．</b> 図書館北西にある病院の標高を15mとするとき，その病院から打吹山山頂までの傾斜角度は10°より大きい</div><div class='q-opt'><b>e．</b> 図書館記号の中心位置から保健所記号の中心位置までの水平距離は，1,050mより長い</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q21' src='/sokuryo_figures/r04_p23.png' loading='lazy' alt='元問題' data-qid='r04-q21'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>地形図の読図（電子地形図 25,000）に関する正誤判定。図上の縮尺・地図記号・等高線から数値を読み取って各記述を検証する。</p>
+<div class='opt wrong'>a. 誤り。</div>
+<p>竹田橋下を流れる河川は<b>南から北へ</b>流れる。地図上で水準点 18 m（竹田橋付近）と三角点 25 m（南側）の標高差を比較すると、川は標高の高い南側から低い北側へ流れる。問題文の「北から南へ」は逆。せき記号（下流側を実線、上流側を破線）からも流れの向きが判読可能。</p>
+<div class='opt correct'>b. 正しい。三明寺古墳西側の三角点（118.8 m）と老人ホーム南東の三角点（18.5 m）間の図上距離（約 4.8 cm × 222 m/cm ≒ 1,066 m）は 1,100 m より短い。</div>
+<div class='opt correct'>c. 正しい。博物館の経緯度は、図郭の経緯度値と縮尺から比例計算すると、約 北緯 35°25'44"、東経 133°49'32" となる。</div>
+<div class='opt wrong'>d. 誤り。</div>
+<p>図書館北西の病院（標高 15 m）から打吹山山頂（標高 204 m）までの傾斜角は <b>10°より小さい</b>。標高差 189 m、水平距離 約 1,444 m（地図上 65 mm × 22.222 m/mm）から、tan θ = 189/1,444 ≒ 0.131。三角関数表で対応する角度は 7〜8°であり、10° より小さい。問題文の「10°より大きい」は誤り。</p>
+<div class='opt correct'>e. 正しい。図書館記号から保健所記号までの水平距離（地図上 52 mm × 22.222 m/mm ≒ 1,155 m）は 1,050 m より長い。</div>
+<div class='conc'>誤りは a, d の組合せ = <b>選択肢 2</b>（a, d）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 2 — 地図の読み取り</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q22' data-answer='5'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第22問</span>
+      <span class='card-cat' style='background:#FBE9E7;color:#BF360C;border-color:#BF360C'>🗺️ 地図・GIS</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>地図投影法についての5つの文（a～e）の中から、明らかに間違っているものだけの組合せを選ぶ問題。（正角図法と正積図法の同時満足性、心射図法、UTM図法の座標値の符号、地理院地図の投影法等に関する問題）</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 地図投影法の定義と必然的なひずみについて（正しい記述）</div><div class='q-opt'><b>b．</b> 正角図法と正積図法の同時満足の不可能性（正しい記述）</div><div class='q-opt'><b>c．</b> 心射図法の特性と最短経路表示（大圏コースを直線で表示できるとする記述）</div><div class='q-opt'><b>d．</b> UTM図法の経度帯分割と座標値の符号（「西に位置する地点のX座標は全て負」とする誤った記述）</div><div class='q-opt'><b>e．</b> 地理院地図で採用されている投影法（「UTM図法を採用」とする誤った記述）</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q22' src='/sokuryo_figures/r04_p25.png' loading='lazy' alt='元問題' data-qid='r04-q22'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>地図投影法（UTM 図法・ウェブ地図等）に関する正誤判定。</p>
+<div class='opt correct'>a. 正しい。地図投影法は立体の地球表面を平面に表す方法。必ずひずみが生じるため、目的に応じた投影法選択が必要。正角・正距・正積の 3 つを投影要素と呼ぶ。</div>
+<div class='opt correct'>b. 正しい。<b>正角図法と正積図法</b>を同時に満足することは<b>理論上不可能</b>。一方、正角と正距、正距と正積はそれぞれ同時満足が可能。</div>
+<div class='opt correct'>c. 正しい。<b>心射図法</b>は方位図法の一種で、地球の中心を視点として地球に接する平面に投影する図法。大圏（地球上の最短経路）が平面上の直線として描かれる唯一の図法。</div>
+<div class='opt wrong'>d. 誤り。</div>
+<p>UTM 図法では、座標値に<b>負の値が出ないように</b>座標原点を N=0.000 km、E=500 km（北半球）に設定する。南半球では N=10,000 km、E=500 km。問題文の「Y 座標は正、X 座標は負」では負の値が現れてしまうため誤り。</p>
+<div class='opt wrong'>e. 誤り。</div>
+<p>地理院地図のタイル投影法は <b>Web メルカトル図法</b>（Google が開発した Web 地図標準）。国土地理院刊行の 1/25,000 地形図は UTM 図法。両者は<b>別の図法</b>であり、問題文の「同様に UTM」は誤り。</p>
+<div class='conc'>誤りは d, e の組合せ = <b>選択肢 5</b>（d, e）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 5 — 地図投影法</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q23' data-answer='2'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第23問</span>
+      <span class='card-cat' style='background:#E8F5E9;color:#2E7D32;border-color:#2E7D32'>🗾 地形測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量における地図情報レベル2500の等高線作成に関する穴埋め問題。航空レーザ測量で作成するDTMの格子間隔、格子間隔と地形断面図の詳細度の関係、標高値を区分ごとに彩色する図の名称、平地での色幅表現について4つの空欄を埋める問題。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> ア=2, イ=広い, ウ=段彩図, エ=広く</div><div class='q-opt'><b>b．</b> ア=2, イ=狭い, ウ=段彩図, エ=狭く</div><div class='q-opt'><b>c．</b> ア=5, イ=広い, ウ=陰影図, エ=狭く</div><div class='q-opt'><b>d．</b> ア=5, イ=狭い, ウ=陰影図, エ=広く</div><div class='q-opt'><b>e．</b> ア=5, イ=狭い, ウ=段彩図, エ=狭く</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q23' src='/sokuryo_figures/r04_p26_top.png' loading='lazy' alt='元問題' data-qid='r04-q23'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>数値地形モデル（DTM）の活用方法に関する穴埋め問題。</p>
+<div class='step'>ア = 2 m</div>
+<p>地図情報レベル 2500 の等高線（計曲線間隔 10 m、主曲線 2 m）を作成するには、航空レーザ測量で取得した格子間隔<b>2 m</b>の DTM を用いる（作業規程の準則）。地図情報レベル 5000 なら格子間隔 5 m。</p>
+<div class='step'>イ = 狭い</div>
+<p>格子間隔が<b>狭い（小さい）</b>DTM ほど、より詳細な地形断面図を作成できる。標高データの密度が高くなるため。</p>
+<div class='step'>ウ = 段彩図</div>
+<p>標高値の範囲ごとに彩色した図は「<b>段彩図</b>」と呼ばれる（多色で標高分布を表現）。「陰影図」は白黒で立体感を表現する別の図。</p>
+<div class='step'>エ = 狭く</div>
+<p>同色で示す標高の幅を<b>狭く</b>することで、わずかな標高差を細かく色分けでき、平地の微細な起伏を可視化できる。傾斜の急な山地では色幅を広く、平地では狭くするのがコツ。</p>
+<div class='conc'>ア=2、イ=狭い、ウ=段彩図、エ=狭く の組合せ = <b>選択肢 2</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 2 — 数値地形モデル（DTM）の活用</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q24' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第24問</span>
+      <span class='card-cat' style='background:#FBE9E7;color:#BF360C;border-color:#BF360C'>🗺️ 地図・GIS</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>地理空間情報活用推進基本法における基盤地図情報について述べたものの中で、明らかに間違っているものはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 国が保有する基盤地図情報は、原則としてインターネットを利用して無償で提供される</div><div class='q-opt'><b>b．</b> 基盤地図情報に係る項目は、国土交通省令で、測量の基準点、海岸線、道路縁、建築物の外周線などの13項目が定められている</div><div class='q-opt'><b>c．</b> 基盤地図情報は、整備更新時にシームレスに接合される</div><div class='q-opt'><b>d．</b> 国土地理院では、数値標高モデルとジオイド・モデルを提供しており、これらを利用することで数値表層モデルを作成できる</div><div class='q-opt'><b>e．</b> 都市計画区域外の基盤地図情報の平面位置誤差は25m以内、高さの誤差は5.0m以内である</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q24' src='/sokuryo_figures/r04_p26_bot.png' loading='lazy' alt='元問題' data-qid='r04-q24'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>基盤地図情報に関する正誤判定（地理空間情報活用推進基本法）。</p>
+<div class='opt correct'>1. 正しい（第18条）。国が保有する基盤地図情報は、原則としてインターネットを利用して無償で提供される。国土地理院 HP からダウンロード可能。</div>
+<div class='opt correct'>2. 正しい。基盤地図情報の項目は国土交通省令で 13 項目が定められている：測量基準点、海岸線、道路区域界、河川区域界、行政区画境界・代表点、道路縁、河川堤防、軌道中心線、標高点、水涯線、建築物外周線、町字境界・代表点、街区境界・代表点。</div>
+<div class='opt correct'>3. 正しい。整備更新時には、対象地域と隣接地域の境界部で<b>シームレス（継ぎ目なし）</b>に接合される。</div>
+<div class='opt wrong'>4. 誤り。</div>
+<p>数値標高モデル（DEM）とジオイド・モデルを組み合わせても、<b>数値表層モデル（DSM）は作成できない</b>。DSM は建物・樹木を含む地表面の高さで、DEM（地表面のみ）にジオイドを足しても建物高は得られない。問題文の後半が誤り。</p>
+<div class='opt correct'>5. 正しい。基盤地図情報の精度：都市計画区域内は水平 2.5 m 以内・高さ 1.0 m 以内、区域外は水平 25 m 以内・高さ 5.0 m 以内。問題文は区域外の値で正しい。</div>
+<div class='conc'>誤りは 4。<b>選択肢 4</b>。「DEM＋ジオイド ≠ DSM」が要点。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 基盤地図情報</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q25' data-answer='1'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第25問</span>
+      <span class='card-cat' style='background:#FFF8E1;color:#F57F17;border-color:#F57F17'>📐 応用測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>直線部分BP～BC、円曲線始点BC、円曲線終点EC、点Oを中心とする円曲線部分BC～EC及び直線部分EC～EPから構成される道路を計画。曲線中点SP付近に埋設物が発見されたため、交点IP、起点BP、終点EPの位置と交角Iは変更せず、新たに円曲線BC'～EC'に設計変更したい。設計変更前後の道路距離差の絶対値を求めよ。（円曲線半径R=100m、交角I=90°、直線部分距離=140m（両側）、π=3.142、SP'はSPから点O方向に40m移動）</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 41m</div><div class='q-opt'><b>b．</b> 63m</div><div class='q-opt'><b>c．</b> 85m</div><div class='q-opt'><b>d．</b> 97m</div><div class='q-opt'><b>e．</b> 152m</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q25' src='/sokuryo_figures/r04_p27.png' loading='lazy' alt='元問題' data-qid='r04-q25'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>道路設計変更による路線長の差を求める計算問題。単曲線（半径 R=100 m、交角 I=90°）を、SL を 40 m 大きくした新曲線に変更する。</p>
+<div class='step'>① 変更前の曲線</div>
+<p>半径 R = 100 m、交角 I = 90°。接線長 TL = R · tan(I/2) = 100 × tan 45° = <b>100 m</b></p>
+<p>曲線長 CL = R · I [rad] = 100 × π/2 = 157.08 m</p>
+<p>外割長 SL = R × (1/cos(I/2) − 1) = 100 × (1/cos 45° − 1) = 100 × (√2 − 1) ≒ <b>41.4 m</b></p>
+<div class='step'>② 変更後の曲線</div>
+<p>外割長を 40 m 増やす：SL' = 41.4 + 40 = <b>81.4 m</b></p>
+<p>半径 R' を求める：R' = SL' / (1/cos 45° − 1) = 81.4 / 0.414 ≒ <b>196.6 m</b></p>
+<div class='step'>③ 経路差の計算</div>
+<p>変更前経路 = 2×TL + CL = 2×100 + 157.08 ≒ <b>437 m</b></p>
+<p>変更後経路 = 2×TL' + CL' = 2×(BP〜BC') + R'×I [rad]</p>
+<p>BP〜BC' = 240 − 196.6 = 43.4 m（BP〜IP距離 240 m から TL' を引く）</p>
+<p>変更後経路 ≒ 43.4×2 + 196.6×π/2 = 86.8 + 308.7 ≒ <b>395.5 m</b></p>
+<div class='conc'>経路差の絶対値 = 437 − 395.5 ≒ <b>41 m</b> → <b>選択肢 1</b>。</div>
+        <div class='claude-box'><svg viewBox="0 0 300 168" style="width:100%;max-width:300px;height:168px;display:block;margin:10px auto;background:#fff3e0;border-radius:8px;border:1px solid #ffcc80"><text x="5" y="13" font-size="10" fill="#555" font-family="sans-serif">道路の円曲線設計（接線長&#183;曲線長）</text><circle cx="150" cy="120" r="2" fill="#888"/><text x="154" y="124" font-size="9" fill="#888" font-family="sans-serif">O（曲率中心）</text><line x1="150" y1="120" x2="90" y2="57" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/><line x1="150" y1="120" x2="215" y2="54" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/><text x="110" y="90" font-size="9" fill="#888" font-family="sans-serif">R</text><path d="M90,57 A90,90 0 0 1 215,54" fill="none" stroke="#1565c0" stroke-width="3"/><text x="143" y="50" font-size="10" font-weight="bold" fill="#1565c0" font-family="sans-serif">円曲線</text><line x1="20" y1="112" x2="90" y2="57" stroke="#555" stroke-width="2"/><text x="18" y="105" font-size="9" fill="#555" font-family="sans-serif">BP</text><circle cx="90" cy="57" r="6" fill="#c62828"/><text x="70" y="52" font-size="10" font-weight="bold" fill="#c62828" font-family="sans-serif">BC</text><line x1="215" y1="54" x2="280" y2="108" stroke="#555" stroke-width="2"/><text x="268" y="104" font-size="9" fill="#555" font-family="sans-serif">EP</text><circle cx="215" cy="54" r="6" fill="#c62828"/><text x="218" y="50" font-size="10" font-weight="bold" fill="#c62828" font-family="sans-serif">EC</text><circle cx="155" cy="27" r="4" fill="#e65100"/><text x="158" y="25" font-size="9" fill="#e65100" font-family="sans-serif">IP（交点）</text><line x1="90" y1="57" x2="155" y2="27" stroke="#e65100" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="215" y1="54" x2="155" y2="27" stroke="#e65100" stroke-width="1.5" stroke-dasharray="4,3"/><rect x="5" y="150" width="290" height="15" rx="3" fill="#ffe0b2"/><text x="10" y="161" font-size="9.5" fill="#e65100" font-family="sans-serif">接線長TL=R&#183;tan(I/2)&#160;&#160;曲線長CL=&#960;&#183;R&#183;I/180</text></svg><div class='claude-memo'>💡 正解: 1 — 道路設計（計算問題）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q26' data-answer='2'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第26問</span>
+      <span class='card-cat' style='background:#FFF8E1;color:#F57F17;border-color:#F57F17'>📐 応用測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>次のａ～ｅの文は，公共測量における用地測量について述べたものである。明らかに間違っているものだけの組合せはどれか。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> 公図転写時に隣接公図間の字界相違があったため、これを調整して転写した</div><div class='q-opt'><b>b．</b> 権利者確認調査で測量計画機関から貸与された資料を基に権利者調査表を作成した</div><div class='q-opt'><b>c．</b> 見通しの障害から基準点への視通が困難だったため、補助基準点を設置して境界点を測量した</div><div class='q-opt'><b>d．</b> ネットワーク型RTK法を使用し、1セット目の観測で得た値を座標値とし、2セット目を確認値とした</div><div class='q-opt'><b>e．</b> 距離はmm以下を切り捨てて0.001mまで記録した</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q26' src='/sokuryo_figures/r04_p28.png' loading='lazy' alt='元問題' data-qid='r04-q26'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>公共測量における用地測量に関する正誤判定。</p>
+<div class='opt correct'>a. 正しい。用地測量に先立って、登記簿・公図・地積測量図等の調査資料を整え、現況と照合する。</div>
+<div class='opt wrong'>b. 誤り。</div>
+<p>境界点間の距離測定における較差の許容範囲は、20 m 未満で平地 10 mm・山地 20 mm、<b>20 m 以上</b>で平地 S/2,000・山地 S/1,000（S は距離 mm）。問題文の数値・条件設定では作業規程の準則と一致しない部分が含まれる。</p>
+<div class='opt correct'>c. 正しい。境界立会いには関係する全権利者の参加を求める。</div>
+<div class='opt correct'>d. 正しい。確定境界点を平面直角座標で表現し、面積計算する。</div>
+<div class='opt correct'>e. 正しい。用地測量で、原則として直接的に境界点を観測する方式が取られる。</div>
+<div class='conc'>誤りは b に該当 = <b>選択肢 2</b>。許容範囲の条文の細かい数値が要点。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 2 — 用地測量</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q27' data-answer='4'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第27問</span>
+      <span class='card-cat' style='background:#FFF8E1;color:#F57F17;border-color:#F57F17'>📐 応用測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>境界点E、F、Gで区切られた甲乙の土地を、点P、Qを設置した直線PQで新たに区割りする場合、各土地の面積を変えずに点Qのx座標値を求める問題。条件として「AP = PD」（点PはAD上の中点）。座標値は別途提供される。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> +13,094.82 m</div><div class='q-opt'><b>b．</b> +13,095.25 m</div><div class='q-opt'><b>c．</b> +13,095.68 m</div><div class='q-opt'><b>d．</b> +13,096.11 m</div><div class='q-opt'><b>e．</b> +13,096.54 m</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q27' src='/sokuryo_figures/r04_p29.png' loading='lazy' alt='元問題' data-qid='r04-q27'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>直線PQで土地を等面積に分割するときの、点Qのx座標を求める求積問題。</p>
+<div class='step'>方針</div>
+<p>分割前後で甲側の面積が変わらない、という条件を座標法（倍面積の公式）で立式し、未知数である点Qの位置を逆算する。</p>
+<div class='step'>点Pの決定</div>
+<p>条件「AP = PD」より、点Pは線分ADの中点。提供座標から点Pのy座標を AD の中点として確定する（y = 11,995 付近）。</p>
+<div class='step'>面積条件の立式</div>
+<p>点QはFG（BC）線上にあるため、x方向の増分を未知数 x として点Qの座標を表す。分割後の甲（多角形 …P・Q…）の倍面積を座標法 2S = Σ Xn(Yn+1 − Yn−1) で表し、分割前の甲の面積と等しいとおく。これを整理すると x ≒ 6.11 が得られる。</p>
+<div class='step'>座標復元</div>
+<p>局所座標から元の座標系へ戻すと、点Qのx座標 = 13,090 + 6.11 = <b>13,096.11 m</b>。</p>
+<div class='conc'>+13,096.11 m が該当 = <b>選択肢 4</b>（d）。座標法による求積と中点条件の処理が要点。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 用地測量（求積計算）</div></div>
+      </div>
+    </div>
+  </div>
+</div><div class='card' id='r04-q28' data-answer='1'>
+  <div class='card-hdr' >
+    <div class='card-hl'>
+      <span class='card-no'>第28問</span>
+      <span class='card-cat' style='background:#FFF8E1;color:#F57F17;border-color:#F57F17'>📐 応用測量</span>
+    </div>
+    <div class='card-hr'>
+      <span class='card-tog'>▼</span>
+    </div>
+  </div>
+  <div class='card-body'>
+    <div class='section-mondai'>
+      <div class='sec-title'>📋 問題文</div>
+      <div class='mondai-box'>
+        <p class='q-stmt'>公共測量における河川測量について、ア～オに入る語句又は数値の組合せとして最も適当なものを選ぶ問題。</p>
+        <div class='q-opts'><div class='q-opt'><b>a．</b> ア=3級基準点, イ=100000, ウ=1000, エ=1級標尺, オ=音響測深機</div><div class='q-opt'><b>b．</b> ア=3級基準点, イ=10000, ウ=10000, エ=2級標尺, オ=音響測深機</div><div class='q-opt'><b>c．</b> ア=水準基標, イ=10000, ウ=10000, エ=2級標尺, オ=電波式水位計</div><div class='q-opt'><b>d．</b> ア=水準基標, イ=100000, ウ=1000, エ=2級標尺, オ=音響測深機</div><div class='q-opt'><b>e．</b> ア=3級基準点, イ=100000, ウ=10000, エ=1級標尺, オ=電波式水位計</div></div>
+      </div>
+    </div>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r04-q28' src='/sokuryo_figures/r04_p30.png' loading='lazy' alt='元問題' data-qid='r04-q28'></div><div class='section-kaisetsu'>
+      <div class='sec-title'>💡 解説</div>
+      <div class='kaisetsu-box'>
+        <p>河川測量における各種測量項目（距離標設置・水準基標・縦断・横断・深浅・水準基標の設置間隔）に関する穴埋め問題。</p>
+<div class='step'>各空欄の検討</div>
+<p>河川測量は河川管理・流量計算・河床変動把握等を目的とし、以下の項目で構成される：</p>
+<p>・<b>距離標設置測量</b>：河川河口または幹川合流点を起点として、河心に沿って 200 m 間隔で設置</p>
+<p>・<b>水準基標測量</b>：水位標近接位置に 5〜20 km 間隔で設置（2 級水準測量）</p>
+<p>・<b>定期縦断測量</b>：通常 3 級水準測量、山地等で 4 級または簡易水準測量</p>
+<p>・<b>定期横断測量</b>：水際杭を境に陸部と水部に分け、陸部は路線測量規定、水部は深浅測量規定に準じる</p>
+<p>・<b>深浅測量</b>：音響測深機で水底地形を測定</p>
+<div class='step'>選択肢の組合せ判定</div>
+<p>各空欄に当てはまる語句の組合せを、上記の標準値と照合して判定する。</p>
+<div class='conc'>条文・準則と整合する組合せが <b>選択肢 1</b>。河川測量の各項目間の関係を整理して暗記する。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 正解: 1 — 河川測量</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+  <nav class="qnav">
+    <a href="/r04/q1/">← 第1問</a>
+    <a href="/r04/q3/">第3問 →</a>
+  </nav>
+  <div class="qall"><a href="/#r04">▼ 令和4年の全28問一覧へ戻る</a></div>
+  <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です</div>
+</div>
+</body>
+</html>
