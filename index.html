@@ -869,15 +869,30 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <p>・N_B = 41.40 + 0.05 × 2 = <b>41.50 m</b>（距離 2,000 m）</p>
 <p>・N_C = 41.40 + 0.05 × 4 = 41.60 m（距離 4,000 m）</p>
 <p>・N_D = 41.40 + 0.05 × 6 = 41.70 m（距離 6,000 m）</p>
-<p>・N_E = 41.40 + 0.05 × 8 = 41.75 m（距離 8,000 m）</p>
+<p>・N_E = 41.40 + 0.05 × 8 = 41.80 m（距離 8,000 m）</p>
 <div class='step'>③ 各点の標高 h = H − N</div>
 <p>・h_A = 91.40 − 41.40 = 50.00 m</p>
 <p>・h_B = 91.60 − 41.50 = <b>50.10 m</b> ← 最高</p>
 <p>・h_C = 91.65 − 41.60 = 50.05 m</p>
 <p>・h_D = 91.70 − 41.70 = 50.00 m</p>
-<p>・h_E = 91.75 − 41.75 = 50.00 m</p>
+<p>・h_E = 91.75 − 41.80 = 49.95 m</p>
 <div class='conc'>最も標高が高いのは新点 B（50.10 m）= <b>選択肢 2</b>。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 H（標高）=h（楕円体高）-N（ジオイド高）。ジオイドが高いほど標高は低くなる（逆の関係）。</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 310" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#e3f2fd;border:1px solid #90caf9" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">標高 h ＝ 楕円体高 H − ジオイド高 N（Nは E へ向けて増える）</text>
+<line x1="55" y1="250" x2="405" y2="250" stroke="#1565c0" stroke-width="3"/>
+<text x="322" y="272" font-size="12.5" fill="#1565c0" font-family="sans-serif">楕円体（基準）</text>
+<line x1="55" y1="185" x2="405" y2="163" stroke="#2e7d32" stroke-width="3"/>
+<text x="60" y="209" font-size="12.5" fill="#2e7d32" font-family="sans-serif">ジオイド N=41.40 →＋0.05/1,000m→ 41.80</text>
+<polyline points="80,108 160,96 240,102 320,108 395,114" fill="none" stroke="#795548" stroke-width="2.5"/>
+<circle cx="80" cy="108" r="7" fill="#795548"/><text x="74" y="93" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">A</text>
+<circle cx="160" cy="96" r="9" fill="#c62828"/><text x="148" y="80" font-size="13.5" font-weight="bold" fill="#c62828" font-family="sans-serif">B★50.10</text>
+<circle cx="240" cy="102" r="7" fill="#795548"/><text x="234" y="87" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">C</text>
+<circle cx="320" cy="108" r="7" fill="#795548"/><text x="314" y="93" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">D</text>
+<circle cx="395" cy="114" r="7" fill="#795548"/><text x="389" y="99" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">E</text>
+<text x="60" y="138" font-size="12" fill="#795548" font-family="sans-serif">h: 50.00　50.10　50.05　50.00　49.95（m）</text>
+<rect x="16" y="282" width="408" height="26" rx="5" fill="#fff"/>
+<text x="24" y="300" font-size="12.5" fill="#555" font-family="sans-serif">楕円体高の増分よりジオイド高の増分が大きいと、標高はむしろ下がる</text>
+</svg><div class='claude-memo'>💡 H（標高）=h（楕円体高）-N（ジオイド高）。ジオイドが高いほど標高は低くなる（逆の関係）。</div></div>
       </div>
     </div>
   </div>
@@ -1861,7 +1876,27 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <p>B の楕円体高 H_B = 497.57 m を使い：</p>
 <div class='conc'>h_B = H_B − N_B = 497.57 − 40.77 = <b>456.80 m</b></div>
 <div class='conc'>最も近いのは <b>選択肢 4</b>（456.80 m）。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 H=h-N（標高=楕円体高-ジオイド高）。ジオイド傾斜でNが変化→標高も変わる。計算の順序を覚える。</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 320" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#e8f5e9;border:1px solid #a5d6a7" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">標高 h ＝ 楕円体高 H − ジオイド高 N</text>
+<path d="M 60,80 L 130,72 L 240,90 L 360,98 L 372,97" fill="none" stroke="#795548" stroke-width="3"/>
+<text x="378" y="100" font-size="12" fill="#795548" font-family="sans-serif">地面</text>
+<circle cx="110" cy="74" r="9" fill="#795548"/><text x="96" y="60" font-size="13.5" font-weight="bold" fill="#795548" font-family="sans-serif">A（既知点）</text>
+<circle cx="345" cy="97" r="9" fill="#c62828"/><text x="332" y="83" font-size="13.5" font-weight="bold" fill="#c62828" font-family="sans-serif">B（新点）</text>
+<path d="M 60,196 L 372,207" fill="none" stroke="#2e7d32" stroke-width="3"/>
+<text x="376" y="214" font-size="11.5" fill="#2e7d32" font-family="sans-serif">ジオイド</text>
+<line x1="60" y1="252" x2="372" y2="252" stroke="#1565c0" stroke-width="3"/>
+<text x="376" y="257" font-size="11.5" fill="#1565c0" font-family="sans-serif">楕円体</text>
+<line x1="110" y1="83" x2="110" y2="193" stroke="#2e7d32" stroke-width="2"/>
+<text x="118" y="145" font-size="12.5" fill="#2e7d32" font-family="sans-serif">h_A=492.48</text>
+<line x1="110" y1="199" x2="110" y2="249" stroke="#1565c0" stroke-width="2"/>
+<text x="118" y="230" font-size="12.5" fill="#1565c0" font-family="sans-serif">N_A=41.61</text>
+<line x1="345" y1="106" x2="345" y2="202" stroke="#c62828" stroke-width="2.5"/>
+<text x="240" y="160" font-size="13" font-weight="bold" fill="#c62828" font-family="sans-serif">h_B=456.80★</text>
+<line x1="345" y1="208" x2="345" y2="249" stroke="#1565c0" stroke-width="2"/>
+<text x="353" y="233" font-size="12.5" fill="#1565c0" font-family="sans-serif">N_B=40.77</text>
+<rect x="16" y="284" width="408" height="26" rx="5" fill="#fff"/>
+<text x="24" y="302" font-size="12.5" fill="#555" font-family="sans-serif">ジオイドは A→B（12 km）で 0.84 m 下がる（−0.07 m/1,000 m）</text>
+</svg><div class='claude-memo'>💡 H=h-N（標高=楕円体高-ジオイド高）。ジオイド傾斜でNが変化→標高も変わる。計算の順序を覚える。</div></div>
       </div>
     </div>
   </div>
@@ -2082,7 +2117,25 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <p>σXC² = (0.5 × 5)² + (86,603 × 0.000024)² ≒ 2.5² + 2.1² = 6.25 + 4.4 ≒ 10.7　→　σXC ≒ 3.3 mm → <b>約 3 mm</b></p>
 <p>σYC² = (0.86603 × 5)² + (50,000 × 0.000024)² ≒ 4.33² + 1.2² = 18.8 + 1.5 ≒ 20.2　→　σYC ≒ 4.5 mm → <b>約 5 mm</b></p>
 <div class='conc'>組合せとして最も近いのは <b>選択肢 2</b>（σXC = 3 mm、σYC = 5 mm）。角度の標準偏差は必ず″→ラジアンに換算（÷206,265）するのがポイント。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 計算ミス防止: 式を書いてから数値代入。単位換算を忘れずに。</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 320" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#fce4ec;border:1px solid #f48fb1" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">方向角：北から時計回りに測る（θ = T + α − 360°）</text>
+<line x1="150" y1="180" x2="150" y2="55" stroke="#555" stroke-width="2"/>
+<polygon points="145,62 150,48 155,62" fill="#555"/>
+<text x="158" y="60" font-size="13" fill="#555" font-family="sans-serif">X（北）</text>
+<line x1="150" y1="180" x2="228" y2="258" stroke="#555" stroke-width="2.5"/>
+<circle cx="228" cy="258" r="12" fill="#1565c0"/><text x="222" y="263" font-size="12.5" font-weight="bold" fill="#fff" font-family="sans-serif">B</text>
+<text x="238" y="232" font-size="13" fill="#555" font-family="sans-serif">T=135°</text>
+<line x1="150" y1="180" x2="310" y2="88" stroke="#c62828" stroke-width="3"/>
+<circle cx="310" cy="88" r="12" fill="#c62828"/><text x="304" y="93" font-size="12.5" font-weight="bold" fill="#fff" font-family="sans-serif">C</text>
+<text x="258" y="150" font-size="13" font-weight="bold" fill="#c62828" font-family="sans-serif">D=100 m</text>
+<path d="M 150,120 A 60,60 0 0 1 202,150" fill="none" stroke="#c62828" stroke-width="2"/>
+<text x="163" y="105" font-size="13.5" font-weight="bold" fill="#c62828" font-family="sans-serif">θ=60°</text>
+<circle cx="150" cy="180" r="12" fill="#e65100"/><text x="144" y="185" font-size="12.5" font-weight="bold" fill="#fff" font-family="sans-serif">A</text>
+<text x="24" y="215" font-size="12.5" fill="#555" font-family="sans-serif">Aに整置し、Bを基準に</text>
+<text x="24" y="233" font-size="12.5" fill="#555" font-family="sans-serif">α=285°回してCを視準</text>
+<rect x="16" y="288" width="408" height="26" rx="5" fill="#fff"/>
+<text x="24" y="306" font-size="12.5" fill="#555" font-family="sans-serif">θ=135°+285°−360°=60° → XC=XA+Dcosθ、YC=YA+Dsinθ</text>
+</svg><div class='claude-memo'>💡 計算ミス防止: 式を書いてから数値代入。単位換算を忘れずに。</div></div>
       </div>
     </div>
   </div>
@@ -2121,7 +2174,24 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <p>鉛直写真では、高さのある地物は主点（鉛直点）から放射方向に倒れこんで写る。主点から先端までの距離 r = 4,000 画素、像の長さ Δr = 140 画素のとき：</p>
 <p>h = H × Δr / r = 2,200 × 140 / 4,000 = 2,200 × 0.035</p>
 <div class='conc'>h = <b>77 m</b>　→　<b>選択肢 5</b>。「倒れこみ Δr / 先端までの距離 r ＝ 塔高 h / 対地高度 H」の比例関係を覚える。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 計算ミス防止: 式を書いてから数値代入。単位換算を忘れずに。</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 310" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#f3e5f5;border:1px solid #ce93d8" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">写真上では、高い物は主点から外向きに「倒れこんで」写る</text>
+<rect x="80" y="45" width="290" height="215" fill="#fafafa" stroke="#555" stroke-width="1.5"/>
+<line x1="218" y1="145" x2="232" y2="159" stroke="#555" stroke-width="2"/>
+<line x1="232" y1="145" x2="218" y2="159" stroke="#555" stroke-width="2"/>
+<text x="240" y="172" font-size="12.5" fill="#555" font-family="sans-serif">主点</text>
+<rect x="248" y="108" width="30" height="30" fill="none" stroke="#2e7d32" stroke-width="2.5"/>
+<text x="284" y="122" font-size="12" fill="#2e7d32" font-family="sans-serif">建物の屋上</text>
+<text x="284" y="138" font-size="12" fill="#2e7d32" font-family="sans-serif">300画素=36m</text>
+<line x1="225" y1="152" x2="112" y2="88" stroke="#888" stroke-width="1.5" stroke-dasharray="5,4"/>
+<text x="128" y="142" font-size="12.5" fill="#888" font-family="sans-serif">r=4,000画素</text>
+<line x1="146" y1="107" x2="112" y2="88" stroke="#c62828" stroke-width="4"/>
+<circle cx="112" cy="88" r="5" fill="#c62828"/>
+<text x="96" y="72" font-size="12.5" font-weight="bold" fill="#c62828" font-family="sans-serif">高塔の像 Δr=140画素</text>
+<text x="118" y="210" font-size="12" fill="#888" font-family="sans-serif">（先端ほど外側にずれる）</text>
+<rect x="16" y="272" width="408" height="28" rx="5" fill="#fff"/>
+<text x="24" y="291" font-size="12.5" fill="#555" font-family="sans-serif">h = H × Δr / r = 2,200 × 140 / 4,000 = 77 m</text>
+</svg><div class='claude-memo'>💡 計算ミス防止: 式を書いてから数値代入。単位換算を忘れずに。</div></div>
       </div>
     </div>
   </div>
@@ -2825,7 +2895,20 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <div class='conc'>S = 1125.400 × 0.99756 × 6,370,000 / (6,370,000 + 100)</div>
 <div class='conc'>= 1125.400 × 0.99756 × 6,370,000 / 6,370,100 ≒ <b>1,122.64 m</b></div>
 <div class='conc'>よって、最も近いのは <b>選択肢 4</b>（1,122.64 m）。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 正解: 4 — 計算問題（距離観測・基準面補正）</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 300" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#e8f5e9;border:1px solid #a5d6a7" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">基準面補正：山の上で測った距離を海面の高さに「降ろす」</text>
+<circle cx="95" cy="100" r="10" fill="#e65100"/><text x="78" y="88" font-size="13" font-weight="bold" fill="#e65100" font-family="sans-serif">A</text>
+<circle cx="355" cy="88" r="10" fill="#e65100"/><text x="365" y="80" font-size="13" font-weight="bold" fill="#e65100" font-family="sans-serif">B</text>
+<line x1="95" y1="100" x2="355" y2="88" stroke="#e65100" stroke-width="3.5"/>
+<text x="130" y="70" font-size="13.5" font-weight="bold" fill="#e65100" font-family="sans-serif">観測距離（平均高さ Hm≒100 m の面）</text>
+<path d="M 60,225 Q 220,210 400,222" fill="none" stroke="#1565c0" stroke-width="3.5"/>
+<text x="105" y="252" font-size="13.5" font-weight="bold" fill="#1565c0" font-family="sans-serif">基準面上の距離 S（求める値）</text>
+<line x1="95" y1="100" x2="95" y2="220" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="355" y1="88" x2="355" y2="218" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="66" y="165" font-size="12.5" fill="#555" font-family="sans-serif">Hm</text>
+<rect x="16" y="264" width="408" height="26" rx="5" fill="#fff"/>
+<text x="24" y="282" font-size="12.5" fill="#555" font-family="sans-serif">S = D・cos((αA−αB)/2) × R/(R+Hm)　高い場所ほど距離は縮む</text>
+</svg><div class='claude-memo'>💡 正解: 4 — 計算問題（距離観測・基準面補正）</div></div>
       </div>
     </div>
   </div>
@@ -3841,7 +3924,23 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <div class='step'>④ 距離 S を求める</div>
 <div class='conc'>S = √(954.644² + 52.676²) = √(911,346 + 2,774) ≒ <b>956.097 m</b></div>
 <div class='conc'>よって、最も近いのは <b>選択肢 5</b>（956.097 m）。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 正解: 5 — 基準点測量（偏心補正計算）</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 290" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#fff8e1;border:1px solid #ffe082" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">相互偏心：測れない A−B 間を、偏心点 A1−B1 経由で求める</text>
+<line x1="60" y1="200" x2="395" y2="200" stroke="#c62828" stroke-width="3" stroke-dasharray="7,5"/>
+<text x="175" y="222" font-size="14" font-weight="bold" fill="#c62828" font-family="sans-serif">S＝求めたい距離</text>
+<line x1="130" y1="105" x2="330" y2="90" stroke="#1565c0" stroke-width="3.5"/>
+<text x="150" y="80" font-size="13.5" font-weight="bold" fill="#1565c0" font-family="sans-serif">S₁=1,000 m（実測した距離）</text>
+<line x1="60" y1="200" x2="130" y2="105" stroke="#e65100" stroke-width="2" stroke-dasharray="4,3"/>
+<text x="48" y="150" font-size="12.5" fill="#e65100" font-family="sans-serif">e₁=20m</text>
+<line x1="395" y1="200" x2="330" y2="90" stroke="#e65100" stroke-width="2" stroke-dasharray="4,3"/>
+<text x="368" y="150" font-size="12.5" fill="#e65100" font-family="sans-serif">e₂=50m</text>
+<circle cx="60" cy="200" r="13" fill="#c62828"/><text x="54" y="205" font-size="13" font-weight="bold" fill="#fff" font-family="sans-serif">A</text>
+<circle cx="395" cy="200" r="13" fill="#c62828"/><text x="389" y="205" font-size="13" font-weight="bold" fill="#fff" font-family="sans-serif">B</text>
+<circle cx="130" cy="105" r="13" fill="#1565c0"/><text x="119" y="110" font-size="12" font-weight="bold" fill="#fff" font-family="sans-serif">A1</text>
+<circle cx="330" cy="90" r="13" fill="#1565c0"/><text x="320" y="95" font-size="12" font-weight="bold" fill="#fff" font-family="sans-serif">B1</text>
+<text x="16" y="252" font-size="12.5" fill="#555" font-family="sans-serif">偏心角 α₁=300°・α₂=315° を使って S を AB 方向（X）と直角方向（Y）に分解し、</text>
+<text x="16" y="272" font-size="12.5" fill="#555" font-family="sans-serif">S = √(X² + Y²) で求める。</text>
+</svg><div class='claude-memo'>💡 正解: 5 — 基準点測量（偏心補正計算）</div></div>
       </div>
     </div>
   </div>
@@ -4131,7 +4230,20 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 <p>　 = 7.5625 + 4.6875 ≒ 12.25</p>
 <div class='conc'>σ_Z = √12.25 = <b>3.50 mm</b></div>
 <div class='conc'>ア=0.5、イ=5.5、ウ=86,603、エ=0.000025、オ=3.50 の組合せ = <b>選択肢 3</b>。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 正解: 3 — 標準偏差の計算（誤差伝播の法則）</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 280" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#fce4ec;border:1px solid #f48fb1" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">高低差 Z = D・sinθ（TSで距離と角度から高さを出す）</text>
+<line x1="80" y1="205" x2="360" y2="205" stroke="#888" stroke-width="1.5" stroke-dasharray="5,4"/>
+<line x1="80" y1="205" x2="360" y2="90" stroke="#555" stroke-width="3.5"/>
+<text x="185" y="128" font-size="14" font-weight="bold" fill="#555" font-family="sans-serif">D = 100 m</text>
+<line x1="360" y1="90" x2="360" y2="205" stroke="#c62828" stroke-width="3.5"/>
+<text x="370" y="152" font-size="14" font-weight="bold" fill="#c62828" font-family="sans-serif">Z = D・sinθ</text>
+<path d="M 140,205 A 60,60 0 0 0 133,183" fill="none" stroke="#e65100" stroke-width="2"/>
+<text x="148" y="192" font-size="13.5" font-weight="bold" fill="#e65100" font-family="sans-serif">θ = 30°</text>
+<circle cx="80" cy="205" r="11" fill="#1565c0"/><text x="63" y="228" font-size="13" font-weight="bold" fill="#1565c0" font-family="sans-serif">TS（A）</text>
+<circle cx="360" cy="90" r="11" fill="#c62828"/><text x="374" y="88" font-size="13" font-weight="bold" fill="#c62828" font-family="sans-serif">B</text>
+<rect x="16" y="238" width="408" height="30" rx="5" fill="#fff"/>
+<text x="24" y="258" font-size="12.5" fill="#555" font-family="sans-serif">σZ² = (sinθ・σD)² + (D・cosθ・σθ)²　※σθ は必ず″→rad（÷206,265）</text>
+</svg><div class='claude-memo'>💡 正解: 3 — 標準偏差の計算（誤差伝播の法則）</div></div>
       </div>
     </div>
   </div>

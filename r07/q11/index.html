@@ -323,15 +323,30 @@ body{padding:0}
 <p>・N_B = 41.40 + 0.05 × 2 = <b>41.50 m</b>（距離 2,000 m）</p>
 <p>・N_C = 41.40 + 0.05 × 4 = 41.60 m（距離 4,000 m）</p>
 <p>・N_D = 41.40 + 0.05 × 6 = 41.70 m（距離 6,000 m）</p>
-<p>・N_E = 41.40 + 0.05 × 8 = 41.75 m（距離 8,000 m）</p>
+<p>・N_E = 41.40 + 0.05 × 8 = 41.80 m（距離 8,000 m）</p>
 <div class='step'>③ 各点の標高 h = H − N</div>
 <p>・h_A = 91.40 − 41.40 = 50.00 m</p>
 <p>・h_B = 91.60 − 41.50 = <b>50.10 m</b> ← 最高</p>
 <p>・h_C = 91.65 − 41.60 = 50.05 m</p>
 <p>・h_D = 91.70 − 41.70 = 50.00 m</p>
-<p>・h_E = 91.75 − 41.75 = 50.00 m</p>
+<p>・h_E = 91.75 − 41.80 = 49.95 m</p>
 <div class='conc'>最も標高が高いのは新点 B（50.10 m）= <b>選択肢 2</b>。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 H（標高）=h（楕円体高）-N（ジオイド高）。ジオイドが高いほど標高は低くなる（逆の関係）。</div></div>
+        <div class='claude-box'><svg viewBox="0 0 440 310" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto;border-radius:8px;background:#e3f2fd;border:1px solid #90caf9" xmlns="http://www.w3.org/2000/svg">
+<text x="16" y="24" font-size="14" fill="#444" font-family="sans-serif">標高 h ＝ 楕円体高 H − ジオイド高 N（Nは E へ向けて増える）</text>
+<line x1="55" y1="250" x2="405" y2="250" stroke="#1565c0" stroke-width="3"/>
+<text x="322" y="272" font-size="12.5" fill="#1565c0" font-family="sans-serif">楕円体（基準）</text>
+<line x1="55" y1="185" x2="405" y2="163" stroke="#2e7d32" stroke-width="3"/>
+<text x="60" y="209" font-size="12.5" fill="#2e7d32" font-family="sans-serif">ジオイド N=41.40 →＋0.05/1,000m→ 41.80</text>
+<polyline points="80,108 160,96 240,102 320,108 395,114" fill="none" stroke="#795548" stroke-width="2.5"/>
+<circle cx="80" cy="108" r="7" fill="#795548"/><text x="74" y="93" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">A</text>
+<circle cx="160" cy="96" r="9" fill="#c62828"/><text x="148" y="80" font-size="13.5" font-weight="bold" fill="#c62828" font-family="sans-serif">B★50.10</text>
+<circle cx="240" cy="102" r="7" fill="#795548"/><text x="234" y="87" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">C</text>
+<circle cx="320" cy="108" r="7" fill="#795548"/><text x="314" y="93" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">D</text>
+<circle cx="395" cy="114" r="7" fill="#795548"/><text x="389" y="99" font-size="12.5" font-weight="bold" fill="#795548" font-family="sans-serif">E</text>
+<text x="60" y="138" font-size="12" fill="#795548" font-family="sans-serif">h: 50.00　50.10　50.05　50.00　49.95（m）</text>
+<rect x="16" y="282" width="408" height="26" rx="5" fill="#fff"/>
+<text x="24" y="300" font-size="12.5" fill="#555" font-family="sans-serif">楕円体高の増分よりジオイド高の増分が大きいと、標高はむしろ下がる</text>
+</svg><div class='claude-memo'>💡 H（標高）=h（楕円体高）-N（ジオイド高）。ジオイドが高いほど標高は低くなる（逆の関係）。</div></div>
       </div>
     </div>
   </div>
