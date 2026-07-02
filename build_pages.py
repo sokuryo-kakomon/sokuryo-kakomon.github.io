@@ -137,7 +137,7 @@ body{{padding:0}}
     {next}
   </nav>
   <div class="qall"><a href="/#{year}">▼ {ylabel}の全28問一覧へ戻る</a></div>
-  <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です</div>
+  <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）</div>
 </div>
 </body>
 </html>
