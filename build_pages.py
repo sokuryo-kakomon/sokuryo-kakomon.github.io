@@ -9,7 +9,7 @@ index.html から各問題カードを抽出し、問題ごとの個別URLペー
 import re, os, html
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE = "https://sokuryo-kakomon.github.io"
+SITE = "https://sokuryo-kakomon.com"
 
 YEARS = {
     "r07": {"label": "令和7年", "seimei": "令和7年度（R7・2025年）", "date": "2025年5月18日",
