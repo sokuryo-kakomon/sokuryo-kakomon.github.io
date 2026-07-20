@@ -30,6 +30,10 @@ def get_style(src):
     m = re.search(r"<style>(.*?)</style>", src, re.S)
     return m.group(1)
 
+def get_prbox(src):
+    m = re.search(r'(<div class="pr-box">.*?</div>\s*</div>)', src, re.S)
+    return m.group(1) if m else ""
+
 def find_cards(src):
     """カード単位で (year, qnum, answer, html) を返す。divの深さを数えて末尾を特定。"""
     cards = []
@@ -134,6 +138,7 @@ body{{padding:0}}
     <a href="{pdfa}" target="_blank" rel="noopener">📋 公式解答PDF</a>
   </div>
   {body}
+  {prbox}
   <nav class="qnav">
     {prev}
     {next}
@@ -167,6 +172,7 @@ def navlink(year, qn, kind):
 def build():
     src = read_index()
     style = get_style(src)
+    prbox = get_prbox(src)
     cards = find_cards(src)
     print("抽出カード数:", len(cards))
     urls = []
@@ -193,6 +199,7 @@ def build():
             year=year, ylabel=y["label"], qn=qn, cat=html.escape(cat),
             date=y["date"], pdfq=y["q"], pdfa=y["a"],
             body=make_body(c["html"]),
+            prbox=prbox,
             prev=navlink(year, prev_q, "prev"),
             next=navlink(year, next_q, "next"),
         )
