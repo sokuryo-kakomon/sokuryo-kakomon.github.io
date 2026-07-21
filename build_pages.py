@@ -95,8 +95,6 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6694004244397132"
-     crossorigin="anonymous"></script>
 <style>{style}
 /* 個別ページ用の上書き */
 body{{padding:0}}
