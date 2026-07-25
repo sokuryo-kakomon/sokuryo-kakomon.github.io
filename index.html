@@ -4950,7 +4950,7 @@ function showTab(y){
   document.querySelectorAll('.ytab').forEach(function(e,i){
     e.classList.toggle('on',['r07','r06','r05','r04'][i]===y);
   });
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo(0,0);
   if(reviewing||weakMode) applyFilter();
 }
 
@@ -4958,7 +4958,7 @@ function toggle(h){
   var b=h.nextElementSibling,t=h.querySelector('.card-tog'),op=b.style.display!=='none';
   b.style.display=op?'none':'block';
   t.classList.toggle('op',!op);
-  if(!op){setTimeout(function(){h.scrollIntoView({behavior:'smooth',block:'start'});},60);}
+  if(!op){setTimeout(function(){h.scrollIntoView({block:'start'});},60);}
 }
 
 document.addEventListener('DOMContentLoaded',initQuiz);
