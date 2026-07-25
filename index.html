@@ -155,15 +155,6 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .card-status{min-width:22px;width:auto;display:inline-flex;align-items:center}
 .card-status .nx{font-size:.72rem;color:#ff6b81;font-weight:900;margin-left:1px}
 .card-status .ok-streak{font-size:.72rem;color:#00b894;font-weight:900;margin-left:1px}
-/* === resizable sidebar === */
-:root{--sb-width:178px}
-.sb{width:var(--sb-width)!important;min-width:var(--sb-width)!important}
-#sb-resizer{position:fixed;top:160px;bottom:0;width:8px;cursor:col-resize;background:transparent;z-index:96;transition:background .15s}
-#sb-resizer::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:40px;background:#dde;border-radius:2px;transition:background .15s}
-#sb-resizer:hover{background:rgba(108,92,231,.12)}
-#sb-resizer:hover::after,#sb-resizer.dragging::after{background:#6c5ce7;width:3px;height:60px}
-#sb-resizer.dragging{background:rgba(108,92,231,.18)}
-@media(max-width:750px){#sb-resizer{display:none}}
 /* === Figure modal === */
 .fig-btn{display:inline-block;font-size:.78rem;font-weight:700;color:#0984e3;background:#e3f2fd;border:1.5px solid #0984e3;border-radius:14px;padding:3px 10px;cursor:pointer;margin-left:6px;transition:all .15s;white-space:nowrap}
 .fig-btn:hover{background:#0984e3;color:#fff}
@@ -242,7 +233,7 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .pr-note{font-size:.72rem;color:rgba(255,255,255,.75);margin-top:12px;line-height:1.6}
 </style>
 </head>
-<body><div id="sb-resizer"></div><div id="svgZoomOverlay" onclick="if(event.target===this)closeSvgZoom()">
+<body><div id="svgZoomOverlay" onclick="if(event.target===this)closeSvgZoom()">
   <button id="svgZoomClose" onclick="closeSvgZoom()" aria-label="閉じる">×</button>
   <div class="svg-zoom-content"></div>
 </div><div class="fig-overlay" id="figOverlay" onclick="if(event.target===this)closeFig()">
@@ -4972,48 +4963,6 @@ function toggle(h){
 }
 
 document.addEventListener('DOMContentLoaded',initQuiz);
-
-/* ===== Sidebar resizer ===== */
-(function(){
-  var W_KEY='sokuryo_sb_w';
-  var MIN=120, MAX=420;
-  function applyWidth(w){
-    document.documentElement.style.setProperty('--sb-width', w+'px');
-    var rz=document.getElementById('sb-resizer');
-    if(rz) rz.style.left=w+'px';
-  }
-  // Restore saved width
-  var saved=parseInt(localStorage.getItem(W_KEY)||'0');
-  if(saved>=MIN && saved<=MAX) applyWidth(saved);
-  else applyWidth(178);
-
-  document.addEventListener('DOMContentLoaded', function(){
-    var rz=document.getElementById('sb-resizer');
-    if(!rz) return;
-    var dragging=false;
-    function startDrag(){dragging=true;rz.classList.add('dragging');document.body.style.userSelect='none';document.body.style.cursor='col-resize';}
-    function endDrag(){
-      if(!dragging) return;
-      dragging=false;rz.classList.remove('dragging');
-      document.body.style.userSelect='';document.body.style.cursor='';
-      var w=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sb-width'));
-      if(w) localStorage.setItem(W_KEY,w);
-    }
-    function moveDrag(x){
-      if(!dragging) return;
-      var w=Math.max(MIN,Math.min(MAX,x));
-      applyWidth(w);
-    }
-    rz.addEventListener('mousedown',function(e){startDrag();e.preventDefault();});
-    document.addEventListener('mousemove',function(e){moveDrag(e.clientX);});
-    document.addEventListener('mouseup',endDrag);
-    rz.addEventListener('touchstart',function(e){startDrag();e.preventDefault();},{passive:false});
-    document.addEventListener('touchmove',function(e){if(dragging){moveDrag(e.touches[0].clientX);e.preventDefault();}},{passive:false});
-    document.addEventListener('touchend',endDrag);
-    // Double-click to reset
-    rz.addEventListener('dblclick',function(){applyWidth(178);localStorage.setItem(W_KEY,178);});
-  });
-})();
 
 /* ===== Figure modal ===== */
 var FIG_BASE='sokuryo_figures/';

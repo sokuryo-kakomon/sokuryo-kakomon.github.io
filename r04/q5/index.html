@@ -155,15 +155,6 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .card-status{min-width:22px;width:auto;display:inline-flex;align-items:center}
 .card-status .nx{font-size:.72rem;color:#ff6b81;font-weight:900;margin-left:1px}
 .card-status .ok-streak{font-size:.72rem;color:#00b894;font-weight:900;margin-left:1px}
-/* === resizable sidebar === */
-:root{--sb-width:178px}
-.sb{width:var(--sb-width)!important;min-width:var(--sb-width)!important}
-#sb-resizer{position:fixed;top:160px;bottom:0;width:8px;cursor:col-resize;background:transparent;z-index:96;transition:background .15s}
-#sb-resizer::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:40px;background:#dde;border-radius:2px;transition:background .15s}
-#sb-resizer:hover{background:rgba(108,92,231,.12)}
-#sb-resizer:hover::after,#sb-resizer.dragging::after{background:#6c5ce7;width:3px;height:60px}
-#sb-resizer.dragging{background:rgba(108,92,231,.18)}
-@media(max-width:750px){#sb-resizer{display:none}}
 /* === Figure modal === */
 .fig-btn{display:inline-block;font-size:.78rem;font-weight:700;color:#0984e3;background:#e3f2fd;border:1.5px solid #0984e3;border-radius:14px;padding:3px 10px;cursor:pointer;margin-left:6px;transition:all .15s;white-space:nowrap}
 .fig-btn:hover{background:#0984e3;color:#fff}
