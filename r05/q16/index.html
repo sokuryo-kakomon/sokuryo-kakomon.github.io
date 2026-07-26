@@ -13,6 +13,8 @@
 <meta property="og:description" content="測量士試験 令和5年 午前 第16問〔地形測量〕の問題と解説・解答。公共測量における地上レーザスキャナを用いた数値地形図データ作成について、明らかに間違っているものだけの組合せを選べ。">
 <meta property="og:url" content="https://sokuryo-kakomon.com/r05/q16/">
 <meta name="twitter:card" content="summary">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6694004244397132"
+     crossorigin="anonymous"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f9fe;color:#333;font-size:18px;line-height:1.75}
@@ -36,12 +38,12 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ytab{padding:6px 18px;border:2px solid #dde;border-radius:24px;background:#fff;color:#777;font-size:1rem;font-weight:700;cursor:pointer;transition:all .18s}
 .ytab.on{background:linear-gradient(135deg,#6c5ce7,#0984e3);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(108,92,231,.4)}
 .ytab:hover:not(.on){background:#f0f0ff;color:#6c5ce7;border-color:#c5b8ff}
-.layout{display:block}
-.sb{width:178px;background:#fff;border-right:1px solid #eaeaee;position:static;padding:6px 0;box-shadow:2px 0 8px rgba(0,0,0,.03);float:left}
+.layout{display:flex;min-height:calc(100vh - 104px)}
+.sb{width:178px;min-width:178px;background:#fff;border-right:1px solid #eaeaee;position:sticky;top:104px;height:calc(100vh - 104px);overflow-y:auto;padding:6px 0;flex-shrink:0;box-shadow:2px 0 8px rgba(0,0,0,.03)}
 .nch{padding:8px 12px 3px;font-size:1rem;font-weight:800;letter-spacing:.05em;margin-top:6px;display:flex;align-items:center;gap:4px}
 .ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
-.main{margin-left:178px;padding:14px 16px;min-width:0;overflow:auto}
+.main{flex:1;padding:14px 16px;min-width:0}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
 .ysec{display:block}
@@ -107,7 +109,7 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ftr{text-align:center;padding:22px;font-size:.85rem;color:#bbb;background:#fff;border-top:1px solid #eaeaee;margin-top:20px}
 .ftr a{color:#6c5ce7;text-decoration:none}
 .ftr a:hover{text-decoration:underline}
-@media(max-width:750px){.sb{display:none}.layout{display:block}.main{padding:10px;margin-left:0}.hdr-stats{display:none}.hdr h1{font-size:.95rem}.card-cat{font-size:.68rem}.aff-banner{flex-direction:column;align-items:flex-start;gap:10px}.aff-banner-btn{align-self:flex-start}}
+@media(max-width:750px){.sb{display:none}.layout{display:block}.main{padding:10px}.hdr-stats{display:none}.hdr h1{font-size:.95rem}.card-cat{font-size:.68rem}.aff-banner{flex-direction:column;align-items:flex-start;gap:10px}.aff-banner-btn{align-self:flex-start}}
 
 /* === PROGRESS BAR === */
 .prog-wrap{position:sticky;top:104px;z-index:85;background:#fff;border-bottom:2px solid #eaeaee;padding:8px 18px}
@@ -123,6 +125,9 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .prog-btn-rs:hover{border-color:#ff6b81;color:#ff6b81}
 /* === SIDEBAR & LAYOUT OVERRIDE for sticky progbar === */
 
+/* === SIDEBAR & LAYOUT OVERRIDE for sticky progbar === */
+.sb{top:160px!important;height:calc(100vh - 160px)!important}
+.layout{min-height:calc(100vh - 160px)!important}
 /* === CARD STATUS BADGE === */
 .card-status{font-size:1rem;width:22px;text-align:center;flex-shrink:0}
 .card.c-ok{border-left:4px solid #00b894}
@@ -154,6 +159,15 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .card-status{min-width:22px;width:auto;display:inline-flex;align-items:center}
 .card-status .nx{font-size:.72rem;color:#ff6b81;font-weight:900;margin-left:1px}
 .card-status .ok-streak{font-size:.72rem;color:#00b894;font-weight:900;margin-left:1px}
+/* === resizable sidebar === */
+:root{--sb-width:178px}
+.sb{width:var(--sb-width)!important;min-width:var(--sb-width)!important}
+#sb-resizer{position:fixed;top:160px;bottom:0;width:8px;cursor:col-resize;background:transparent;z-index:96;transition:background .15s}
+#sb-resizer::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:40px;background:#dde;border-radius:2px;transition:background .15s}
+#sb-resizer:hover{background:rgba(108,92,231,.12)}
+#sb-resizer:hover::after,#sb-resizer.dragging::after{background:#6c5ce7;width:3px;height:60px}
+#sb-resizer.dragging{background:rgba(108,92,231,.18)}
+@media(max-width:750px){#sb-resizer{display:none}}
 /* === Figure modal === */
 .fig-btn{display:inline-block;font-size:.78rem;font-weight:700;color:#0984e3;background:#e3f2fd;border:1.5px solid #0984e3;border-radius:14px;padding:3px 10px;cursor:pointer;margin-left:6px;transition:all .15s;white-space:nowrap}
 .fig-btn:hover{background:#0984e3;color:#fff}
