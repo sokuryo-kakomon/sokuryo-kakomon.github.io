@@ -189,14 +189,13 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .orig-fig-label{font-size:.8rem;color:#9580ff;font-weight:700;margin-bottom:6px;display:block}
 .orig-fig{max-width:100%;max-height:600px;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:transform .15s}
 .orig-fig:hover{transform:scale(1.02);box-shadow:0 4px 14px rgba(108,92,231,.25)}
-/* === Hide text problem (PDF image is now primary) === */
-.mondai-box .q-stmt{display:none}
-.mondai-box .q-opts{display:none}
-.mondai-box{border:none;padding:0;background:transparent;min-height:0}
+/* === 問題文はテキストで表示し、元PDF画像は補助として併記 === */
+.mondai-box{background:#fafaff;border:1.5px solid #e0dcff;border-radius:10px;padding:14px 16px}
 .section-mondai .sec-title{margin-bottom:8px}
-/* === Hide q-sels (was outside q-opts) === */
-.mondai-box .q-sels{display:none}
-.mondai-box .q-opts-plain{display:none}
+.mondai-box .q-stmt{display:block}
+.mondai-box .q-opts{display:flex}
+.mondai-box .q-sels{display:flex}
+.mondai-box .q-opts-plain{display:block}
 /* === Bigger inline image with nav === */
 .orig-fig-wrap{position:relative}
 .orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
