@@ -119,7 +119,8 @@ body{{padding:0}}
 .qnav a.disabled{{opacity:.35;pointer-events:none}}
 .qall{{display:block;text-align:center;margin-top:18px}}
 .qall a{{color:#6c5ce7;text-decoration:none;font-weight:800;border-bottom:1px solid #c5b8ff}}
-.qfoot{{text-align:center;color:#aaa;font-size:.8rem;margin-top:36px}}
+.qfoot{{text-align:center;color:#aaa;font-size:.8rem;margin-top:36px;line-height:1.9}}
+.qfoot a{{color:#6c5ce7;text-decoration:none}}
 .orig-fig{{max-width:100%;height:auto;border-radius:8px;border:1px solid #eee}}
 .orig-fig-wrap{{margin:12px 0}}
 .orig-fig-label{{display:inline-block;font-size:.85rem;color:#888;margin-bottom:4px}}
@@ -144,7 +145,7 @@ body{{padding:0}}
     {next}
   </nav>
   <div class="qall"><a href="/#{year}">▼ {ylabel}の全28問一覧へ戻る</a></div>
-  <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）</div>
+  <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報</a></div>
 </div>
 </body>
 </html>
@@ -217,6 +218,8 @@ def write_sitemap(urls):
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     lines += ['  <url><loc>%s/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>' % SITE]
+    for p in ("/about/", "/privacy/"):
+        lines.append('  <url><loc>%s%s</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>' % (SITE, p))
     for u in urls:
         lines.append('  <url><loc>%s</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>' % u)
     lines.append('</urlset>')
