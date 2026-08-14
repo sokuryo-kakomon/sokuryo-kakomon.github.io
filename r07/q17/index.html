@@ -44,6 +44,22 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
 .main{flex:1;padding:14px 16px;min-width:0}
+.intro{background:#fff;border-radius:14px;padding:22px 26px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid #eee}
+.intro h2{font-size:1.15rem;font-weight:900;color:#333;line-height:1.6;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #f0f0ff}
+.intro h3{font-size:1.02rem;font-weight:800;color:#6c5ce7;margin:22px 0 8px}
+.intro p{font-size:1rem;line-height:1.9;color:#555;margin-bottom:10px}
+.intro a{color:#6c5ce7}
+.intro-list{list-style:none;margin:0 0 10px}
+.intro-list li{font-size:1rem;line-height:1.85;color:#555;padding:8px 0 8px 22px;position:relative;border-bottom:1px solid #f5f5fa}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'▸';position:absolute;left:4px;color:#6c5ce7;font-weight:900}
+.tbl-wrap{overflow-x:auto;margin:10px 0 14px}
+.trend{border-collapse:collapse;width:100%;min-width:340px;font-size:.97rem}
+.trend th{background:#f0f0ff;color:#6c5ce7;font-weight:800;padding:9px 12px;text-align:left;border-bottom:2px solid #e0dcff;white-space:nowrap}
+.trend td{padding:8px 12px;border-bottom:1px solid #f0f0f5;color:#555}
+.trend td:nth-child(2),.trend td:nth-child(3),.trend th:nth-child(2),.trend th:nth-child(3){text-align:right;white-space:nowrap}
+.trend tbody tr:hover{background:#fafaff}
+@media(max-width:700px){.intro{padding:18px 16px}.intro h2{font-size:1.06rem}}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
 .ysec{display:block}
@@ -81,6 +97,17 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
 .q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
 .q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
+/* 選択肢そのものを解答ボタンとして押させる（番号ボタンとの二重表示をやめたため） */
+.q-pick{cursor:pointer}
+.q-pick:hover{border-color:#6c5ce7;background:#f5f4ff;box-shadow:0 2px 8px rgba(108,92,231,.18)}
+span.q-pick:hover{background:#6c5ce7;color:#fff}
+.q-pick:focus-visible{outline:3px solid #b8b0ff;outline-offset:2px}
+.opt-ok{border-color:#00b894!important;background:#e8f9f4!important;box-shadow:0 2px 8px rgba(0,184,148,.2)}
+span.opt-ok{background:#00b894!important;color:#fff!important}
+.opt-ok::after{content:' \2705';font-weight:900}
+.opt-ng{border-color:#ff6b81!important;background:#fff0f2!important}
+span.opt-ng{background:#ff6b81!important;color:#fff!important}
+.opt-ng::after{content:' \274c';font-weight:900}
 .section-kaisetsu{margin-top:14px}
 .kaisetsu-box{padding:8px 0;font-size:.96rem;line-height:1.85;display:flex;flex-direction:column}
 .kaisetsu-box p{margin:5px 0;color:#555}
@@ -198,6 +225,14 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .mondai-box .q-opts-plain{display:block}
 /* === Bigger inline image with nav === */
 .orig-fig-wrap{position:relative}
+/* 問題文が本文にテキストで載っている問題は、原典の画像を既定で畳む（同じ内容の二重表示を避ける） */
+.orig-details{margin:10px 0 0;border:1px solid #ececf5;border-radius:10px;background:#fafafa}
+.orig-details>summary{cursor:pointer;padding:9px 14px;font-size:.88rem;color:#999;list-style:none;user-select:none}
+.orig-details>summary::-webkit-details-marker{display:none}
+.orig-details>summary::before{content:'\25b6';display:inline-block;margin-right:7px;font-size:.72rem;color:#c5c5d5;transition:transform .15s}
+.orig-details[open]>summary::before{transform:rotate(90deg)}
+.orig-details>summary:hover{color:#6c5ce7;background:#f5f4ff;border-radius:10px}
+.orig-details .orig-fig-wrap{margin:0;border:none;background:none;padding:0 12px 12px}
 .orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .fig-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap}
 .fig-nav-btn{padding:5px 14px;border-radius:14px;border:1.5px solid #6c5ce7;background:#fff;color:#6c5ce7;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .12s}
@@ -321,21 +356,36 @@ body{padding:0}
     <div class='section-mondai'>
       <div class='sec-title'>📋 問題文</div>
       <div class='mondai-box'>
-        <p class='q-stmt'>UAV 写真点群測量においてデジタルカメラを鉛直下に向けた写真撮影を行うに当たり，標高が 20ｍから 40ｍまでの土地を撮影範囲全体にわたって同一コース内の隣接写真間の重複度が最小で 80％となるように計画した。撮影基準面の標高を 20ｍとするとき，撮影基準面における同一コース 内の隣接写真間の重複度は何％となるか。最も近いものを次の 1 ～ 5 の中から選べ。</p><div class='q-opts'><div class='q-opt'><b>1．</b> 80 ％</div><div class='q-opt'><b>2．</b> 84 ％</div><div class='q-opt'><b>3．</b> 87 ％</div><div class='q-opt'><b>4．</b> 90 ％</div><div class='q-opt'><b>5．</b> 92 ％</div></div>
+        <p class='q-stmt'>UAV 写真点群測量においてデジタルカメラを鉛直下に向けた写真撮影を行うに当たり，標高が 20ｍから 40ｍまでの土地を撮影範囲全体にわたって同一コース内の隣接写真間の重複度が最小で 80％となるように計画した。撮影基準面の標高を 20ｍとするとき，撮影基準面における同一コース 内の隣接写真間の重複度は何％となるか。最も近いものを次の 1 ～ 5 の中から選べ。</p><div class='q-opts'><div class='q-opt' data-ans-opt='1'><b>1．</b> 80 ％</div><div class='q-opt' data-ans-opt='2'><b>2．</b> 84 ％</div><div class='q-opt' data-ans-opt='3'><b>3．</b> 87 ％</div><div class='q-opt' data-ans-opt='4'><b>4．</b> 90 ％</div><div class='q-opt' data-ans-opt='5'><b>5．</b> 92 ％</div></div>
       </div>
     </div>
-    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r07-q17' src='/sokuryo_figures/r07b_p02_bot.png' loading='lazy' alt='元問題' data-qid='r07-q17'></div><div class='section-kaisetsu'>
+    <details class='orig-details'><summary>📄 原典の問題ページ（画像）</summary><div class='orig-fig-wrap'><img class='orig-fig' id='fig-r07-q17' src='/sokuryo_figures/r07b_p02_bot.png' loading='lazy' alt='元問題' data-qid='r07-q17'></div></details><div class='section-kaisetsu'>
       <div class='sec-title'>💡 解説</div>
       <div class='kaisetsu-box'>
-        <p>公共測量における空中写真測量の計画・撮影方法に関する正誤判定。</p>
-<div class='opt correct'>1. 正しい。撮影飛行は天候・対地高度・コース直交方向の風向き等を考慮して計画する。</div>
-<div class='opt correct'>2. 正しい。隣接コース間の写真は<b>30%程度の側方重複（サイドラップ）</b>を確保するのが標準。</div>
-<div class='opt wrong'>3. 誤り。</div>
-<p>同一コース内の隣接写真は<b>約 60% の前後重複（オーバーラップ）</b>を確保する。立体視・標定点を確実に取るために必要。問題文の重複率は誤り。</p>
-<div class='opt correct'>4. 正しい。地形の起伏が大きい区域では、最大標高と最低標高を考慮し撮影基準面を設定する。</div>
-<div class='opt correct'>5. 正しい。撮影縮尺や地上画素寸法は、作成する地形図の精度水準に合わせて決定する。</div>
-<div class='conc'>誤りは3。<b>選択肢 3</b>。「コース内60％・コース間30％」と覚える。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 高い地点で最小重複度→そこから基線長決定→基準面での重複度を逆算。高いほど重複度は下がる。</div></div>
+        <p>UAV 写真点群測量における<b>重複度の計算問題</b>。等高度で飛行しているのに地面の標高が場所によって違う、という状況をどう扱うかが問われている。<br>
+まず全体の見通しを立てておく。カメラは同じ高さを飛ぶので、<b>地面が高い場所ほどカメラに近い</b>。カメラに近いほど 1 枚の写真が写しとる範囲は<b>狭くなる</b>。撮影基線長（隣り合う撮影地点の間隔）は一定なので、写る範囲が狭い場所ほど隣の写真と重なる割合＝<b>重複度は小さくなる</b>。<br>
+したがって<b>重複度が最小になるのは最も標高の高い地点（標高 40 m）</b>であり、そこが 80％ になるように計画したことになる。ここから逆算して基線長を求め、撮影基準面（標高 20 m）での重複度を出す、という流れになる。</p>
+<div class='step'>① 撮影基準面での対地高度 H を求める</div>
+<p>地上画素寸法（GSD）と素子寸法・焦点距離・対地高度の関係は次のとおり。</p>
+<div class='conc'>地上画素寸法 ＝ 素子寸法 × 対地高度 ÷ 焦点距離</div>
+<p>撮影基準面での地上画素寸法が 2 cm ＝ 0.02 m、素子寸法 7 μm ＝ 7×10⁻⁶ m、焦点距離 21 mm ＝ 0.021 m だから、</p>
+<div class='conc'>0.02 ＝ 7×10⁻⁶ × H ÷ 0.021　→　H ＝ 0.02 × 0.021 ÷ 7×10⁻⁶ ＝ <b>60 m</b></div>
+<p>撮影基準面の標高が 20 m なので、<b>カメラの標高は 20 ＋ 60 ＝ 80 m</b> となる。以降はこの 80 m を基準に、各地点の対地高度を出していく。</p>
+<div class='step'>② 撮影基準面での撮影範囲（撮影基線の方向）</div>
+<p>「画面短辺は撮影基線と平行」という条件があるので、重複度に効くのは<b>短辺 3,360 画素</b>のほう。長辺 5,040 画素は使わない（ここで長辺を使うのが典型的な誤答）。</p>
+<div class='conc'>3,360 画素 × 0.02 m ＝ <b>67.2 m</b></div>
+<div class='step'>③ 標高 40 m 地点での撮影範囲</div>
+<p>この地点の対地高度は 80 − 40 ＝ <b>40 m</b>。撮影範囲は対地高度に比例するので、基準面での 67.2 m を高度比で縮めればよい。</p>
+<div class='conc'>67.2 m × 40 ÷ 60 ＝ <b>44.8 m</b></div>
+<div class='step'>④ 撮影基線長 B を求める</div>
+<p>標高 40 m の地点で重複度が 80％ということは、隣の写真と<b>重ならない部分が 20％</b>ということ。この重ならない幅がそのまま撮影基線長になる。</p>
+<div class='conc'>B ＝ 44.8 m × (1 − 0.80) ＝ <b>8.96 m</b></div>
+<div class='step'>⑤ 撮影基準面での重複度を求める</div>
+<p>基線長は撮影範囲全体にわたって一定（8.96 m）。撮影基準面での撮影範囲は ② の 67.2 m なので、</p>
+<div class='conc'>重複度 ＝ 1 − B ÷ 撮影範囲 ＝ 1 − 8.96 ÷ 67.2 ＝ 1 − 0.1333 ＝ <b>86.7 ％</b></div>
+<p>最も近い値は 87 ％。</p>
+<div class='conc'>よって <b>選択肢 3</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 等高度飛行では<b>標高が高い地点ほど重複度が下がる</b>。「最小重複度」は必ず<b>最高標高</b>の地点で起きるので、そこから基線長を逆算するのが定石。画面短辺・長辺のどちらが基線と平行かは必ず問題文で確認する。</div></div>
       </div>
     </div>
   </div>
@@ -374,5 +424,108 @@ body{padding:0}
   <div class="qall"><a href="/#r07">▼ 令和7年の全28問一覧へ戻る</a></div>
   <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報・お問い合わせ</a></div>
 </div>
+<script>
+(function(){
+  var STORE='sokuryo_q_v2';
+  var card=document.querySelector('.card[data-answer]');
+  if(!card||!card.id) return;
+  var qid=card.id;
+  var correct=parseInt(card.getAttribute('data-answer'),10);
+  if(!correct) return;
+  var secK=card.querySelector('.section-kaisetsu');
+  if(!secK||!secK.parentNode) return;
+
+  function ld(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+  function sv(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+  // 選択肢そのものが解答肢になっている問題（data-ans-opt 付き）は選択肢を直接押させる。
+  // 番号ボタンを別に並べると同じ番号が二重に出るため。1〜5の一覧がHTMLに無い
+  // 組合せ問題だけ、従来どおり番号ボタンを出す。
+  var opts=card.querySelectorAll('[data-ans-opt]');
+  function labelOf(el){
+    var b=el.querySelector('b');
+    return b?b.textContent.replace(/[．.]\s*$/,''):el.getAttribute('data-ans-opt');
+  }
+  function ansText(){
+    for(var i=0;i<opts.length;i++){
+      if(parseInt(opts[i].getAttribute('data-ans-opt'),10)===correct) return labelOf(opts[i]);
+    }
+    return correct;
+  }
+
+  var wrap=document.createElement('div');
+  wrap.className='quiz-area';wrap.id='qa-'+qid;
+  var prompt=document.createElement('div');
+  prompt.className='quiz-prompt';
+  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
+  wrap.appendChild(prompt);
+  var row=document.createElement('div');row.className='quiz-btns';
+  if(opts.length){
+    for(var i=0;i<opts.length;i++){
+      (function(el){
+        var num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.add('q-pick');
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.onclick=function(ev){ev.stopPropagation();submit(num);};
+        el.onkeydown=function(ev){
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();submit(num);}
+        };
+      })(opts[i]);
+    }
+  }else{
+    for(var n=1;n<=5;n++){
+      (function(num){
+        var b=document.createElement('button');
+        b.className='q-btn';b.type='button';b.textContent=num;
+        b.setAttribute('aria-label','選択肢'+num+'を選ぶ');
+        b.onclick=function(){submit(num);};
+        row.appendChild(b);
+      })(n);
+    }
+  }
+  wrap.appendChild(row);
+  var res=document.createElement('div');
+  res.className='quiz-result';res.id='qr-'+qid;
+  wrap.appendChild(res);
+  secK.parentNode.insertBefore(wrap,secK);
+
+  function paint(userAns){
+    if(opts.length){
+      for(var i=0;i<opts.length;i++){
+        var el=opts[i], num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.remove('q-pick');
+        el.removeAttribute('role');el.removeAttribute('tabindex');
+        el.onclick=null;el.onkeydown=null;
+        if(num===correct) el.classList.add('opt-ok');
+        else if(num===userAns) el.classList.add('opt-ng');
+      }
+      return;
+    }
+    var bs=wrap.querySelectorAll('.q-btn');
+    for(var i=0;i<bs.length;i++){
+      bs[i].disabled=true;
+      if(i+1===correct) bs[i].className='q-btn ans-ok';
+      else if(i+1===userAns) bs[i].className='q-btn ans-ng';
+    }
+  }
+  function show(isOk){
+    res.className='quiz-result r-'+(isOk?'ok':'ng');
+    res.textContent=isOk?'\u2705 正解！':'\u274c 不正解。正解は '+ansText();
+  }
+  function submit(userAns){
+    var isOk=(userAns===correct);
+    var prog=ld();var prev=prog[qid]||{};
+    var ng=prev.ngCount||0, ok=prev.okStreak||0;
+    if(isOk){ok+=1;}else{ng+=1;ok=0;}
+    prog[qid]={answered:true,correct:isOk,userAnswer:userAns,correctAnswer:correct,
+               ngCount:ng,okStreak:ok,attempts:(prev.attempts||0)+1};
+    sv(prog);paint(userAns);show(isOk);
+  }
+
+  var d=ld()[qid];
+  if(d&&d.answered){paint(d.userAnswer);show(d.correct);}
+})();
+</script>
 </body>
 </html>

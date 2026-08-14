@@ -147,9 +147,117 @@ body{{padding:0}}
   <div class="qall"><a href="/#{year}">▼ {ylabel}の全28問一覧へ戻る</a></div>
   <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報・お問い合わせ</a></div>
 </div>
+{quiz}
 </body>
 </html>
 """
+
+# 個別ページ用の解答ボタン。トップページと同じ localStorage キー・同じ記録形式を使うので
+# 進捗は両者で共有される。トップページと違い解説はロックしない（検索から来た人に
+# すぐ読ませるため。qa-locked を付けると本文が display:none になり検索評価も落ちる）。
+QUIZ_JS = """<script>
+(function(){
+  var STORE='sokuryo_q_v2';
+  var card=document.querySelector('.card[data-answer]');
+  if(!card||!card.id) return;
+  var qid=card.id;
+  var correct=parseInt(card.getAttribute('data-answer'),10);
+  if(!correct) return;
+  var secK=card.querySelector('.section-kaisetsu');
+  if(!secK||!secK.parentNode) return;
+
+  function ld(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+  function sv(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+  // 選択肢そのものが解答肢になっている問題（data-ans-opt 付き）は選択肢を直接押させる。
+  // 番号ボタンを別に並べると同じ番号が二重に出るため。1〜5の一覧がHTMLに無い
+  // 組合せ問題だけ、従来どおり番号ボタンを出す。
+  var opts=card.querySelectorAll('[data-ans-opt]');
+  function labelOf(el){
+    var b=el.querySelector('b');
+    return b?b.textContent.replace(/[．.]\\s*$/,''):el.getAttribute('data-ans-opt');
+  }
+  function ansText(){
+    for(var i=0;i<opts.length;i++){
+      if(parseInt(opts[i].getAttribute('data-ans-opt'),10)===correct) return labelOf(opts[i]);
+    }
+    return correct;
+  }
+
+  var wrap=document.createElement('div');
+  wrap.className='quiz-area';wrap.id='qa-'+qid;
+  var prompt=document.createElement('div');
+  prompt.className='quiz-prompt';
+  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
+  wrap.appendChild(prompt);
+  var row=document.createElement('div');row.className='quiz-btns';
+  if(opts.length){
+    for(var i=0;i<opts.length;i++){
+      (function(el){
+        var num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.add('q-pick');
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.onclick=function(ev){ev.stopPropagation();submit(num);};
+        el.onkeydown=function(ev){
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();submit(num);}
+        };
+      })(opts[i]);
+    }
+  }else{
+    for(var n=1;n<=5;n++){
+      (function(num){
+        var b=document.createElement('button');
+        b.className='q-btn';b.type='button';b.textContent=num;
+        b.setAttribute('aria-label','選択肢'+num+'を選ぶ');
+        b.onclick=function(){submit(num);};
+        row.appendChild(b);
+      })(n);
+    }
+  }
+  wrap.appendChild(row);
+  var res=document.createElement('div');
+  res.className='quiz-result';res.id='qr-'+qid;
+  wrap.appendChild(res);
+  secK.parentNode.insertBefore(wrap,secK);
+
+  function paint(userAns){
+    if(opts.length){
+      for(var i=0;i<opts.length;i++){
+        var el=opts[i], num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.remove('q-pick');
+        el.removeAttribute('role');el.removeAttribute('tabindex');
+        el.onclick=null;el.onkeydown=null;
+        if(num===correct) el.classList.add('opt-ok');
+        else if(num===userAns) el.classList.add('opt-ng');
+      }
+      return;
+    }
+    var bs=wrap.querySelectorAll('.q-btn');
+    for(var i=0;i<bs.length;i++){
+      bs[i].disabled=true;
+      if(i+1===correct) bs[i].className='q-btn ans-ok';
+      else if(i+1===userAns) bs[i].className='q-btn ans-ng';
+    }
+  }
+  function show(isOk){
+    res.className='quiz-result r-'+(isOk?'ok':'ng');
+    res.textContent=isOk?'\\u2705 正解！':'\\u274c 不正解。正解は '+ansText();
+  }
+  function submit(userAns){
+    var isOk=(userAns===correct);
+    var prog=ld();var prev=prog[qid]||{};
+    var ng=prev.ngCount||0, ok=prev.okStreak||0;
+    if(isOk){ok+=1;}else{ng+=1;ok=0;}
+    prog[qid]={answered:true,correct:isOk,userAnswer:userAns,correctAnswer:correct,
+               ngCount:ng,okStreak:ok,attempts:(prev.attempts||0)+1};
+    sv(prog);paint(userAns);show(isOk);
+  }
+
+  var d=ld()[qid];
+  if(d&&d.answered){paint(d.userAnswer);show(d.correct);}
+})();
+</script>"""
 
 def jsonld(url, year, ylabel, qn, cat):
     import json
@@ -203,6 +311,7 @@ def build():
             prbox=prbox,
             prev=navlink(year, prev_q, "prev"),
             next=navlink(year, next_q, "next"),
+            quiz=QUIZ_JS,
         )
         d = os.path.join(ROOT, year, "q%d" % qn)
         os.makedirs(d, exist_ok=True)

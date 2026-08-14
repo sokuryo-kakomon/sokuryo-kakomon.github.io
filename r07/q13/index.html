@@ -44,6 +44,22 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
 .main{flex:1;padding:14px 16px;min-width:0}
+.intro{background:#fff;border-radius:14px;padding:22px 26px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid #eee}
+.intro h2{font-size:1.15rem;font-weight:900;color:#333;line-height:1.6;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #f0f0ff}
+.intro h3{font-size:1.02rem;font-weight:800;color:#6c5ce7;margin:22px 0 8px}
+.intro p{font-size:1rem;line-height:1.9;color:#555;margin-bottom:10px}
+.intro a{color:#6c5ce7}
+.intro-list{list-style:none;margin:0 0 10px}
+.intro-list li{font-size:1rem;line-height:1.85;color:#555;padding:8px 0 8px 22px;position:relative;border-bottom:1px solid #f5f5fa}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'▸';position:absolute;left:4px;color:#6c5ce7;font-weight:900}
+.tbl-wrap{overflow-x:auto;margin:10px 0 14px}
+.trend{border-collapse:collapse;width:100%;min-width:340px;font-size:.97rem}
+.trend th{background:#f0f0ff;color:#6c5ce7;font-weight:800;padding:9px 12px;text-align:left;border-bottom:2px solid #e0dcff;white-space:nowrap}
+.trend td{padding:8px 12px;border-bottom:1px solid #f0f0f5;color:#555}
+.trend td:nth-child(2),.trend td:nth-child(3),.trend th:nth-child(2),.trend th:nth-child(3){text-align:right;white-space:nowrap}
+.trend tbody tr:hover{background:#fafaff}
+@media(max-width:700px){.intro{padding:18px 16px}.intro h2{font-size:1.06rem}}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
 .ysec{display:block}
@@ -81,6 +97,17 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
 .q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
 .q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
+/* 選択肢そのものを解答ボタンとして押させる（番号ボタンとの二重表示をやめたため） */
+.q-pick{cursor:pointer}
+.q-pick:hover{border-color:#6c5ce7;background:#f5f4ff;box-shadow:0 2px 8px rgba(108,92,231,.18)}
+span.q-pick:hover{background:#6c5ce7;color:#fff}
+.q-pick:focus-visible{outline:3px solid #b8b0ff;outline-offset:2px}
+.opt-ok{border-color:#00b894!important;background:#e8f9f4!important;box-shadow:0 2px 8px rgba(0,184,148,.2)}
+span.opt-ok{background:#00b894!important;color:#fff!important}
+.opt-ok::after{content:' \2705';font-weight:900}
+.opt-ng{border-color:#ff6b81!important;background:#fff0f2!important}
+span.opt-ng{background:#ff6b81!important;color:#fff!important}
+.opt-ng::after{content:' \274c';font-weight:900}
 .section-kaisetsu{margin-top:14px}
 .kaisetsu-box{padding:8px 0;font-size:.96rem;line-height:1.85;display:flex;flex-direction:column}
 .kaisetsu-box p{margin:5px 0;color:#555}
@@ -198,6 +225,14 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .mondai-box .q-opts-plain{display:block}
 /* === Bigger inline image with nav === */
 .orig-fig-wrap{position:relative}
+/* 問題文が本文にテキストで載っている問題は、原典の画像を既定で畳む（同じ内容の二重表示を避ける） */
+.orig-details{margin:10px 0 0;border:1px solid #ececf5;border-radius:10px;background:#fafafa}
+.orig-details>summary{cursor:pointer;padding:9px 14px;font-size:.88rem;color:#999;list-style:none;user-select:none}
+.orig-details>summary::-webkit-details-marker{display:none}
+.orig-details>summary::before{content:'\25b6';display:inline-block;margin-right:7px;font-size:.72rem;color:#c5c5d5;transition:transform .15s}
+.orig-details[open]>summary::before{transform:rotate(90deg)}
+.orig-details>summary:hover{color:#6c5ce7;background:#f5f4ff;border-radius:10px}
+.orig-details .orig-fig-wrap{margin:0;border:none;background:none;padding:0 12px 12px}
 .orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .fig-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap}
 .fig-nav-btn{padding:5px 14px;border-radius:14px;border:1.5px solid #6c5ce7;background:#fff;color:#6c5ce7;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .12s}
@@ -321,34 +356,36 @@ body{padding:0}
     <div class='section-mondai'>
       <div class='sec-title'>📋 問題文</div>
       <div class='mondai-box'>
-        <p class='q-stmt'>図 13 に模式的に示すように，水準点 A ～ D において，公共測量における 2 級水準測量を実施 し，表 13 の観測結果を得た。環閉合差の許容範囲を 5mm√S （S は観測距離，km 単位）としたとき， 再測すべき路線として最も適当なものはどれか。 次の 1 ～ 5 の中から選べ。</p><div class='q-opts'><div class='q-opt'><b>1．</b> 路線（1）<div class='q-opt'><b>2．</b> 路線（2）</div><div class='q-opt'><b>3．</b> 路線（3）</div><div class='q-opt'><b>4．</b> 路線（4）</div><div class='q-opt'><b>5．</b> 路線（5）</div></div>
+        <p class='q-stmt'>図 13 に模式的に示すように，水準点 A ～ D において，公共測量における 2 級水準測量を実施 し，表 13 の観測結果を得た。環閉合差の許容範囲を 5mm√S （S は観測距離，km 単位）としたとき， 再測すべき路線として最も適当なものはどれか。 次の 1 ～ 5 の中から選べ。</p><div class='q-opts'><div class='q-opt' data-ans-opt='1'><b>1．</b> 路線（1）</div><div class='q-opt' data-ans-opt='2'><b>2．</b> 路線（2）</div><div class='q-opt' data-ans-opt='3'><b>3．</b> 路線（3）</div><div class='q-opt' data-ans-opt='4'><b>4．</b> 路線（4）</div><div class='q-opt' data-ans-opt='5'><b>5．</b> 路線（5）</div></div>
       </div>
     </div>
-    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r07-q13' src='/sokuryo_figures/r07a_p14.png' loading='lazy' alt='元問題' data-qid='r07-q13'></div><div class='section-kaisetsu'>
+    <div class='orig-fig-wrap'><span class='orig-fig-label'>📐 問題の図表</span><img class='orig-fig' id='fig-r07-q13' src='/sokuryo_figures/r07a_p14_fig.png' loading='lazy' alt='元問題' data-qid='r07-q13'></div><div class='section-kaisetsu'>
       <div class='sec-title'>💡 解説</div>
       <div class='kaisetsu-box'>
-        <p>水準点 A・B・C・D を結ぶ 6 路線の観測結果（表 13）から、環閉合差が許容範囲を超える環を特定し、複数の超過環に共通する路線を <b>再測対象</b>として選ぶ問題。</p>
-<div class='step'>① 環と路線の対応（図 13）</div>
-<p>B を中心に A・C・D が外側に配置された水準網。3 つの三角環がある：</p>
-<p>・<b>環 ABC</b>：路線 (1) A→B、(4) C→B、(6) B→C などで構成（=A↔B↔C の閉合）</p>
-<p>・<b>環 ABD</b>：B を介して A・D を結ぶ閉合</p>
-<p>・<b>環 BCD</b>：B を介して C・D を結ぶ閉合</p>
-<p>※具体的な路線の組合せは図と表の観測方向に従う。</p>
-<div class='step'>② 各環の閉合差を計算</div>
-<p>環一周の高低差の和は、理想なら 0。観測値の和が「閉合差」。各路線の観測高低差（表 13）を符号に注意して足し合わせる。</p>
-<div class='step'>③ 許容範囲と比較</div>
-<p>許容範囲 = <b>5 mm · √S</b>（S：環一周の観測距離 km）</p>
-<p>例えば環一周 4 km なら許容差 = 5 × √4 = 10 mm。観測距離は表 13 の各路線距離を合計して計算する。</p>
-<div class='step'>④ 共通路線の特定</div>
-<p>複数の環で閉合差が許容を超える場合、<b>それらの環に共通する路線に異常がある</b>可能性が最も高い。具体的に計算すると、許容超過した環が共通して通る路線が <b>路線 (5)</b>。</p>
-<div class='conc'>よって、再測すべきは <b>路線 (5)</b> = <b>選択肢 5</b>。</div>
-<p>※ 考え方：単独路線の異常は必ず複数環の閉合差を悪化させる。共通項を取れば原因路線が分かる。</p>
-        <div class='claude-box'><div class='claude-memo'>💡 複数の環が超過→共通する路線が原因。環①④は正常→②③に共通する路線(5)が再測対象。</div></div>
+        <p>6 つの路線からなる水準網で、<b>閉合差が許容範囲を超えた環</b>を洗い出し、<b>それらに共通して含まれる路線</b>を再測対象として特定する問題。<br>
+考え方の芯はこうである。ある 1 本の路線に誤差があると、その路線を通る環はすべて閉合差が悪化する。逆に、その路線を通らない環は正常なままである。したがって<b>「超過した環すべてに共通し、正常な環には含まれない路線」</b>が犯人だと絞り込める。</p>
+<div class='step'>① 路線の向きを確認する</div>
+<p>図 13 の矢印が観測の向きを表している。環を一周するとき、<b>矢印と逆向きに進む路線は符号を反転</b>させて足す必要があるので、ここを最初に押さえる。</p>
+<div class='conc'>(1) C→A ＋3.429 m / 2.00 km　　(2) A→D −1.176 m / 2.00 km　　(3) D→C −2.257 m / 2.00 km<br>(4) A→B −2.513 m / 1.00 km　　(5) B→D ＋1.362 m / 1.00 km　　(6) C→B ＋0.925 m / 1.00 km</div>
+<div class='step'>② 環を洗い出す</div>
+<p>B が中心にあり、A・C・D が外周に並ぶ形なので、三角環が 3 つと外周の環が 1 つ、計 4 つの環がとれる。</p>
+<div class='step'>③ 各環の閉合差と許容範囲を計算する</div>
+<p><b>環 ABC</b>［(1)(4)(6)］C→A→B→C と一周する。B→C は (6) と逆向きなので符号を反転。</p>
+<p>閉合差 ＝ ＋3.429 −2.513 −0.925 ＝ <b>−0.009 m ＝ −9 mm</b>　／　S ＝ 2.00＋1.00＋1.00 ＝ 4.00 km、許容 ＝ 5√4 ＝ <b>10 mm</b> → <b>範囲内</b></p>
+<p><b>環 ABD</b>［(4)(5)(2)］A→B→D→A と一周する。D→A は (2) と逆向きなので符号を反転。</p>
+<p>閉合差 ＝ −2.513 ＋1.362 ＋1.176 ＝ <b>＋0.025 m ＝ ＋25 mm</b>　／　S ＝ 1.00＋1.00＋2.00 ＝ 4.00 km、許容 ＝ <b>10 mm</b> → <b>許容超過</b></p>
+<p><b>環 BCD</b>［(6)(5)(3)］C→B→D→C と一周する。</p>
+<p>閉合差 ＝ ＋0.925 ＋1.362 −2.257 ＝ <b>＋0.030 m ＝ ＋30 mm</b>　／　S ＝ 1.00＋1.00＋2.00 ＝ 4.00 km、許容 ＝ <b>10 mm</b> → <b>許容超過</b></p>
+<p><b>外周環</b>［(1)(2)(3)］C→A→D→C と一周する。</p>
+<p>閉合差 ＝ ＋3.429 −1.176 −2.257 ＝ <b>−0.004 m ＝ −4 mm</b>　／　S ＝ 2.00×3 ＝ 6.00 km、許容 ＝ 5√6 ≒ <b>12.2 mm</b> → <b>範囲内</b></p>
+<div class='step'>④ 超過した環の共通路線を探す</div>
+<p>許容を超えたのは <b>環 ABD</b>［(4)(5)(2)］と <b>環 BCD</b>［(6)(5)(3)］の 2 つ。この 2 つに共通して含まれる路線は <b>(5)</b> だけである。<br>
+裏づけとして、範囲内だった環 ABC［(1)(4)(6)］と外周環［(1)(2)(3)］は、<b>いずれも (5) を含んでいない</b>。「(5) を通る環はすべて超過し、通らない環はすべて正常」という形になっており、(5) に誤差があると考えて矛盾がない。</p>
+<div class='conc'>よって再測すべきは <b>路線 (5)</b>。<b>選択肢 5</b>。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 手順は「<b>矢印の向きを確認 → 環ごとに符号をそろえて閉合差 → 5√S と比較 → 超過環の共通路線</b>」。逆向きの路線で符号を反転し忘れるのが最大の失点源。正常な環に犯人が含まれていないかで検算できる。</div></div>
       </div>
     </div>
   </div>
-</div>
-
 </div>
   <div class="pr-box">
   <h2>📚 おすすめ学習グッズ</h2>
@@ -384,5 +421,108 @@ body{padding:0}
   <div class="qall"><a href="/#r07">▼ 令和7年の全28問一覧へ戻る</a></div>
   <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報・お問い合わせ</a></div>
 </div>
+<script>
+(function(){
+  var STORE='sokuryo_q_v2';
+  var card=document.querySelector('.card[data-answer]');
+  if(!card||!card.id) return;
+  var qid=card.id;
+  var correct=parseInt(card.getAttribute('data-answer'),10);
+  if(!correct) return;
+  var secK=card.querySelector('.section-kaisetsu');
+  if(!secK||!secK.parentNode) return;
+
+  function ld(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+  function sv(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+  // 選択肢そのものが解答肢になっている問題（data-ans-opt 付き）は選択肢を直接押させる。
+  // 番号ボタンを別に並べると同じ番号が二重に出るため。1〜5の一覧がHTMLに無い
+  // 組合せ問題だけ、従来どおり番号ボタンを出す。
+  var opts=card.querySelectorAll('[data-ans-opt]');
+  function labelOf(el){
+    var b=el.querySelector('b');
+    return b?b.textContent.replace(/[．.]\s*$/,''):el.getAttribute('data-ans-opt');
+  }
+  function ansText(){
+    for(var i=0;i<opts.length;i++){
+      if(parseInt(opts[i].getAttribute('data-ans-opt'),10)===correct) return labelOf(opts[i]);
+    }
+    return correct;
+  }
+
+  var wrap=document.createElement('div');
+  wrap.className='quiz-area';wrap.id='qa-'+qid;
+  var prompt=document.createElement('div');
+  prompt.className='quiz-prompt';
+  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
+  wrap.appendChild(prompt);
+  var row=document.createElement('div');row.className='quiz-btns';
+  if(opts.length){
+    for(var i=0;i<opts.length;i++){
+      (function(el){
+        var num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.add('q-pick');
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.onclick=function(ev){ev.stopPropagation();submit(num);};
+        el.onkeydown=function(ev){
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();submit(num);}
+        };
+      })(opts[i]);
+    }
+  }else{
+    for(var n=1;n<=5;n++){
+      (function(num){
+        var b=document.createElement('button');
+        b.className='q-btn';b.type='button';b.textContent=num;
+        b.setAttribute('aria-label','選択肢'+num+'を選ぶ');
+        b.onclick=function(){submit(num);};
+        row.appendChild(b);
+      })(n);
+    }
+  }
+  wrap.appendChild(row);
+  var res=document.createElement('div');
+  res.className='quiz-result';res.id='qr-'+qid;
+  wrap.appendChild(res);
+  secK.parentNode.insertBefore(wrap,secK);
+
+  function paint(userAns){
+    if(opts.length){
+      for(var i=0;i<opts.length;i++){
+        var el=opts[i], num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.remove('q-pick');
+        el.removeAttribute('role');el.removeAttribute('tabindex');
+        el.onclick=null;el.onkeydown=null;
+        if(num===correct) el.classList.add('opt-ok');
+        else if(num===userAns) el.classList.add('opt-ng');
+      }
+      return;
+    }
+    var bs=wrap.querySelectorAll('.q-btn');
+    for(var i=0;i<bs.length;i++){
+      bs[i].disabled=true;
+      if(i+1===correct) bs[i].className='q-btn ans-ok';
+      else if(i+1===userAns) bs[i].className='q-btn ans-ng';
+    }
+  }
+  function show(isOk){
+    res.className='quiz-result r-'+(isOk?'ok':'ng');
+    res.textContent=isOk?'\u2705 正解！':'\u274c 不正解。正解は '+ansText();
+  }
+  function submit(userAns){
+    var isOk=(userAns===correct);
+    var prog=ld();var prev=prog[qid]||{};
+    var ng=prev.ngCount||0, ok=prev.okStreak||0;
+    if(isOk){ok+=1;}else{ng+=1;ok=0;}
+    prog[qid]={answered:true,correct:isOk,userAnswer:userAns,correctAnswer:correct,
+               ngCount:ng,okStreak:ok,attempts:(prev.attempts||0)+1};
+    sv(prog);paint(userAns);show(isOk);
+  }
+
+  var d=ld()[qid];
+  if(d&&d.answered){paint(d.userAnswer);show(d.correct);}
+})();
+</script>
 </body>
 </html>

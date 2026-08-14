@@ -44,6 +44,22 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
 .main{flex:1;padding:14px 16px;min-width:0}
+.intro{background:#fff;border-radius:14px;padding:22px 26px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid #eee}
+.intro h2{font-size:1.15rem;font-weight:900;color:#333;line-height:1.6;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #f0f0ff}
+.intro h3{font-size:1.02rem;font-weight:800;color:#6c5ce7;margin:22px 0 8px}
+.intro p{font-size:1rem;line-height:1.9;color:#555;margin-bottom:10px}
+.intro a{color:#6c5ce7}
+.intro-list{list-style:none;margin:0 0 10px}
+.intro-list li{font-size:1rem;line-height:1.85;color:#555;padding:8px 0 8px 22px;position:relative;border-bottom:1px solid #f5f5fa}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'▸';position:absolute;left:4px;color:#6c5ce7;font-weight:900}
+.tbl-wrap{overflow-x:auto;margin:10px 0 14px}
+.trend{border-collapse:collapse;width:100%;min-width:340px;font-size:.97rem}
+.trend th{background:#f0f0ff;color:#6c5ce7;font-weight:800;padding:9px 12px;text-align:left;border-bottom:2px solid #e0dcff;white-space:nowrap}
+.trend td{padding:8px 12px;border-bottom:1px solid #f0f0f5;color:#555}
+.trend td:nth-child(2),.trend td:nth-child(3),.trend th:nth-child(2),.trend th:nth-child(3){text-align:right;white-space:nowrap}
+.trend tbody tr:hover{background:#fafaff}
+@media(max-width:700px){.intro{padding:18px 16px}.intro h2{font-size:1.06rem}}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
 .ysec{display:block}
@@ -81,6 +97,17 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
 .q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
 .q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
+/* 選択肢そのものを解答ボタンとして押させる（番号ボタンとの二重表示をやめたため） */
+.q-pick{cursor:pointer}
+.q-pick:hover{border-color:#6c5ce7;background:#f5f4ff;box-shadow:0 2px 8px rgba(108,92,231,.18)}
+span.q-pick:hover{background:#6c5ce7;color:#fff}
+.q-pick:focus-visible{outline:3px solid #b8b0ff;outline-offset:2px}
+.opt-ok{border-color:#00b894!important;background:#e8f9f4!important;box-shadow:0 2px 8px rgba(0,184,148,.2)}
+span.opt-ok{background:#00b894!important;color:#fff!important}
+.opt-ok::after{content:' \2705';font-weight:900}
+.opt-ng{border-color:#ff6b81!important;background:#fff0f2!important}
+span.opt-ng{background:#ff6b81!important;color:#fff!important}
+.opt-ng::after{content:' \274c';font-weight:900}
 .section-kaisetsu{margin-top:14px}
 .kaisetsu-box{padding:8px 0;font-size:.96rem;line-height:1.85;display:flex;flex-direction:column}
 .kaisetsu-box p{margin:5px 0;color:#555}
@@ -198,6 +225,14 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .mondai-box .q-opts-plain{display:block}
 /* === Bigger inline image with nav === */
 .orig-fig-wrap{position:relative}
+/* 問題文が本文にテキストで載っている問題は、原典の画像を既定で畳む（同じ内容の二重表示を避ける） */
+.orig-details{margin:10px 0 0;border:1px solid #ececf5;border-radius:10px;background:#fafafa}
+.orig-details>summary{cursor:pointer;padding:9px 14px;font-size:.88rem;color:#999;list-style:none;user-select:none}
+.orig-details>summary::-webkit-details-marker{display:none}
+.orig-details>summary::before{content:'\25b6';display:inline-block;margin-right:7px;font-size:.72rem;color:#c5c5d5;transition:transform .15s}
+.orig-details[open]>summary::before{transform:rotate(90deg)}
+.orig-details>summary:hover{color:#6c5ce7;background:#f5f4ff;border-radius:10px}
+.orig-details .orig-fig-wrap{margin:0;border:none;background:none;padding:0 12px 12px}
 .orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .fig-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap}
 .fig-nav-btn{padding:5px 14px;border-radius:14px;border:1.5px solid #6c5ce7;background:#fff;color:#6c5ce7;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .12s}
@@ -321,22 +356,28 @@ body{padding:0}
     <div class='section-mondai'>
       <div class='sec-title'>📋 問題文</div>
       <div class='mondai-box'>
-        <p class='q-stmt'>次の a〜e の文は，公共測量における GNSS 測量機による水準測量 （以下「GNSS 水準測量」とい う。）について述べたものである。明らかに間違っているものだけの組合せはどれか。次の 1～5 の 中から選べ。</p><div class='q-opts'><div class='q-opt'><b>a．</b> 標高を定める測量であるため，GNSS 水準測量では，PCV 補正を行わない。</div><div class='q-opt'><b>b．</b> GNSS 水準測量では，国土地理院が提供するジオイド・モデルを用いることにより，既知点か らの距離が 6～40 ㎞の範囲において 3 級水準点を設置できる。</div><div class='q-opt'><b>c．</b> GNSS 水準測量で使用できる既知点の種類は，一～二等水準点，電子基準点（標高区分:水準測 量による）及び 1～2 級水準点である。</div><div class='q-opt'><b>d．</b> GNSS 水準測量では，スタティック法又はネットワーク型 RTK 法により観測を行う。</div><div class='q-opt'><b>e．</b> 大気中に含まれる水蒸気などによって電波の伝搬遅延量が増加し，高さ方向の精度に影響する ことから，寒冷前線や温暖前線が通過しているときは，原則として観測を行わない。</div></div><div class='q-sels'><span class='q-sel'><b>1.</b> a，c</span><span class='q-sel'><b>2.</b> a，ｄ</span><span class='q-sel'><b>3.</b> b，ｃ</span><span class='q-sel'><b>4.</b> b，e</span><span class='q-sel'><b>5.</b> d，e</span></div>
+        <p class='q-stmt'>次の a〜e の文は，公共測量における GNSS 測量機による水準測量 （以下「GNSS 水準測量」とい う。）について述べたものである。明らかに間違っているものだけの組合せはどれか。次の 1～5 の 中から選べ。</p><div class='q-opts'><div class='q-opt'><b>a．</b> 標高を定める測量であるため，GNSS 水準測量では，PCV 補正を行わない。</div><div class='q-opt'><b>b．</b> GNSS 水準測量では，国土地理院が提供するジオイド・モデルを用いることにより，既知点か らの距離が 6～40 ㎞の範囲において 3 級水準点を設置できる。</div><div class='q-opt'><b>c．</b> GNSS 水準測量で使用できる既知点の種類は，一～二等水準点，電子基準点（標高区分:水準測 量による）及び 1～2 級水準点である。</div><div class='q-opt'><b>d．</b> GNSS 水準測量では，スタティック法又はネットワーク型 RTK 法により観測を行う。</div><div class='q-opt'><b>e．</b> 大気中に含まれる水蒸気などによって電波の伝搬遅延量が増加し，高さ方向の精度に影響する ことから，寒冷前線や温暖前線が通過しているときは，原則として観測を行わない。</div></div><div class='q-sels'><span class='q-sel' data-ans-opt='1'><b>1.</b> a，c</span><span class='q-sel' data-ans-opt='2'><b>2.</b> a，ｄ</span><span class='q-sel' data-ans-opt='3'><b>3.</b> b，ｃ</span><span class='q-sel' data-ans-opt='4'><b>4.</b> b，e</span><span class='q-sel' data-ans-opt='5'><b>5.</b> d，e</span></div>
       </div>
     </div>
-    <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r06-q11' src='/sokuryo_figures/r06_p10.png' loading='lazy' alt='元問題' data-qid='r06-q11'></div><div class='section-kaisetsu'>
+    <details class='orig-details'><summary>📄 原典の問題ページ（画像）</summary><div class='orig-fig-wrap'><img class='orig-fig' id='fig-r06-q11' src='/sokuryo_figures/r06_p10.png' loading='lazy' alt='元問題' data-qid='r06-q11'></div></details><div class='section-kaisetsu'>
       <div class='sec-title'>💡 解説</div>
       <div class='kaisetsu-box'>
-        <p>GNSS 水準測量（GNSS による標高の測量マニュアル）に関する正誤判定。</p>
+        <p>GNSS 水準測量（「GNSS による標高の測量マニュアル」）に関する正誤判定。<br>
+前提として押さえておきたいのは、<b>GNSS が直接求めるのは「標高」ではなく「楕円体高」だ</b>ということ。両者は次の関係で結ばれている。</p>
+<div class='conc'>標高 ＝ 楕円体高 − ジオイド高</div>
+<p>つまり GNSS 水準測量とは、GNSS で楕円体高を精密に求め、そこから国土地理院のジオイド・モデルによるジオイド高を差し引いて標高を得る測量である。<b>高さ方向の精度がそのまま成果の精度になる</b>ため、高さの誤差要因に対して各所で厳しい条件が課されている。この視点で各記述を見ていく。</p>
 <div class='opt wrong'>a. 誤り。</div>
-<p>GNSS 水準測量では、原則として <b>PCV 補正を行う必要がある</b>。問題文の「PCV 補正は不要」は誤り。アンテナ位相特性は標高方向の精度に直接影響するため必須。</p>
-<div class='opt correct'>b. 正しい。路線の辺数 6 辺以下、路線長 60 km 以下が標準。</div>
-<div class='opt correct'>c. 正しい。既知点の数は 3 点以上が標準。</div>
-<div class='opt wrong'>d. 誤り。</div>
-<p>GNSS 水準測量は<b>スタティック法のみ</b>で実施する。問題文の他手法（RTK 等）はGNSS 水準測量には適用されない。</p>
-<div class='opt correct'>e. 正しい。台風・熱帯低気圧の近接、積乱雲の急速発達・集中豪雨が予測されるときは GNSS 観測を避ける。</div>
-<div class='conc'>誤りは a, d の組合せ = <b>選択肢 2</b>（a, d）。</div>
-        <div class='claude-box'><div class='claude-memo'>💡 GNSS水準測量: スタティック法のみ（RTKは不可）。PCV補正は必須（省略不可）。2大ポイント！</div></div>
+<p>記述は「標高を定める測量であるため PCV 補正を行わない」とするが、理屈が逆である。PCV（アンテナ位相特性）とは、アンテナの電気的な位相中心が電波の到来方向によってずれる性質のことで、その影響は<b>とりわけ高さ方向に強く現れる</b>。標高を求める測量だからこそ、PCV 補正は省略できない。GNSS 水準測量では原則として PCV 補正を行う。</p>
+<div class='opt correct'>b. 正しい。</div>
+<p>ジオイド・モデルを併用することで標高が求められる（冒頭の式）ため、GNSS 水準測量によって<b>3 級水準点</b>を設置することが認められている。マニュアルはその適用範囲を<b>既知点からの距離 6 〜 40 km</b>と定めており、記述はこのとおり。直接水準測量のように路線を実際にたどる必要がないため、山間部や横断が難しい地形で特に効果を発揮する。</p>
+<div class='opt correct'>c. 正しい。</div>
+<p>使用できる既知点は、<b>一〜二等水準点、電子基準点（標高区分：水準測量による）、1〜2 級水準点</b>に限られる。共通しているのは、いずれも<b>標高が水準測量によって高精度に決められている点</b>だということ。電子基準点がすべて使えるわけではなく「標高区分：水準測量による」ものに限定されるのがポイントで、GNSS によって標高を与えた点を既知点にしてしまうと、その誤差をさらに引き継いでしまうためである。</p>
+<div class='opt wrong'>d. 誤り。 ← もう一つの誤り</div>
+<p>GNSS 水準測量の観測は<b>スタティック法のみ</b>で行う。ネットワーク型 RTK 法は即時に結果が得られる利点がある反面、観測時間が短く、高さ方向に必要な精度を確保できない。長時間の連続観測によって衛星配置の変化を取り込み、対流圏遅延などの誤差を平均化できるスタティック法でなければならない。「ネットワーク型 RTK 法により観測を行う」とする記述は誤り。</p>
+<div class='opt correct'>e. 正しい。</div>
+<p>GNSS の電波は大気を通過する際に遅れる。とくに対流圏の<b>水蒸気</b>による遅延は変動が大きく、正確なモデル化が難しい。基線の両端で水蒸気の分布が違えば遅延の差が誤差として残り、これも<b>高さ方向</b>に効いてくる。寒冷前線や温暖前線の通過時は水蒸気分布が短時間で大きく変化するため、原則として観測を行わない。記述のとおり。</p>
+<div class='conc'>誤りは <b>a</b> と <b>d</b>。その組合せは <b>選択肢 2</b>（a, d）。</div>
+        <div class='claude-box'><div class='claude-memo'>💡 「<b>標高＝楕円体高−ジオイド高</b>」から出発すると全選択肢がつながる。高さの精度を守るための決まりごとなので、<b>PCV 補正は必須</b>・<b>スタティック法のみ</b>・<b>既知点は水準測量で標高を決めた点だけ</b>、と理由ごと覚える。</div></div>
       </div>
     </div>
   </div>
@@ -375,5 +416,108 @@ body{padding:0}
   <div class="qall"><a href="/#r06">▼ 令和6年の全28問一覧へ戻る</a></div>
   <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報・お問い合わせ</a></div>
 </div>
+<script>
+(function(){
+  var STORE='sokuryo_q_v2';
+  var card=document.querySelector('.card[data-answer]');
+  if(!card||!card.id) return;
+  var qid=card.id;
+  var correct=parseInt(card.getAttribute('data-answer'),10);
+  if(!correct) return;
+  var secK=card.querySelector('.section-kaisetsu');
+  if(!secK||!secK.parentNode) return;
+
+  function ld(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+  function sv(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+  // 選択肢そのものが解答肢になっている問題（data-ans-opt 付き）は選択肢を直接押させる。
+  // 番号ボタンを別に並べると同じ番号が二重に出るため。1〜5の一覧がHTMLに無い
+  // 組合せ問題だけ、従来どおり番号ボタンを出す。
+  var opts=card.querySelectorAll('[data-ans-opt]');
+  function labelOf(el){
+    var b=el.querySelector('b');
+    return b?b.textContent.replace(/[．.]\s*$/,''):el.getAttribute('data-ans-opt');
+  }
+  function ansText(){
+    for(var i=0;i<opts.length;i++){
+      if(parseInt(opts[i].getAttribute('data-ans-opt'),10)===correct) return labelOf(opts[i]);
+    }
+    return correct;
+  }
+
+  var wrap=document.createElement('div');
+  wrap.className='quiz-area';wrap.id='qa-'+qid;
+  var prompt=document.createElement('div');
+  prompt.className='quiz-prompt';
+  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
+  wrap.appendChild(prompt);
+  var row=document.createElement('div');row.className='quiz-btns';
+  if(opts.length){
+    for(var i=0;i<opts.length;i++){
+      (function(el){
+        var num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.add('q-pick');
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.onclick=function(ev){ev.stopPropagation();submit(num);};
+        el.onkeydown=function(ev){
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();submit(num);}
+        };
+      })(opts[i]);
+    }
+  }else{
+    for(var n=1;n<=5;n++){
+      (function(num){
+        var b=document.createElement('button');
+        b.className='q-btn';b.type='button';b.textContent=num;
+        b.setAttribute('aria-label','選択肢'+num+'を選ぶ');
+        b.onclick=function(){submit(num);};
+        row.appendChild(b);
+      })(n);
+    }
+  }
+  wrap.appendChild(row);
+  var res=document.createElement('div');
+  res.className='quiz-result';res.id='qr-'+qid;
+  wrap.appendChild(res);
+  secK.parentNode.insertBefore(wrap,secK);
+
+  function paint(userAns){
+    if(opts.length){
+      for(var i=0;i<opts.length;i++){
+        var el=opts[i], num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.remove('q-pick');
+        el.removeAttribute('role');el.removeAttribute('tabindex');
+        el.onclick=null;el.onkeydown=null;
+        if(num===correct) el.classList.add('opt-ok');
+        else if(num===userAns) el.classList.add('opt-ng');
+      }
+      return;
+    }
+    var bs=wrap.querySelectorAll('.q-btn');
+    for(var i=0;i<bs.length;i++){
+      bs[i].disabled=true;
+      if(i+1===correct) bs[i].className='q-btn ans-ok';
+      else if(i+1===userAns) bs[i].className='q-btn ans-ng';
+    }
+  }
+  function show(isOk){
+    res.className='quiz-result r-'+(isOk?'ok':'ng');
+    res.textContent=isOk?'\u2705 正解！':'\u274c 不正解。正解は '+ansText();
+  }
+  function submit(userAns){
+    var isOk=(userAns===correct);
+    var prog=ld();var prev=prog[qid]||{};
+    var ng=prev.ngCount||0, ok=prev.okStreak||0;
+    if(isOk){ok+=1;}else{ng+=1;ok=0;}
+    prog[qid]={answered:true,correct:isOk,userAnswer:userAns,correctAnswer:correct,
+               ngCount:ng,okStreak:ok,attempts:(prev.attempts||0)+1};
+    sv(prog);paint(userAns);show(isOk);
+  }
+
+  var d=ld()[qid];
+  if(d&&d.answered){paint(d.userAnswer);show(d.correct);}
+})();
+</script>
 </body>
 </html>

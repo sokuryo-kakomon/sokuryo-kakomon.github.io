@@ -44,6 +44,22 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
 .main{flex:1;padding:14px 16px;min-width:0}
+.intro{background:#fff;border-radius:14px;padding:22px 26px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid #eee}
+.intro h2{font-size:1.15rem;font-weight:900;color:#333;line-height:1.6;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #f0f0ff}
+.intro h3{font-size:1.02rem;font-weight:800;color:#6c5ce7;margin:22px 0 8px}
+.intro p{font-size:1rem;line-height:1.9;color:#555;margin-bottom:10px}
+.intro a{color:#6c5ce7}
+.intro-list{list-style:none;margin:0 0 10px}
+.intro-list li{font-size:1rem;line-height:1.85;color:#555;padding:8px 0 8px 22px;position:relative;border-bottom:1px solid #f5f5fa}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'▸';position:absolute;left:4px;color:#6c5ce7;font-weight:900}
+.tbl-wrap{overflow-x:auto;margin:10px 0 14px}
+.trend{border-collapse:collapse;width:100%;min-width:340px;font-size:.97rem}
+.trend th{background:#f0f0ff;color:#6c5ce7;font-weight:800;padding:9px 12px;text-align:left;border-bottom:2px solid #e0dcff;white-space:nowrap}
+.trend td{padding:8px 12px;border-bottom:1px solid #f0f0f5;color:#555}
+.trend td:nth-child(2),.trend td:nth-child(3),.trend th:nth-child(2),.trend th:nth-child(3){text-align:right;white-space:nowrap}
+.trend tbody tr:hover{background:#fafaff}
+@media(max-width:700px){.intro{padding:18px 16px}.intro h2{font-size:1.06rem}}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
 .ysec{display:block}
@@ -81,6 +97,17 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
 .q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
 .q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
+/* 選択肢そのものを解答ボタンとして押させる（番号ボタンとの二重表示をやめたため） */
+.q-pick{cursor:pointer}
+.q-pick:hover{border-color:#6c5ce7;background:#f5f4ff;box-shadow:0 2px 8px rgba(108,92,231,.18)}
+span.q-pick:hover{background:#6c5ce7;color:#fff}
+.q-pick:focus-visible{outline:3px solid #b8b0ff;outline-offset:2px}
+.opt-ok{border-color:#00b894!important;background:#e8f9f4!important;box-shadow:0 2px 8px rgba(0,184,148,.2)}
+span.opt-ok{background:#00b894!important;color:#fff!important}
+.opt-ok::after{content:' \2705';font-weight:900}
+.opt-ng{border-color:#ff6b81!important;background:#fff0f2!important}
+span.opt-ng{background:#ff6b81!important;color:#fff!important}
+.opt-ng::after{content:' \274c';font-weight:900}
 .section-kaisetsu{margin-top:14px}
 .kaisetsu-box{padding:8px 0;font-size:.96rem;line-height:1.85;display:flex;flex-direction:column}
 .kaisetsu-box p{margin:5px 0;color:#555}
@@ -198,6 +225,14 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .mondai-box .q-opts-plain{display:block}
 /* === Bigger inline image with nav === */
 .orig-fig-wrap{position:relative}
+/* 問題文が本文にテキストで載っている問題は、原典の画像を既定で畳む（同じ内容の二重表示を避ける） */
+.orig-details{margin:10px 0 0;border:1px solid #ececf5;border-radius:10px;background:#fafafa}
+.orig-details>summary{cursor:pointer;padding:9px 14px;font-size:.88rem;color:#999;list-style:none;user-select:none}
+.orig-details>summary::-webkit-details-marker{display:none}
+.orig-details>summary::before{content:'\25b6';display:inline-block;margin-right:7px;font-size:.72rem;color:#c5c5d5;transition:transform .15s}
+.orig-details[open]>summary::before{transform:rotate(90deg)}
+.orig-details>summary:hover{color:#6c5ce7;background:#f5f4ff;border-radius:10px}
+.orig-details .orig-fig-wrap{margin:0;border:none;background:none;padding:0 12px 12px}
 .orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .fig-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap}
 .fig-nav-btn{padding:5px 14px;border-radius:14px;border:1.5px solid #6c5ce7;background:#fff;color:#6c5ce7;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .12s}
@@ -321,29 +356,45 @@ body{padding:0}
     <div class='section-mondai'>
       <div class='sec-title'>📋 問題文</div>
       <div class='mondai-box'>
-        <p class='q-stmt'>境界点 A，B，C，D で囲まれた四角形の土地の面積を求めたい。 境界点 B は直接観測ができ ないため，補助基準点Pを設置し，点 A，P，C，D をトータルステーションを用いて測量し，表27 に示す平面直角座標系 (平成14年国土交通省告示第9号) における座標値を得た。境界点 A，B， C，D で囲まれた四角形の土地の面積は幾らか。 最も近いものを次の 1 ～ 5 の中から選べ。</p><div class='q-opts'><div class='q-opt'><b>1．</b> 787.200 ㎡<div class='q-opt'><b>2．</b> 814.600 ㎡</div><div class='q-opt'><b>3．</b> 823.800 ㎡</div><div class='q-opt'><b>4．</b> 851.250 ㎡</div><div class='q-opt'><b>5．</b> 953.700 ㎡</div></div>
+        <p class='q-stmt'>境界点 A，B，C，D で囲まれた四角形の土地の面積を求めたい。 境界点 B は直接観測ができ ないため，補助基準点Pを設置し，点 A，P，C，D をトータルステーションを用いて測量し，表27 に示す平面直角座標系 (平成14年国土交通省告示第9号) における座標値を得た。境界点 A，B， C，D で囲まれた四角形の土地の面積は幾らか。 最も近いものを次の 1 ～ 5 の中から選べ。<br>
+ただし、点 P から点 B までの平面距離は 10.000 m、点 P における点 B の方向角は 240°00′00″ とする。</p>
+        <div class='tbl-wrap'><table class='trend'><caption style='text-align:left;font-size:.92rem;color:#666;padding-bottom:4px'>表 27</caption>
+          <thead><tr><th>点</th><th>X (m)</th><th>Y (m)</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>+10,090.500</td><td>+13,045.500</td></tr>
+            <tr><td>P</td><td>+10,105.500</td><td>+13,089.000</td></tr>
+            <tr><td>C</td><td>+10,075.500</td><td>+13,080.500</td></tr>
+            <tr><td>D</td><td>+10,070.500</td><td>+13,040.500</td></tr>
+          </tbody></table></div><div class='q-opts'><div class='q-opt' data-ans-opt='1'><b>1．</b> 787.200 ㎡</div><div class='q-opt' data-ans-opt='2'><b>2．</b> 814.600 ㎡</div><div class='q-opt' data-ans-opt='3'><b>3．</b> 823.800 ㎡</div><div class='q-opt' data-ans-opt='4'><b>4．</b> 851.250 ㎡</div><div class='q-opt' data-ans-opt='5'><b>5．</b> 953.700 ㎡</div></div>
       </div>
     </div>
     <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r07-q27' src='/sokuryo_figures/r07b_p11.png' loading='lazy' alt='元問題' data-qid='r07-q27'></div><div class='section-kaisetsu'>
       <div class='sec-title'>💡 解説</div>
       <div class='kaisetsu-box'>
-        <p>図 27 の4 点（A, B, C, D）で囲まれた土地の面積を、平面直角座標から<b>座標法（シューレース公式）</b>で求める問題。</p>
-<div class='step'>① 座標法の公式</div>
-<div class='conc'>2S = |Σ x_i × (y_(i+1) − y_(i−1))|</div>
-<p>または等価な形：<b>2S = |Σ (x_i × y_(i+1) − x_(i+1) × y_i)|</b></p>
-<div class='step'>② 各点の座標を整理</div>
-<p>図27 と表27 に示された A、B、C、D の (X, Y) 座標を順に並べる。</p>
-<div class='step'>③ 公式に代入して 2S を計算</div>
-<p>順番に各項を計算し、絶対値を取って 2S を求める。</p>
-<div class='step'>④ 面積 S = 2S / 2</div>
-<p>計算結果として、最も近い選択肢の値となる。</p>
-<div class='conc'>計算結果は <b>選択肢 3</b> の値に最も近い。座標法は誤差の少ない面積計算法で、4点以上の多角形でも適用できる。</div>
+        <p>四角形 A・B・C・D の面積を座標法で求める問題。ただし頂点のひとつ <b>B の座標が与えられていない</b>ところが本問の仕掛けで、まず補助基準点 P からの距離と方向角を使って B の座標を計算し、そのうえで面積を出す、という二段構えになる。</p>
+<div class='step'>① 点 B の座標を求める</div>
+<p>方向角は<b>X 軸（北）を 0° として時計回り</b>に測る角度なので、距離 S と方向角 T から座標の増分は次のようになる。sin と cos が通常の数学と入れ替わって見える点に注意。</p>
+<div class='conc'>ΔX ＝ S・cos T　　ΔY ＝ S・sin T</div>
+<p>S ＝ 10.000 m、T ＝ 240°00′00″ なので、cos 240° ＝ −0.50000、sin 240° ＝ −0.86603 より</p>
+<p>ΔX ＝ 10.000 × (−0.50000) ＝ −5.000 m　／　ΔY ＝ 10.000 × (−0.86603) ＝ −8.660 m</p>
+<div class='conc'>B ＝ (10,105.500 − 5.000,　13,089.000 − 8.660) ＝ <b>(10,100.500,　13,080.340)</b></div>
+<div class='step'>② 計算しやすい局所座標に置き換える</div>
+<p>座標が 10,000 台のままでは掛け算の桁数が大きく、ミスを招く。面積は原点をどこに置いても変わらないので、<b>(10,070, 13,040) を原点</b>として引き算しておく。</p>
+<div class='conc'>A(20.5,　5.5)　B(30.5,　40.34)　C(5.5,　40.5)　D(0.5,　0.5)</div>
+<div class='step'>③ 座標法（シューレースの公式）で 2S を求める</div>
+<p>頂点を <b>A → B → C → D</b> の順に一周し、隣り合う 2 点ごとに (x<sub>i</sub>·y<sub>i+1</sub> − x<sub>i+1</sub>·y<sub>i</sub>) を計算して足し合わせる。</p>
+<p>A→B：20.5 × 40.34 − 30.5 × 5.5 ＝ 826.97 − 167.75 ＝ ＋659.22</p>
+<p>B→C：30.5 × 40.5 − 5.5 × 40.34 ＝ 1,235.25 − 221.87 ＝ ＋1,013.38</p>
+<p>C→D：5.5 × 0.5 − 0.5 × 40.5 ＝ 2.75 − 20.25 ＝ −17.50</p>
+<p>D→A：0.5 × 5.5 − 20.5 × 0.5 ＝ 2.75 − 10.25 ＝ −7.50</p>
+<div class='conc'>2S ＝ 659.22 ＋ 1,013.38 − 17.50 − 7.50 ＝ 1,647.60</div>
+<div class='step'>④ 面積を求める</div>
+<div class='conc'>S ＝ 1,647.60 ÷ 2 ＝ <b>823.80 m²</b></div>
+<div class='conc'>よって <b>選択肢 3</b>（823.800 m²）。</div>
         <div class='claude-box'><svg viewBox="0 0 320 230" style="width:100%;max-width:320px;height:230px;display:block;margin:10px auto;background:#fce4ec;border-radius:8px;border:1px solid #f48fb1"><text x="10" y="16" font-size="11" fill="#555" font-weight="bold" font-family="sans-serif">座標法（ガウス公式）で面積計算</text><polygon points="65,170 65,55 245,50 245,170" fill="#fce4ec" stroke="#c62828" stroke-width="2"/><circle cx="65" cy="170" r="6" fill="#c62828"/><text x="40" y="195" font-size="11" font-weight="bold" fill="#c62828" font-family="sans-serif">A</text><circle cx="65" cy="55" r="6" fill="#c62828"/><text x="40" y="48" font-size="11" font-weight="bold" fill="#c62828" font-family="sans-serif">D</text><circle cx="245" cy="50" r="6" fill="#c62828"/><text x="252" y="48" font-size="11" font-weight="bold" fill="#c62828" font-family="sans-serif">C</text><circle cx="245" cy="170" r="6" fill="#c62828"/><text x="252" y="175" font-size="11" font-weight="bold" fill="#c62828" font-family="sans-serif">B（未観測）</text><circle cx="225" cy="135" r="6" fill="#1565C0"/><text x="195" y="130" font-size="11" font-weight="bold" fill="#1565C0" font-family="sans-serif">P</text><line x1="225" y1="135" x2="245" y2="170" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="4,2"/><text x="175" y="155" font-size="10" fill="#1565C0" font-family="sans-serif">方位角240°</text><text x="175" y="167" font-size="10" fill="#1565C0" font-family="sans-serif">距離10m</text><text x="10" y="212" font-size="10" fill="#555" font-family="sans-serif">P→B: ΔX=10·cos240°=−5.0, ΔY=10·sin240°=−8.66</text><text x="10" y="225" font-size="10.5" fill="#c62828" font-weight="bold" font-family="sans-serif">→ B 座標から座標法で面積 ≒ 823.8 m²</text></svg><div class='claude-memo'>💡 方向角の三角関数: ΔX=S×cos(方向角), ΔY=S×sin(方向角)（北が0度で時計回り）。</div></div>
       </div>
     </div>
   </div>
-</div>
-
 </div>
   <div class="pr-box">
   <h2>📚 おすすめ学習グッズ</h2>
@@ -379,5 +430,108 @@ body{padding:0}
   <div class="qall"><a href="/#r07">▼ 令和7年の全28問一覧へ戻る</a></div>
   <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報・お問い合わせ</a></div>
 </div>
+<script>
+(function(){
+  var STORE='sokuryo_q_v2';
+  var card=document.querySelector('.card[data-answer]');
+  if(!card||!card.id) return;
+  var qid=card.id;
+  var correct=parseInt(card.getAttribute('data-answer'),10);
+  if(!correct) return;
+  var secK=card.querySelector('.section-kaisetsu');
+  if(!secK||!secK.parentNode) return;
+
+  function ld(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+  function sv(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+  // 選択肢そのものが解答肢になっている問題（data-ans-opt 付き）は選択肢を直接押させる。
+  // 番号ボタンを別に並べると同じ番号が二重に出るため。1〜5の一覧がHTMLに無い
+  // 組合せ問題だけ、従来どおり番号ボタンを出す。
+  var opts=card.querySelectorAll('[data-ans-opt]');
+  function labelOf(el){
+    var b=el.querySelector('b');
+    return b?b.textContent.replace(/[．.]\s*$/,''):el.getAttribute('data-ans-opt');
+  }
+  function ansText(){
+    for(var i=0;i<opts.length;i++){
+      if(parseInt(opts[i].getAttribute('data-ans-opt'),10)===correct) return labelOf(opts[i]);
+    }
+    return correct;
+  }
+
+  var wrap=document.createElement('div');
+  wrap.className='quiz-area';wrap.id='qa-'+qid;
+  var prompt=document.createElement('div');
+  prompt.className='quiz-prompt';
+  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
+  wrap.appendChild(prompt);
+  var row=document.createElement('div');row.className='quiz-btns';
+  if(opts.length){
+    for(var i=0;i<opts.length;i++){
+      (function(el){
+        var num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.add('q-pick');
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.onclick=function(ev){ev.stopPropagation();submit(num);};
+        el.onkeydown=function(ev){
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();submit(num);}
+        };
+      })(opts[i]);
+    }
+  }else{
+    for(var n=1;n<=5;n++){
+      (function(num){
+        var b=document.createElement('button');
+        b.className='q-btn';b.type='button';b.textContent=num;
+        b.setAttribute('aria-label','選択肢'+num+'を選ぶ');
+        b.onclick=function(){submit(num);};
+        row.appendChild(b);
+      })(n);
+    }
+  }
+  wrap.appendChild(row);
+  var res=document.createElement('div');
+  res.className='quiz-result';res.id='qr-'+qid;
+  wrap.appendChild(res);
+  secK.parentNode.insertBefore(wrap,secK);
+
+  function paint(userAns){
+    if(opts.length){
+      for(var i=0;i<opts.length;i++){
+        var el=opts[i], num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.remove('q-pick');
+        el.removeAttribute('role');el.removeAttribute('tabindex');
+        el.onclick=null;el.onkeydown=null;
+        if(num===correct) el.classList.add('opt-ok');
+        else if(num===userAns) el.classList.add('opt-ng');
+      }
+      return;
+    }
+    var bs=wrap.querySelectorAll('.q-btn');
+    for(var i=0;i<bs.length;i++){
+      bs[i].disabled=true;
+      if(i+1===correct) bs[i].className='q-btn ans-ok';
+      else if(i+1===userAns) bs[i].className='q-btn ans-ng';
+    }
+  }
+  function show(isOk){
+    res.className='quiz-result r-'+(isOk?'ok':'ng');
+    res.textContent=isOk?'\u2705 正解！':'\u274c 不正解。正解は '+ansText();
+  }
+  function submit(userAns){
+    var isOk=(userAns===correct);
+    var prog=ld();var prev=prog[qid]||{};
+    var ng=prev.ngCount||0, ok=prev.okStreak||0;
+    if(isOk){ok+=1;}else{ng+=1;ok=0;}
+    prog[qid]={answered:true,correct:isOk,userAnswer:userAns,correctAnswer:correct,
+               ngCount:ng,okStreak:ok,attempts:(prev.attempts||0)+1};
+    sv(prog);paint(userAns);show(isOk);
+  }
+
+  var d=ld()[qid];
+  if(d&&d.answered){paint(d.userAnswer);show(d.correct);}
+})();
+</script>
 </body>
 </html>

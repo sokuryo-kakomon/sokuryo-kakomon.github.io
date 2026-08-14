@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>測量士試験 令和5年 午前 第13問〔水準測量〕解説・解答｜測量士過去問</title>
-<meta name="description" content="測量士試験 令和5年 午前 第13問〔水準測量〕の問題と解説・解答。既知点A及び既知点Bから新点Pの標高を求めるため、公共測量における1級水準測量を行った。標尺補正を行った後の新点Pの標高の最確値を求めよ。標尺の標尺改正数は20℃において+5μm/m、膨張係数…">
+<meta name="description" content="測量士試験 令和5年 午前 第13問〔水準測量〕の問題と解説・解答。既知点A及び既知点Bから新点Pの標高を求めるため、公共測量における1級水準測量を行い、表13−1の結果を得た。標尺補正を行った後の新点Pの標高の最確値は幾らか。最も近いものを次の中から選べ。た…">
 <link rel="canonical" href="https://sokuryo-kakomon.com/r05/q13/">
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="測量士試験 過去問解説">
 <meta property="og:title" content="測量士試験 令和5年 午前 第13問〔水準測量〕解説・解答｜測量士過去問">
-<meta property="og:description" content="測量士試験 令和5年 午前 第13問〔水準測量〕の問題と解説・解答。既知点A及び既知点Bから新点Pの標高を求めるため、公共測量における1級水準測量を行った。標尺補正を行った後の新点Pの標高の最確値を求めよ。標尺の標尺改正数は20℃において+5μm/m、膨張係数…">
+<meta property="og:description" content="測量士試験 令和5年 午前 第13問〔水準測量〕の問題と解説・解答。既知点A及び既知点Bから新点Pの標高を求めるため、公共測量における1級水準測量を行い、表13−1の結果を得た。標尺補正を行った後の新点Pの標高の最確値は幾らか。最も近いものを次の中から選べ。た…">
 <meta property="og:url" content="https://sokuryo-kakomon.com/r05/q13/">
 <meta name="twitter:card" content="summary">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6694004244397132"
@@ -44,6 +44,22 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .ni{display:block;padding:7px 14px;font-size:1.02rem;color:#555;text-decoration:none;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{background:#f0f0ff;border-left-color:#6c5ce7;color:#6c5ce7}
 .main{flex:1;padding:14px 16px;min-width:0}
+.intro{background:#fff;border-radius:14px;padding:22px 26px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid #eee}
+.intro h2{font-size:1.15rem;font-weight:900;color:#333;line-height:1.6;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #f0f0ff}
+.intro h3{font-size:1.02rem;font-weight:800;color:#6c5ce7;margin:22px 0 8px}
+.intro p{font-size:1rem;line-height:1.9;color:#555;margin-bottom:10px}
+.intro a{color:#6c5ce7}
+.intro-list{list-style:none;margin:0 0 10px}
+.intro-list li{font-size:1rem;line-height:1.85;color:#555;padding:8px 0 8px 22px;position:relative;border-bottom:1px solid #f5f5fa}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'▸';position:absolute;left:4px;color:#6c5ce7;font-weight:900}
+.tbl-wrap{overflow-x:auto;margin:10px 0 14px}
+.trend{border-collapse:collapse;width:100%;min-width:340px;font-size:.97rem}
+.trend th{background:#f0f0ff;color:#6c5ce7;font-weight:800;padding:9px 12px;text-align:left;border-bottom:2px solid #e0dcff;white-space:nowrap}
+.trend td{padding:8px 12px;border-bottom:1px solid #f0f0f5;color:#555}
+.trend td:nth-child(2),.trend td:nth-child(3),.trend th:nth-child(2),.trend th:nth-child(3){text-align:right;white-space:nowrap}
+.trend tbody tr:hover{background:#fafaff}
+@media(max-width:700px){.intro{padding:18px 16px}.intro h2{font-size:1.06rem}}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
 .ysec{display:block}
@@ -81,6 +97,17 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
 .q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
 .q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
+/* 選択肢そのものを解答ボタンとして押させる（番号ボタンとの二重表示をやめたため） */
+.q-pick{cursor:pointer}
+.q-pick:hover{border-color:#6c5ce7;background:#f5f4ff;box-shadow:0 2px 8px rgba(108,92,231,.18)}
+span.q-pick:hover{background:#6c5ce7;color:#fff}
+.q-pick:focus-visible{outline:3px solid #b8b0ff;outline-offset:2px}
+.opt-ok{border-color:#00b894!important;background:#e8f9f4!important;box-shadow:0 2px 8px rgba(0,184,148,.2)}
+span.opt-ok{background:#00b894!important;color:#fff!important}
+.opt-ok::after{content:' \2705';font-weight:900}
+.opt-ng{border-color:#ff6b81!important;background:#fff0f2!important}
+span.opt-ng{background:#ff6b81!important;color:#fff!important}
+.opt-ng::after{content:' \274c';font-weight:900}
 .section-kaisetsu{margin-top:14px}
 .kaisetsu-box{padding:8px 0;font-size:.96rem;line-height:1.85;display:flex;flex-direction:column}
 .kaisetsu-box p{margin:5px 0;color:#555}
@@ -198,6 +225,14 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .mondai-box .q-opts-plain{display:block}
 /* === Bigger inline image with nav === */
 .orig-fig-wrap{position:relative}
+/* 問題文が本文にテキストで載っている問題は、原典の画像を既定で畳む（同じ内容の二重表示を避ける） */
+.orig-details{margin:10px 0 0;border:1px solid #ececf5;border-radius:10px;background:#fafafa}
+.orig-details>summary{cursor:pointer;padding:9px 14px;font-size:.88rem;color:#999;list-style:none;user-select:none}
+.orig-details>summary::-webkit-details-marker{display:none}
+.orig-details>summary::before{content:'\25b6';display:inline-block;margin-right:7px;font-size:.72rem;color:#c5c5d5;transition:transform .15s}
+.orig-details[open]>summary::before{transform:rotate(90deg)}
+.orig-details>summary:hover{color:#6c5ce7;background:#f5f4ff;border-radius:10px}
+.orig-details .orig-fig-wrap{margin:0;border:none;background:none;padding:0 12px 12px}
 .orig-fig{max-width:100%;max-height:none!important;width:auto;height:auto;cursor:zoom-in;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .fig-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap}
 .fig-nav-btn{padding:5px 14px;border-radius:14px;border:1.5px solid #6c5ce7;background:#fff;color:#6c5ce7;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .12s}
@@ -321,8 +356,21 @@ body{padding:0}
     <div class='section-mondai'>
       <div class='sec-title'>📋 問題文</div>
       <div class='mondai-box'>
-        <p class='q-stmt'>既知点A及び既知点Bから新点Pの標高を求めるため、公共測量における1級水準測量を行った。標尺補正を行った後の新点Pの標高の最確値を求めよ。標尺の標尺改正数は20℃において+5μm/m、膨張係数は+1.0×10⁻⁶/℃。区間A→P（温度15℃、距離10km、観測高低差+145.6065m）、区間P→B（温度20℃、距離20km、観測高低差-145.6044m）。既知点A標高0.0000m、既知点B標高0.0007m。</p>
-        <div class='q-opts'><div class='q-opt'><b>a．</b> 145.6047 m</div><div class='q-opt'><b>b．</b> 145.6051 m</div><div class='q-opt'><b>c．</b> 145.6053 m</div><div class='q-opt'><b>d．</b> 145.6055 m</div><div class='q-opt'><b>e．</b> 145.6058 m</div></div>
+        <p class='q-stmt'>既知点 A 及び既知点 B から新点 P の標高を求めるため、公共測量における 1 級水準測量を行い、表 13−1 の結果を得た。標尺補正を行った後の新点 P の標高の最確値は幾らか。最も近いものを次の中から選べ。<br>
+ただし、既知点 A 及び既知点 B の標高は表 13−2 のとおりであり、この観測で使用した標尺の標尺改正数は 20℃において +5 μm/m、膨張係数は +1.0×10⁻⁶/℃ である。</p>
+        <div class='tbl-wrap'><table class='trend'><caption style='text-align:left;font-size:.92rem;color:#666;padding-bottom:4px'>表 13−1</caption>
+          <thead><tr><th>区間</th><th>距離</th><th>観測高低差</th><th>観測時の平均気温</th></tr></thead>
+          <tbody>
+            <tr><td>A → P</td><td>2 km</td><td>−16.1435 m</td><td>15℃</td></tr>
+            <tr><td>P → B</td><td>1 km</td><td>−67.0123 m</td><td>20℃</td></tr>
+          </tbody></table></div>
+        <div class='tbl-wrap'><table class='trend'><caption style='text-align:left;font-size:.92rem;color:#666;padding-bottom:4px'>表 13−2</caption>
+          <thead><tr><th>既知点</th><th>標高</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>161.7500 m</td></tr>
+            <tr><td>B</td><td>78.5918 m</td></tr>
+          </tbody></table></div>
+        <div class='q-opts'><div class='q-opt' data-ans-opt='1'><b>1．</b> 145.6047 m</div><div class='q-opt' data-ans-opt='2'><b>2．</b> 145.6051 m</div><div class='q-opt' data-ans-opt='3'><b>3．</b> 145.6053 m</div><div class='q-opt' data-ans-opt='4'><b>4．</b> 145.6055 m</div><div class='q-opt' data-ans-opt='5'><b>5．</b> 145.6058 m</div></div>
       </div>
     </div>
     <div class='orig-fig-wrap'><span class='orig-fig-label'>📑 元問題ページ</span><img class='orig-fig' id='fig-r05-q13' src='/sokuryo_figures/r05_p13.png' loading='lazy' alt='元問題' data-qid='r05-q13'></div><div class='section-kaisetsu'>
@@ -345,7 +393,7 @@ body{padding:0}
 <p>距離比 A→P : P→B = 2 km : 1 km → 重量比 = 1/2 : 1/1 = 1 : 2（距離の逆数が重量）</p>
 <div class='conc'>最確値 = (1 × 145.6065 + 2 × 145.6044) / (1 + 2) = 436.8153 / 3 ≒ <b>145.6051 m</b></div>
 <div class='conc'>よって、最も近いのは <b>選択肢 2</b>（145.6051 m）。</div>
-        <div class='claude-box'><svg viewBox="0 0 300 140" style="width:100%;max-width:300px;height:140px;display:block;margin:10px auto;background:#e0f7fa;border-radius:8px;border:1px solid #80deea"><text x="5" y="13" font-size="10" fill="#555" font-family="sans-serif">水準路線：既知点A&#183;B&#8594;新点P（路線距離で加重平均）</text><circle cx="50" cy="75" r="16" fill="#1565c0"/><text x="44" y="79" font-size="12" font-weight="bold" fill="white" font-family="sans-serif">A</text><text x="34" y="98" font-size="9" fill="#1565c0" font-family="sans-serif">既知点</text><circle cx="150" cy="75" r="16" fill="#c62828"/><text x="144" y="79" font-size="12" font-weight="bold" fill="white" font-family="sans-serif">P</text><text x="136" y="98" font-size="9" fill="#c62828" font-family="sans-serif">新点</text><circle cx="250" cy="75" r="16" fill="#1565c0"/><text x="244" y="79" font-size="12" font-weight="bold" fill="white" font-family="sans-serif">B</text><text x="234" y="98" font-size="9" fill="#1565c0" font-family="sans-serif">既知点</text><line x1="66" y1="70" x2="134" y2="70" stroke="#2e7d32" stroke-width="2.5"/><polygon points="130,66 134,70 130,74" fill="#2e7d32"/><text x="88" y="62" font-size="10" fill="#2e7d32" font-family="sans-serif">路線&#9312;</text><line x1="134" y1="80" x2="66" y2="80" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="166" y1="70" x2="234" y2="70" stroke="#e65100" stroke-width="2.5"/><polygon points="230,66 234,70 230,74" fill="#e65100"/><text x="188" y="62" font-size="10" fill="#e65100" font-family="sans-serif">路線&#9313;</text><line x1="234" y1="80" x2="166" y2="80" stroke="#e65100" stroke-width="1.5" stroke-dasharray="4,3"/><rect x="5" y="108" width="290" height="27" rx="4" fill="#b2ebf2"/><text x="10" y="120" font-size="9.5" fill="#555" font-family="sans-serif">標尺補正後の高低差を路線距離の逆数で加重平均&#8594;新点Pの標高</text><text x="10" y="132" font-size="9.5" fill="#c62828" font-family="sans-serif">HP = HA + &#916;h&#8321;(補正後)&#160;&#160;&#8592;&#160;重み=1/距離で加重平均</text></svg><div class='claude-memo'>💡 正解: 2 — 計算：1級水準測量の標尺補正</div></div>
+        <div class='claude-box'><svg viewBox="0 0 300 140" style="width:100%;max-width:300px;height:140px;display:block;margin:10px auto;background:#e0f7fa;border-radius:8px;border:1px solid #80deea"><text x="5" y="13" font-size="10" fill="#555" font-family="sans-serif">水準路線：既知点A&#183;B&#8594;新点P（路線距離で加重平均）</text><circle cx="50" cy="75" r="16" fill="#1565c0"/><text x="44" y="79" font-size="12" font-weight="bold" fill="white" font-family="sans-serif">A</text><text x="34" y="98" font-size="9" fill="#1565c0" font-family="sans-serif">既知点</text><circle cx="150" cy="75" r="16" fill="#c62828"/><text x="144" y="79" font-size="12" font-weight="bold" fill="white" font-family="sans-serif">P</text><text x="136" y="98" font-size="9" fill="#c62828" font-family="sans-serif">新点</text><circle cx="250" cy="75" r="16" fill="#1565c0"/><text x="244" y="79" font-size="12" font-weight="bold" fill="white" font-family="sans-serif">B</text><text x="234" y="98" font-size="9" fill="#1565c0" font-family="sans-serif">既知点</text><line x1="66" y1="70" x2="134" y2="70" stroke="#2e7d32" stroke-width="2.5"/><polygon points="130,66 134,70 130,74" fill="#2e7d32"/><text x="88" y="62" font-size="10" fill="#2e7d32" font-family="sans-serif">路線&#9312;</text><line x1="134" y1="80" x2="66" y2="80" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="166" y1="70" x2="234" y2="70" stroke="#e65100" stroke-width="2.5"/><polygon points="230,66 234,70 230,74" fill="#e65100"/><text x="188" y="62" font-size="10" fill="#e65100" font-family="sans-serif">路線&#9313;</text><line x1="234" y1="80" x2="166" y2="80" stroke="#e65100" stroke-width="1.5" stroke-dasharray="4,3"/><rect x="5" y="108" width="290" height="27" rx="4" fill="#b2ebf2"/><text x="10" y="120" font-size="9.5" fill="#555" font-family="sans-serif">標尺補正後の高低差を路線距離の逆数で加重平均&#8594;新点Pの標高</text><text x="10" y="132" font-size="9.5" fill="#c62828" font-family="sans-serif">HP = HA + &#916;h&#8321;(補正後)&#160;&#160;&#8592;&#160;重み=1/距離で加重平均</text></svg><div class='claude-memo'>💡 補正係数は <b>C₀ ＋ (T − T₀) × α</b>。<b>20℃ちょうどなら温度の項が消える</b>点がひっかけ。最確値は<b>距離の逆数</b>で重み付けした平均。</div></div>
       </div>
     </div>
   </div>
@@ -384,5 +432,108 @@ body{padding:0}
   <div class="qall"><a href="/#r05">▼ 令和5年の全28問一覧へ戻る</a></div>
   <div class="qfoot">測量士試験 過去問解説（無料）／ 本ページは独学者向けの解説です<br>出典：国土地理院「測量士・測量士補試験の試験問題及び解答例」を加工して掲載（政府標準利用規約準拠）<br><a href="/privacy/">プライバシーポリシー</a> ／ <a href="/about/">運営者情報・お問い合わせ</a></div>
 </div>
+<script>
+(function(){
+  var STORE='sokuryo_q_v2';
+  var card=document.querySelector('.card[data-answer]');
+  if(!card||!card.id) return;
+  var qid=card.id;
+  var correct=parseInt(card.getAttribute('data-answer'),10);
+  if(!correct) return;
+  var secK=card.querySelector('.section-kaisetsu');
+  if(!secK||!secK.parentNode) return;
+
+  function ld(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+  function sv(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+  // 選択肢そのものが解答肢になっている問題（data-ans-opt 付き）は選択肢を直接押させる。
+  // 番号ボタンを別に並べると同じ番号が二重に出るため。1〜5の一覧がHTMLに無い
+  // 組合せ問題だけ、従来どおり番号ボタンを出す。
+  var opts=card.querySelectorAll('[data-ans-opt]');
+  function labelOf(el){
+    var b=el.querySelector('b');
+    return b?b.textContent.replace(/[．.]\s*$/,''):el.getAttribute('data-ans-opt');
+  }
+  function ansText(){
+    for(var i=0;i<opts.length;i++){
+      if(parseInt(opts[i].getAttribute('data-ans-opt'),10)===correct) return labelOf(opts[i]);
+    }
+    return correct;
+  }
+
+  var wrap=document.createElement('div');
+  wrap.className='quiz-area';wrap.id='qa-'+qid;
+  var prompt=document.createElement('div');
+  prompt.className='quiz-prompt';
+  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
+  wrap.appendChild(prompt);
+  var row=document.createElement('div');row.className='quiz-btns';
+  if(opts.length){
+    for(var i=0;i<opts.length;i++){
+      (function(el){
+        var num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.add('q-pick');
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.onclick=function(ev){ev.stopPropagation();submit(num);};
+        el.onkeydown=function(ev){
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();submit(num);}
+        };
+      })(opts[i]);
+    }
+  }else{
+    for(var n=1;n<=5;n++){
+      (function(num){
+        var b=document.createElement('button');
+        b.className='q-btn';b.type='button';b.textContent=num;
+        b.setAttribute('aria-label','選択肢'+num+'を選ぶ');
+        b.onclick=function(){submit(num);};
+        row.appendChild(b);
+      })(n);
+    }
+  }
+  wrap.appendChild(row);
+  var res=document.createElement('div');
+  res.className='quiz-result';res.id='qr-'+qid;
+  wrap.appendChild(res);
+  secK.parentNode.insertBefore(wrap,secK);
+
+  function paint(userAns){
+    if(opts.length){
+      for(var i=0;i<opts.length;i++){
+        var el=opts[i], num=parseInt(el.getAttribute('data-ans-opt'),10);
+        el.classList.remove('q-pick');
+        el.removeAttribute('role');el.removeAttribute('tabindex');
+        el.onclick=null;el.onkeydown=null;
+        if(num===correct) el.classList.add('opt-ok');
+        else if(num===userAns) el.classList.add('opt-ng');
+      }
+      return;
+    }
+    var bs=wrap.querySelectorAll('.q-btn');
+    for(var i=0;i<bs.length;i++){
+      bs[i].disabled=true;
+      if(i+1===correct) bs[i].className='q-btn ans-ok';
+      else if(i+1===userAns) bs[i].className='q-btn ans-ng';
+    }
+  }
+  function show(isOk){
+    res.className='quiz-result r-'+(isOk?'ok':'ng');
+    res.textContent=isOk?'\u2705 正解！':'\u274c 不正解。正解は '+ansText();
+  }
+  function submit(userAns){
+    var isOk=(userAns===correct);
+    var prog=ld();var prev=prog[qid]||{};
+    var ng=prev.ngCount||0, ok=prev.okStreak||0;
+    if(isOk){ok+=1;}else{ng+=1;ok=0;}
+    prog[qid]={answered:true,correct:isOk,userAnswer:userAns,correctAnswer:correct,
+               ngCount:ng,okStreak:ok,attempts:(prev.attempts||0)+1};
+    sv(prog);paint(userAns);show(isOk);
+  }
+
+  var d=ld()[qid];
+  if(d&&d.answered){paint(d.userAnswer);show(d.correct);}
+})();
+</script>
 </body>
 </html>
