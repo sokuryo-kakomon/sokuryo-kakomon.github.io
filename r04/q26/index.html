@@ -93,15 +93,24 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .q-stmt{margin-bottom:10px;line-height:1.85;font-size:1.02rem;color:#333}
 .q-opts{display:flex;flex-direction:column;gap:6px;margin:8px 0}
 .q-opt{padding:9px 13px;background:#fff;border-radius:8px;border:1.5px solid #ececff;font-size:1rem;line-height:1.75;transition:border-color .15s}
-.q-opt:hover{border-color:#b8b0ff}
+/* 押せない記述（判断材料の a〜e）は控えめにして、解答肢と見分けられるようにする */
+.q-opt:not(.q-pick):not(.opt-ok):not(.opt-ng){background:#fafafb;border-color:#f2f2f6;color:#555}
 .q-opts-plain{font-size:.96rem;line-height:1.78;white-space:pre-line;color:#444}
 .q-sels{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #eee}
 .q-sel{background:#f0f0ff;color:#6c5ce7;padding:4px 12px;border-radius:14px;font-size:1rem;font-weight:600}
 /* 選択肢そのものを解答ボタンとして押させる（番号ボタンとの二重表示をやめたため） */
-.q-pick{cursor:pointer}
-.q-pick:hover{border-color:#6c5ce7;background:#f5f4ff;box-shadow:0 2px 8px rgba(108,92,231,.18)}
+/* 押せる解答肢は、丸印つきのボタンとして押せることが一目で分かるようにする */
+.q-pick{cursor:pointer;border-color:#c5b8ff;background:#fff;box-shadow:0 1px 3px rgba(108,92,231,.10)}
+div.q-pick{position:relative;padding-left:42px}
+div.q-pick::before{content:'';position:absolute;left:14px;top:1.05em;width:15px;height:15px;border:2px solid #b0a4ff;border-radius:50%;background:#fff;transition:all .15s}
+div.q-pick:hover::before{border-color:#6c5ce7;box-shadow:inset 0 0 0 3.5px #6c5ce7}
+.q-pick:hover{border-color:#6c5ce7;background:#f7f5ff;box-shadow:0 3px 10px rgba(108,92,231,.22)}
 span.q-pick:hover{background:#6c5ce7;color:#fff}
 .q-pick:focus-visible{outline:3px solid #b8b0ff;outline-offset:2px}
+/* 解答後も丸印の分の余白を保ち、文字位置がずれないようにする */
+div.opt-ok,div.opt-ng{padding-left:42px}
+.q-ans-label{font-size:.9rem;font-weight:800;color:#6c5ce7;margin:14px 0 6px;display:flex;align-items:center;gap:6px}
+.q-ans-label::before{content:'👇'}
 .opt-ok{border-color:#00b894!important;background:#e8f9f4!important;box-shadow:0 2px 8px rgba(0,184,148,.2)}
 span.opt-ok{background:#00b894!important;color:#fff!important}
 .opt-ok::after{content:' \2705';font-weight:900}
@@ -449,10 +458,21 @@ body{padding:0}
 
   var wrap=document.createElement('div');
   wrap.className='quiz-area';wrap.id='qa-'+qid;
-  var prompt=document.createElement('div');
-  prompt.className='quiz-prompt';
-  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
-  wrap.appendChild(prompt);
+  if(opts.length){
+    // 案内文は解答肢のすぐ上に置く（離れていると、どれを押すのか分からなくなるため）
+    var g=opts[0].parentNode;
+    if(g&&(!g.previousElementSibling||g.previousElementSibling.className!=='q-ans-label')){
+      var lab=document.createElement('div');
+      lab.className='q-ans-label';
+      lab.textContent='正解だと思う選択肢をクリックしてください';
+      g.parentNode.insertBefore(lab,g);
+    }
+  }else{
+    var prompt=document.createElement('div');
+    prompt.className='quiz-prompt';
+    prompt.textContent='正解番号を選んでください';
+    wrap.appendChild(prompt);
+  }
   var row=document.createElement('div');row.className='quiz-btns';
   if(opts.length){
     for(var i=0;i<opts.length;i++){

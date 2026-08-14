@@ -186,10 +186,21 @@ QUIZ_JS = """<script>
 
   var wrap=document.createElement('div');
   wrap.className='quiz-area';wrap.id='qa-'+qid;
-  var prompt=document.createElement('div');
-  prompt.className='quiz-prompt';
-  prompt.textContent=opts.length?'正解だと思う選択肢をクリックしてください':'正解番号を選んでください';
-  wrap.appendChild(prompt);
+  if(opts.length){
+    // 案内文は解答肢のすぐ上に置く（離れていると、どれを押すのか分からなくなるため）
+    var g=opts[0].parentNode;
+    if(g&&(!g.previousElementSibling||g.previousElementSibling.className!=='q-ans-label')){
+      var lab=document.createElement('div');
+      lab.className='q-ans-label';
+      lab.textContent='正解だと思う選択肢をクリックしてください';
+      g.parentNode.insertBefore(lab,g);
+    }
+  }else{
+    var prompt=document.createElement('div');
+    prompt.className='quiz-prompt';
+    prompt.textContent='正解番号を選んでください';
+    wrap.appendChild(prompt);
+  }
   var row=document.createElement('div');row.className='quiz-btns';
   if(opts.length){
     for(var i=0;i<opts.length;i++){
