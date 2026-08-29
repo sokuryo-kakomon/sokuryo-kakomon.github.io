@@ -59,6 +59,12 @@ body{font-family:'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#f8f
 .trend td{padding:8px 12px;border-bottom:1px solid #f0f0f5;color:#555}
 .trend td:nth-child(2),.trend td:nth-child(3),.trend th:nth-child(2),.trend th:nth-child(3){text-align:right;white-space:nowrap}
 .trend tbody tr:hover{background:#fafaff}
+.gd-box{background:linear-gradient(135deg,#f7f5ff,#eef4ff);border:1px solid #ddd6ff;border-radius:12px;padding:16px 18px;margin:16px 0}
+.gd-box h3{margin-top:0}
+.gd-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.gd-chips a{padding:8px 14px;background:#fff;border:1.5px solid #c5b8ff;border-radius:20px;color:#6c5ce7;text-decoration:none;font-weight:700;font-size:.93rem;transition:all .15s}
+.gd-chips a:hover{background:#6c5ce7;color:#fff;border-color:#6c5ce7}
+.gd-all{display:inline-block;margin-top:12px;color:#6c5ce7;font-weight:800;text-decoration:none;border-bottom:1px solid #c5b8ff}
 @media(max-width:700px){.intro{padding:18px 16px}.intro h2{font-size:1.06rem}}
 .yp{display:none}.yp.on{display:block}
 .sumbar,.sec-hd{background:linear-gradient(135deg,#6c5ce7,#0984e3);border-radius:14px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 4px 18px rgba(108,92,231,.3)}
@@ -552,6 +558,12 @@ span.opt-ng{background:#ff6b81!important;color:#fff!important}
       <p><b>地図編集・GIS、基準点測量、写真測量、応用測量</b>の 4 分野が毎年ほぼ 4 問ずつ出ており、この 4 つだけで全体の約 6 割（112問中 65問）を占めます。まずここを固めるのが近道です。</p>
       <p>分野によって問われ方も違います。<b>基準点測量・水準測量・写真測量・応用測量</b>は計算問題の比重が高く、解き方の型が決まっているため演習量がそのまま得点になります。これに対して<b>法規・測量の基準</b>は条文の言い回しを覚えているかどうかで決まるので、短時間で仕上げやすい分野です。出題数の少ない法規を後回しにせず先に片づけておくと、全体の負担が軽くなります。</p>
 
+      <div class="gd-box">
+        <h3>分野別ガイド ― 過去問を解く前に、分野の全体像をつかむ</h3>
+        <p>個々の問題を解くだけでは、その分野で何が問われているのかが見えにくいものです。9つの分野それぞれについて、<b>何が問われるのか</b>と<b>どこで間違えやすいのか</b>を通しで読める解説を用意しました。各ガイドから、その分野の過去問へ直接進めます。</p>
+        <div class="gd-chips"><a href="/guide/hoki/">法規</a><a href="/guide/kijun/">測量の基準</a><a href="/guide/gosa/">誤差・統計</a><a href="/guide/kijunten/">基準点測量</a><a href="/guide/suijun/">水準測量</a><a href="/guide/chikei/">地形測量</a><a href="/guide/shashin/">写真測量</a><a href="/guide/chizu/">地図編集・GIS</a><a href="/guide/oyo/">応用測量</a></div>
+        <a class="gd-all" href="/guide/">▼ 分野別ガイドの一覧を見る</a>
+      </div>
       <h3>このサイトの使い方</h3>
       <p>年度のタブで年度を切り替え、問題をクリックすると解説が開きます。<b>正解番号を選ぶと正誤が記録され</b>、間違えた問題だけをあとから絞り込めます。記録はお使いの端末の中だけに保存され、外部には送信されません。</p>
       <p>各問題には<b>その問題だけの専用ページ</b>があります。「🔗 この問題だけのページを開く」から移動でき、リンクの共有やブックマークに使えます。専用ページにも解答ボタンがあり、記録はこのページと共有されます。</p>

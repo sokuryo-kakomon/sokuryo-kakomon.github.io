@@ -8,6 +8,20 @@ index.html から各問題カードを抽出し、問題ごとの個別URLペー
 """
 import re, os, html
 
+import guide_content
+
+GUIDE_BY_CAT = {g["cat"]: g for g in guide_content.GUIDES}
+
+
+def guide_link(cat):
+    """その問題の分野ガイドへの導線。分野が未登録なら索引へ送る。"""
+    g = GUIDE_BY_CAT.get(cat)
+    if not g:
+        return '<a class="golink" href="/guide/">📘 分野別ガイドで体系から学ぶ</a>'
+    return ('<a class="golink" href="/guide/%s/">📘 「%s」の要点を分野別ガイドで読む</a>'
+            % (g["slug"], g["name"]))
+
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = "https://sokuryo-kakomon.com"
 
@@ -119,6 +133,8 @@ body{{padding:0}}
 .qnav a.disabled{{opacity:.35;pointer-events:none}}
 .qall{{display:block;text-align:center;margin-top:18px}}
 .qall a{{color:#6c5ce7;text-decoration:none;font-weight:800;border-bottom:1px solid #c5b8ff}}
+.golink{{display:block;margin-top:18px;padding:14px 18px;background:linear-gradient(135deg,#6c5ce7,#0984e3);color:#fff;border-radius:12px;text-decoration:none;font-weight:800;font-size:1rem;text-align:center;box-shadow:0 4px 14px rgba(108,92,231,.28)}}
+.golink:hover{{opacity:.9}}
 .qfoot{{text-align:center;color:#aaa;font-size:.8rem;margin-top:36px;line-height:1.9}}
 .qfoot a{{color:#6c5ce7;text-decoration:none}}
 .orig-fig{{max-width:100%;height:auto;border-radius:8px;border:1px solid #eee}}
@@ -139,6 +155,7 @@ body{{padding:0}}
     <a href="{pdfa}" target="_blank" rel="noopener">📋 公式解答PDF</a>
   </div>
   {body}
+  {guidelink}
   {prbox}
   <nav class="qnav">
     {prev}
@@ -320,6 +337,7 @@ def build():
             date=y["date"], pdfq=y["q"], pdfa=y["a"],
             body=make_body(c["html"]),
             prbox=prbox,
+            guidelink=guide_link(cat),
             prev=navlink(year, prev_q, "prev"),
             next=navlink(year, next_q, "next"),
             quiz=QUIZ_JS,
@@ -340,12 +358,16 @@ def write_sitemap(urls):
     lines += ['  <url><loc>%s/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>' % SITE]
     for p in ("/about/", "/privacy/"):
         lines.append('  <url><loc>%s%s</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>' % (SITE, p))
+    lines.append('  <url><loc>%s/guide/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>' % SITE)
+    for g in guide_content.GUIDES:
+        lines.append('  <url><loc>%s/guide/%s/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>'
+                     % (SITE, g["slug"]))
     for u in urls:
         lines.append('  <url><loc>%s</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>' % u)
     lines.append('</urlset>')
     with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
-    print("sitemap.xml 書き出し:", len(urls) + 1, "URL")
+    print("sitemap.xml 書き出し:", len(urls) + 3 + len(guide_content.GUIDES), "URL")
 
 def inject_permalinks(src):
     """index.html の各カードの card-body 冒頭に専用ページへのリンクを注入。"""

@@ -3,6 +3,16 @@
   <url><loc>https://sokuryo-kakomon.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>https://sokuryo-kakomon.com/about/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://sokuryo-kakomon.com/privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/hoki/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/kijun/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/gosa/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/kijunten/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/suijun/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/chikei/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/shashin/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/chizu/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sokuryo-kakomon.com/guide/oyo/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://sokuryo-kakomon.com/r07/q1/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://sokuryo-kakomon.com/r07/q2/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://sokuryo-kakomon.com/r07/q3/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
