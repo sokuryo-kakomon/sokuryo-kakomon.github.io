@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import ProgressBar from '../components/react/ProgressBar';
+import { SITE_NAME, SITE_TAGLINE, years, categories, questions, site } from '../lib/data';
+
+const total = questions.length;
+const allIds = questions.map((q) => q.id);
+const title = `${SITE_NAME}｜測量士試験（午前・択一）過去問の演習と詳しい解説・無料`;
+const description = `測量士試験 午前（択一式）の令和4〜7年度 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
+const steps = [
+  { n: '一', t: '年度か分野を選ぶ', d: '年度ごとに通しで解くか、苦手な分野だけ絞るか。未回答・要復習だけを出すこともできます。' },
+  { n: '二', t: '解答を選ぶ', d: '選択肢を押すとその場で正誤が出ます。結果は端末に自動で記録され、登録は要りません。' },
+  { n: '三', t: '解説を読む', d: '正解の理由だけでなく、誤りの選択肢が「どこが、なぜ」誤りかまで。条文はその場でタップして確認できます。' },
+  { n: '四', t: '成績表で弱点を絞る', d: '年度別・分野別の正答率と、間違えた問題の一覧。要復習の問題だけをもう一度解けます。' },
+];
+const features = [
+  { t: '「途中の考え方」まで書く', d: '公式に配布されるのは問題と正解番号だけ。当サイトは公式の適用から数値の代入、単位の換算までを手順ごとに書き、誤りの選択肢も一つずつ理由を示します。' },
+  { t: '解いて、その場で判定', d: '選択肢を押すと正誤と解説がすぐ出ます。年度・分野・未回答・要復習で絞り込み、通しで演習できます。' },
+  { t: '成績は端末に自動保存', d: '年度別・分野別の正答率、間違えた問題の一覧を成績表にまとめます。登録不要で、記録は外部に送信されません。' },
+  { t: '条文はその場で確認', d: '解説中の「第◯条」を押すと、条文の要点と e-Gov・作業規程の準則 PDF への直リンクが開きます。' },
+];
+const jsonLd = {
+  '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, url: site.url + '/', description,
+  inLanguage: 'ja',
+};
+---
+<Base title={title} description={description} path="/" jsonLd={jsonLd}>
+  <!-- ヒーロー -->
+  <section class="relative overflow-hidden">
+    <div class="absolute -right-10 -top-16 text-[22rem] leading-none serif text-paper-deep select-none pointer-events-none" aria-hidden="true">測</div>
+    <div class="relative max-w-6xl mx-auto px-4 pt-14 pb-12 md:pt-24 md:pb-20">
+      <div class="eyebrow mb-4">測量士試験（午前・択一式）対策</div>
+      <h1 class="text-4xl md:text-6xl leading-tight mb-5">解くたびに、<br class="md:hidden" />腑に落ちる。</h1>
+      <p class="max-w-2xl text-lg text-ink-soft leading-relaxed mb-7">
+        令和4〜7年度の全{total}問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
+      </p>
+      <div class="flex flex-wrap gap-3 mb-6">
+        <a href="/practice/" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
+        <a href="/guide/" class="btn btn-ghost text-lg px-6 py-3">分野別ガイドを読む</a>
+      </div>
+      <div class="text-sm text-ink-soft" id="countdown"></div>
+      <div class="flex flex-wrap gap-2 mt-6 text-sm">
+        {['登録不要・無料', `全${total}問に詳細解説`, '成績を自動記録', '条文をタップで参照'].map((t) => (
+          <span class="px-3 py-1 rounded-full bg-card border border-line">{t}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 特長 -->
+  <section class="max-w-6xl mx-auto px-4 pb-14">
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {features.map((f) => (
+        <div class="card p-5">
+          <h3 class="text-base mb-2 leading-snug">{f.t}</h3>
+          <p class="text-sm text-ink-soft leading-relaxed">{f.d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 演習を選ぶ -->
+  <section id="select" class="bg-paper-deep/50 border-y border-line scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-4 py-14">
+      <div class="text-center mb-8">
+        <div class="eyebrow mb-2">演習を選ぶ</div>
+        <h2 class="text-3xl">年度別・分野別</h2>
+      </div>
+      <div class="card p-4 max-w-xl mx-auto mb-8"><ProgressBar client:load ids={allIds} label="あなたの進捗（この端末）" /></div>
+
+      <h3 class="text-lg mb-3">年度別に通しで解く</h3>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+        {years.map((y) => (
+          <article class="card p-5 flex flex-col">
+            <h4 class="serif text-xl">{y.label}</h4>
+            <div class="text-xs text-ink-soft mb-3">{y.examDate}実施 ・ 全{y.count}問</div>
+            <a href={`/practice/?year=${y.id}`} class="btn btn-primary btn-sm mb-2">この年度を解く</a>
+            <div class="flex gap-3 text-xs mt-auto">
+              <a href={`/${y.id}/`}>問題一覧</a>
+              {y.pdf.questions && <a href={y.pdf.questions} target="_blank" rel="noopener">公式問題PDF</a>}
+              {y.pdf.answers && <a href={y.pdf.answers} target="_blank" rel="noopener">公式解答PDF</a>}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <h3 class="text-lg mb-3">分野別に固める</h3>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((c) => (
+          <article class="card p-4 flex items-center gap-3">
+            <span class="text-2xl">{c.icon}</span>
+            <div class="min-w-0 flex-1">
+              <div class="font-bold">{c.name}</div>
+              <div class="text-xs text-ink-soft">{c.count}問 ・ {Math.round((c.count / total) * 100)}%</div>
+            </div>
+            <a href={`/practice/?cat=${c.slug}`} class="btn btn-primary btn-sm">解く</a>
+            <a href={`/guide/${c.slug}/`} class="btn btn-ghost btn-sm">ガイド</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- つかい方 -->
+  <section id="howto" class="max-w-6xl mx-auto px-4 py-14 scroll-mt-16">
+    <div class="text-center mb-8">
+      <div class="eyebrow mb-2">進め方</div>
+      <h2 class="text-3xl">つかい方</h2>
+    </div>
+    <ol class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {steps.map((s) => (
+        <li class="card p-5">
+          <div class="serif text-3xl text-moss mb-1">{s.n}</div>
+          <h3 class="text-base mb-1">{s.t}</h3>
+          <p class="text-sm text-ink-soft leading-relaxed">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 解説の方針 -->
+  <section class="max-w-6xl mx-auto px-4 pb-14">
+    <div class="card p-6 md:p-8 md:grid md:grid-cols-2 md:gap-10">
+      <div>
+        <h2 class="text-2xl mb-3">解説の書き方について</h2>
+        <p class="text-ink-soft leading-relaxed mb-3">
+          測量士試験は受験者数がそれほど多くない国家試験のため、市販の教材が限られています。公式に配布されるのは<b>問題と正解番号だけ</b>で、「なぜその答えになるのか」までは示されません。とくに計算問題は、正解の数字を見ただけでは自分の解き方のどこが間違っていたのか分かりません。当サイトは、その<b>途中の考え方</b>を一問ずつ書き残すことを目的に作っています。
+        </p>
+        <ul class="text-sm text-ink-soft leading-relaxed space-y-2 list-disc pl-5">
+          <li><b class="text-ink">正解以外の選択肢も説明します。</b>「どこが、なぜ誤りなのか」を選択肢ごとに書いています。誤りの選択肢を切れるようになることが、択一式では得点に直結します。</li>
+          <li><b class="text-ink">根拠の条文を示します。</b>法規の問題では、測量法や作業規程の準則の該当条文を明記し、その場で条文を確認できるようにしています。</li>
+          <li><b class="text-ink">計算過程を省略しません。</b>公式の適用、数値の代入、単位の換算まで手順を分けて書いています。</li>
+          <li><b class="text-ink">原理から説明します。</b>たとえば GNSS 水準測量なら「標高＝楕円体高−ジオイド高」という関係から、各規定の理由をたどれるようにしています。</li>
+        </ul>
+      </div>
+      <div class="mt-8 md:mt-0">
+        <h2 class="text-2xl mb-3">4年分{total}問の出題分野</h2>
+        <p class="text-sm text-ink-soft mb-3">当サイトの分類で集計したものです。分野の偏りをつかむ目安にしてください。</p>
+        <div class="qhtml"><div class="tbl-wrap"><table>
+          <thead><tr><th>分野</th><th class="text-right">問題数</th><th class="text-right">割合</th></tr></thead>
+          <tbody>
+            {categories.map((c) => (
+              <tr><td><a href={`/guide/${c.slug}/`} class="no-underline">{c.icon} {c.name}</a></td><td class="text-right">{c.count}問</td><td class="text-right">{(c.count / total * 100).toFixed(1)}%</td></tr>
+            ))}
+          </tbody>
+        </table></div></div>
+        <p class="text-sm text-ink-soft leading-relaxed mt-3">
+          <b class="text-ink">地図編集・GIS、基準点測量、写真測量、応用測量</b>の4分野で全体の約6割を占めます。計算問題は解き方の型が決まっているため演習量がそのまま得点になり、<b class="text-ink">法規・測量の基準</b>は条文の言い回しを覚えているかで決まるので短時間で仕上げやすい分野です。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-6xl mx-auto px-4 pb-4 text-center">
+    <div class="serif text-2xl mb-1">継続は、合格への近道。</div>
+    <p class="text-sm text-ink-soft mb-5">1日数問でも、解いた分だけ成績表に積み上がります。</p>
+    <a href="/practice/" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
+  </section>
+
+  <script>
+    // 次回試験（例年5月第3日曜）までの日数。公式発表前は推定として出す。
+    const el = document.getElementById('countdown');
+    if (el) {
+      const third = (y: number) => { const d = new Date(y, 4, 1); const off = (7 - d.getDay()) % 7; return new Date(y, 4, 1 + off + 14); };
+      const now = new Date(); now.setHours(0, 0, 0, 0);
+      let ex = third(now.getFullYear());
+      if (ex < now) ex = third(now.getFullYear() + 1);
+      const days = Math.round((ex.getTime() - now.getTime()) / 86400000);
+      const reiwa = ex.getFullYear() - 2018;
+      el.textContent = `令和${reiwa}年度試験（${ex.getFullYear()}年${ex.getMonth() + 1}月${ex.getDate()}日 ・ 例年の日程からの推定）まで、あと ${days} 日`;
+    }
+  </script>
+</Base>

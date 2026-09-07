@@ -1,0 +1,29 @@
+---
+import { SITE_NAME } from '../lib/data';
+interface Props { withSidebar?: boolean }
+const { withSidebar = false } = Astro.props;
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/practice/', label: '演習', mobile: true },
+  { href: '/#select', label: '年度・分野', mobile: false },
+  { href: '/guide/', label: 'ガイド', mobile: true },
+  { href: '/progress/', label: '成績表', mobile: true },
+];
+---
+<header class="sticky top-0 z-50 border-b border-line bg-paper/92 backdrop-blur">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center gap-2">
+    {withSidebar && <button id="sb-toggle" type="button" class="lg:hidden btn btn-ghost btn-sm px-2.5" aria-label="メニュー">☰</button>}
+    <a href="/" class="serif text-xl text-ink no-underline flex items-baseline gap-2 min-w-0">
+      <span class="whitespace-nowrap">{SITE_NAME}</span>
+      <span class="hidden sm:inline text-[.72rem] text-ink-soft font-sans font-normal tracking-wider">午前択一 4年分112問の演習と解説</span>
+    </a>
+    <nav class="ml-auto flex items-center gap-0.5 text-sm">
+      {nav.map((n) => (
+        <a href={n.href}
+          class={'px-2.5 py-1.5 rounded-dojo no-underline text-ink hover:bg-paper-deep whitespace-nowrap'
+            + (n.mobile ? '' : ' hidden sm:inline')
+            + (n.href !== '/#select' && path.startsWith(n.href) ? ' font-bold text-moss-deep' : '')}>{n.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>

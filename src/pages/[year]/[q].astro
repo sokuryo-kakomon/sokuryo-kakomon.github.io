@@ -1,0 +1,49 @@
+---
+import App from '../../layouts/App.astro';
+import QuestionCard from '../../components/react/QuestionCard';
+import AmazonBox from '../../components/AmazonBox.astro';
+import { questions, byId, site, SITE_NAME } from '../../lib/data';
+
+// 旧サイトと同じ /r07/q1/ という URL に 1 問ずつ静的生成する
+export function getStaticPaths() {
+  return questions.map((q) => ({ params: { year: q.year, q: 'q' + q.num }, props: { q } }));
+}
+const { q } = Astro.props;
+const prev = q.prev ? byId.get(q.prev)! : null;
+const next = q.next ? byId.get(q.next)! : null;
+const title = `${q.title} 解説・解答｜${SITE_NAME}`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description: q.description,
+  url: site.url + q.url,
+  isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: site.url + '/' },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'トップ', item: site.url + '/' },
+      { '@type': 'ListItem', position: 2, name: q.yearLabel, item: `${site.url}/${q.year}/` },
+      { '@type': 'ListItem', position: 3, name: `第${q.num}問`, item: site.url + q.url },
+    ],
+  },
+};
+---
+<App title={title} description={q.description} path={q.url} ogType="article" jsonLd={jsonLd}>
+  <nav class="text-sm text-ink-soft mb-2"><a href="/">トップ</a> ／ <a href={`/${q.year}/`}>{q.yearLabel}</a> ／ 第{q.num}問</nav>
+  <h1 class="text-xl md:text-2xl mb-4 leading-snug">{q.title}<span class="block text-sm font-sans font-normal text-ink-soft mt-1">解答と解説</span></h1>
+
+  <QuestionCard client:load q={q} lawRefs={site.lawRefs} />
+
+  <nav class="flex justify-between gap-3 mt-6">
+    {prev ? <a class="btn btn-ghost flex-1" href={prev.url}>← 第{prev.num}問</a> : <span class="btn btn-ghost flex-1 is-disabled">← 前の問題</span>}
+    <a class="btn btn-ghost" href={`/${q.year}/`}>一覧</a>
+    {next ? <a class="btn btn-ghost flex-1" href={next.url}>第{next.num}問 →</a> : <span class="btn btn-ghost flex-1 is-disabled">次の問題 →</span>}
+  </nav>
+  <div class="mt-4 text-center text-sm">
+    <a href={`/guide/${q.categorySlug}/`}>📚 「{q.category}」の分野別ガイドを読む</a>
+    <span class="mx-2 text-ink-faint">｜</span>
+    <a href={`/practice/?cat=${q.categorySlug}`}>この分野を通しで解く</a>
+  </div>
+  <div class="mt-8"><AmazonBox /></div>
+</App>

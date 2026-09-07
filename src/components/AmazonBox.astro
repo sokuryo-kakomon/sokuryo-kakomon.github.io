@@ -1,0 +1,28 @@
+---
+// Amazon アソシエイトの学習グッズ枠。旧サイトの4枚をそのまま引き継ぐ。
+import { site } from '../lib/data';
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const tag = site.amazonTag;
+const items = [
+  { ico: '📘', t: '測量士試験 テキスト', d: '基礎から学べる定番テキスト', k: '測量士試験 参考書 テキスト' },
+  { ico: '📝', t: '過去問題集', d: '年度別・科目別の演習に', k: '測量士試験 過去問題集' },
+  { ico: '🖩', t: '関数電卓', d: '三角関数・log 計算に必須', k: '関数電卓 カシオ' },
+  { ico: '📗', t: '測量士補 テキスト・過去問', d: 'まず測量士補から始めたい方に', k: '測量士補 テキスト 過去問' },
+];
+const href = (k: string) => `https://www.amazon.co.jp/s?k=${encodeURIComponent(k)}&tag=${tag}`;
+---
+<div class={'card ' + (compact ? 'p-3' : 'p-5')}>
+  <div class={'serif ' + (compact ? 'text-sm mb-2' : 'text-base mb-1')}>📚 学習グッズ</div>
+  {!compact && <p class="text-xs text-ink-soft mb-3">独学での測量士試験対策に役立つ定番アイテム</p>}
+  <div class={compact ? 'space-y-1' : 'grid gap-2 sm:grid-cols-2'}>
+    {items.map((it) => (
+      <a href={href(it.k)} target="_blank" rel="noopener sponsored"
+        class={'block no-underline text-ink rounded-dojo border border-line bg-white hover:border-ink-faint ' + (compact ? 'px-2.5 py-1.5 text-xs' : 'p-3')}>
+        <span class="mr-1">{it.ico}</span><b>{it.t}</b>
+        {!compact && <div class="text-xs text-ink-soft mt-0.5">{it.d}</div>}
+      </a>
+    ))}
+  </div>
+  <p class="text-[.68rem] text-ink-faint mt-2 leading-snug">当サイトは Amazon.co.jp を宣伝しリンクすることによって紹介料を得られる、Amazon アソシエイト・プログラムの参加者です。</p>
+</div>
