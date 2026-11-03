@@ -8,7 +8,7 @@ export function getStaticPaths() {
 }
 const { y } = Astro.props;
 const qs = ofYear(y.id);
-const title = pageTitle(`${y.label} 測量士試験 午前 全${qs.length}問の解答と解説`);
+const title = pageTitle(`測量士 ${y.label} 午前 全${qs.length}問の解答と解説`);
 const description = `${y.label}（${y.examDate}実施）測量士試験 午前・択一式の全${qs.length}問を、解答と詳しい解説つきで掲載。1問ずつ解いて正誤を記録できます。`;
 const jsonLd = {
   '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description, url: site.url + `/${y.id}/`,

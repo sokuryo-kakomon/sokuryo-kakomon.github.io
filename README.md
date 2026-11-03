@@ -1,12 +1,12 @@
-# 測量士過去問（sokuryo-kakomon.com）
+# 測量士 過去問ドリル（sokuryo-kakomon.com）
 
-測量士試験 午前（択一式）令和4〜7年度 全112問の演習・解説サイト。Astro + React で静的生成し、GitHub Pages で配信する。
+測量士試験 午前（択一式）令和4〜8年度 全140問の演習・解説サイト。Astro + React で静的生成し、GitHub Pages で配信する。
 
 ## 構成
 
 ```
 src/data/            抽出済みデータ（唯一の情報源）
-  questions.json     112問（問題文・選択肢・解説は HTML、AI用に平文も併記）
+  questions.json     140問（問題文・選択肢・解説は HTML、AI用に平文も併記）
   site.json          年度・分野・条文リンク辞書・公式PDF
   guides.json        分野別ガイド 9本
   pages.json         運営者情報・プライバシーポリシー本文

@@ -6,7 +6,7 @@ import { $progress, $bookmarks, isWeak, toggleBookmark } from '../../store/progr
 import QuestionCard from './QuestionCard';
 
 // 演習画面。条件を選ぶ → 1問ずつ解く → 結果、の3画面。
-// 問題本文は /data/q/<id>.json を1問ずつ取りに行く（全112問を最初に読むと700KBになるため）。
+// 問題本文は /data/q/<id>.json を1問ずつ取りに行く（全140問を最初に読むと約900KBになるため）。
 
 const S = siteJson as unknown as Site;
 type Mode = 'order' | 'random' | 'unanswered' | 'wrong' | 'weak' | 'bookmark';

@@ -7,8 +7,8 @@ import type { Question, Site, Guides, StaticPage, QuestionIndex } from './types'
 // サーバー側（ビルド時）専用。React の island からは import しない
 // （questions.json は 700KB あり、クライアントへ丸ごと送りたくない）。
 
-export const SITE_NAME = '測量士過去問';
-export const SITE_TAGLINE = '測量士試験（午前・択一）4年分112問の演習と解説';
+export const SITE_NAME = '測量士 過去問ドリル';
+export const SITE_TAGLINE = '測量士試験（午前・択一）5年分140問の演習と解説';
 
 export const questions = questionsJson as Question[];
 export const site = siteJson as Site;

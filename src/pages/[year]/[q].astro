@@ -11,7 +11,7 @@ export function getStaticPaths() {
 const { q } = Astro.props;
 const prev = q.prev ? byId.get(q.prev)! : null;
 const next = q.next ? byId.get(q.next)! : null;
-const title = `${q.title} 解説・解答｜${SITE_NAME}`;
+const title = `測量士 令和${q.yearNum}年 午前 第${q.num}問（${q.category}）｜${SITE_NAME}`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
