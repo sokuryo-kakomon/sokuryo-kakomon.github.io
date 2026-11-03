@@ -1,26 +1,32 @@
 ---
-// Amazon アソシエイトの学習グッズ枠。旧サイトの4枚をそのまま引き継ぐ。
+// Amazon アソシエイトの学習グッズ枠。検索結果ではなく商品ページへ直接送る。
+// 表紙画像と価格は Product Advertising API でしか出せない（規約）ので、書名と一言だけ。
+// 電卓は試験会場で貸与される（関数電卓ではない）。機種は受験講座の案内による（2026-11 時点）。
 import { site } from '../lib/data';
 interface Props { compact?: boolean }
 const { compact = false } = Astro.props;
 const tag = site.amazonTag;
 const items = [
-  { ico: '📘', t: '測量士試験 テキスト', d: '基礎から学べる定番テキスト', k: '測量士試験 参考書 テキスト' },
-  { ico: '📝', t: '過去問題集', d: '年度別・科目別の演習に', k: '測量士試験 過去問題集' },
-  { ico: '🖩', t: '関数電卓', d: '三角関数・log 計算に必須', k: '関数電卓 カシオ' },
-  { ico: '📗', t: '測量士補 テキスト・過去問', d: 'まず測量士補から始めたい方に', k: '測量士補 テキスト 過去問' },
+  { ico: '📘', asin: '4889411720', t: '測量士・測量士補 国家試験受験テキスト', s: '受験テキスト', by: '日本測量協会', d: '全分野の基礎を1冊で。解説で引っかかった所の確認に' },
+  { ico: '📝', asin: '4889411704', t: '国家試験問題 模範解説集（令和7年）', s: '模範解説集', by: '日本測量協会', d: '午前に加え、このサイトに無い午後（記述式）の問題と解説つき' },
+  { ico: '🧮', asin: 'B000UZRNGY', t: 'カシオ 電卓 SL-300A', s: '本番と同じ電卓', by: 'カシオ', d: '試験会場で貸与される電卓と同じ機種。√とメモリーの操作を手に慣らす' },
+  { ico: '📗', asin: '4798198188', t: '測量士補 合格ガイド 第5版', s: '測量士補から', by: '翔泳社', d: 'まず測量士補から固めたい人に。テキストと問題集が1冊に' },
 ];
-const href = (k: string) => `https://www.amazon.co.jp/s?k=${encodeURIComponent(k)}&tag=${tag}`;
+const href = (asin: string) => `https://www.amazon.co.jp/dp/${asin}/?tag=${tag}`;
 ---
 <div class={'card ' + (compact ? 'p-3' : 'p-5')}>
   <div class={'serif ' + (compact ? 'text-sm mb-2' : 'text-base mb-1')}>📚 学習グッズ</div>
-  {!compact && <p class="text-xs text-ink-soft mb-3">独学での測量士試験対策に役立つ定番アイテム</p>}
+  {!compact && <p class="text-xs text-ink-soft mb-3">独学の測量士試験対策で使われている定番</p>}
   <div class={compact ? 'space-y-1' : 'grid gap-2 sm:grid-cols-2'}>
     {items.map((it) => (
-      <a href={href(it.k)} target="_blank" rel="noopener sponsored"
+      <a href={href(it.asin)} target="_blank" rel="noopener sponsored"
         class={'block no-underline text-ink rounded-dojo border border-line bg-white hover:border-ink-faint ' + (compact ? 'px-2.5 py-1.5 text-xs' : 'p-3')}>
-        <span class="mr-1">{it.ico}</span><b>{it.t}</b>
-        {!compact && <div class="text-xs text-ink-soft mt-0.5">{it.d}</div>}
+        <span class="mr-1">{it.ico}</span><b>{compact ? it.s : it.t}</b>
+        {!compact && <>
+          <div class="text-[.7rem] text-ink-faint">{it.by}</div>
+          <div class="text-xs text-ink-soft mt-1">{it.d}</div>
+          <div class="text-xs mt-1.5 text-moss">Amazon で見る ›</div>
+        </>}
       </a>
     ))}
   </div>
