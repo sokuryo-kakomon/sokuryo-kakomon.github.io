@@ -1,0 +1,18 @@
+name = "sokuryo-ai"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# 回数の数え（日付ごと）。初回は `npx wrangler kv namespace create LIMITS` で作り、出た id をここへ
+[[kv_namespaces]]
+binding = "LIMITS"
+id = "REPLACE_WITH_KV_ID"
+
+[vars]
+SITE_URL = "https://sokuryo-kakomon.com"
+ALLOWED_ORIGINS = "https://sokuryo-kakomon.com,http://127.0.0.1:4321,http://127.0.0.1:4322,http://localhost:4321"
+AI_MODEL = "claude-opus-5-5"
+AI_EFFORT = "medium"
+DAILY_PER_IP = "5"
+DAILY_TOTAL = "300"
+# ANTHROPIC_API_KEY は `npx wrangler secret put ANTHROPIC_API_KEY` で入れる（ここには書かない）
