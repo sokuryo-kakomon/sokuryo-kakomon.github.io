@@ -34,7 +34,12 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
   // React 19 は dangerouslySetInnerHTML のオブジェクトが別物になるたびに innerHTML を
   // 書き直す。解説は linkify で DOM を書き換えるので、オブジェクトを固定して再描画で
   // 条文ボタンが消えないようにする。
-  const explHtml = useMemo(() => ({ __html: q.explanationHtml }), [q.explanationHtml]);
+  // 規則改正の札は解説の先頭に入っている。解く前から見えるよう、解説（隠れる部分）の外へ出す
+  const [notice, explBody] = useMemo(() => {
+    const m = q.explanationHtml.match(/^<div class="notice">([\s\S]*?)<\/div>\n?/);
+    return m ? [m[1], q.explanationHtml.slice(m[0].length)] : [null, q.explanationHtml];
+  }, [q.explanationHtml]);
+  const explHtml = useMemo(() => ({ __html: explBody }), [explBody]);
   const stmtHtml = useMemo(() => ({ __html: q.statementHtml }), [q.statementHtml]);
 
   useEffect(() => { setMounted(true); }, []);
@@ -143,6 +148,8 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
             className="mt-2 max-w-full h-auto border border-line rounded-dojo bg-white cursor-zoom-in" onClick={() => setZoom(q.figure!.src)} />
         </details>
       )}
+
+      {notice && <div className="qhtml mt-4"><div className="notice">{notice}</div></div>}
 
       <section className={'relative mt-6 pt-5 border-t-2 border-line' + (revealed ? '' : ' expl-veiled')}>
         <h2 className="text-lg mb-2">解説</h2>
