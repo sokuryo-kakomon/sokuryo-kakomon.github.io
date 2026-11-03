@@ -1,23 +1,36 @@
 // 測量士 過去問ドリル の「AI に質問」中継サーバー（Cloudflare Workers）。
 //
-// ブラウザ → POST /ask {qid, messages} → この Worker が問題データを本番サイトから取り、
-// Claude に問い合わせて、答えの文字を少しずつそのまま返す（text/plain のストリーム）。
-// API キーはブラウザに出さず、Worker の secret（ANTHROPIC_API_KEY）にだけ置く。
+//   POST /ask       {qid, messages, code?, turnstile?} → Claude の答えを text/plain で少しずつ返す
+//   POST /checkout  → Stripe の支払い画面（月額980円）の URL
+//   GET  /code      ?session_id= → 支払いが済んでいれば利用コードを返す（何度呼んでも同じコード）
+//   POST /status    {code} → コードの有効・今日と今月の残り
+//   POST /portal    {code} → Stripe の契約管理画面（解約・カード変更）の URL
+//   POST /stripe-webhook → 解約・支払い失敗でコードを止め、再開で戻す
 //
-// 使いすぎの止め（どちらも KV の日付ごとの数え）:
-//   - 1つの IP あたり 1日 DAILY_PER_IP 回
-//   - 全体で 1日 DAILY_TOTAL 回（お金の上限の最後の砦。Anthropic Console の月額上限と二重にかける）
+// API キー類はブラウザに出さず、Worker の secret にだけ置く。ログインは作らず「利用コード」で見分ける。
+//
+// 使いすぎの止め（KV の日付・月ごとの数え）:
+//   無料: IP ごと 1日 FREE_PER_IP 回、無料全体で 1日 FREE_TOTAL 回、Turnstile（人間の確認）
+//   有料: コードごと 1日 PAID_PER_DAY 回・1か月 PAID_PER_MONTH 回（配られても全員でこの数を分け合うだけ）
+//   最後の砦は Anthropic Console の月額上限。
 import Anthropic from '@anthropic-ai/sdk';
+import Stripe from 'stripe';
 
 export interface Env {
   ANTHROPIC_API_KEY: string;
+  STRIPE_SECRET_KEY: string;
+  STRIPE_WEBHOOK_SECRET: string;
+  STRIPE_PRICE_ID: string;
+  TURNSTILE_SECRET?: string;   // 無ければ人間の確認を飛ばす（手元の試験用）
   LIMITS: KVNamespace;
-  SITE_URL: string;          // 問題データの取得元（本番サイト）
-  ALLOWED_ORIGINS: string;   // カンマ区切り
+  SITE_URL: string;
+  ALLOWED_ORIGINS: string;
   AI_MODEL: string;
-  AI_EFFORT: string;         // low | medium | high
-  DAILY_PER_IP: string;
-  DAILY_TOTAL: string;
+  AI_EFFORT: string;
+  FREE_PER_IP: string;
+  FREE_TOTAL: string;
+  PAID_PER_DAY: string;
+  PAID_PER_MONTH: string;
 }
 
 interface Question {
@@ -29,10 +42,12 @@ interface Question {
   explanationText: string;
 }
 
+interface CodeRec { sub: string; customer: string; active: boolean; created: number }
+
 const QID = /^r\d{2}-q\d{1,2}$/;
-const MAX_TURNS = 12;        // user と assistant を合わせた往復の上限（6往復）
-const MAX_CHARS = 800;       // 1回の質問の長さ
-// サーバー側フォールバック（拒否時に別モデルで続ける）を受け付けるモデル
+const CODE = /^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/;
+const MAX_TURNS = 12;
+const MAX_CHARS = 800;
 const FALLBACK_MODELS = new Set(['claude-opus-5-5', 'claude-opus-5', 'claude-fable-5-1']);
 
 const SYSTEM_RULES = `あなたは測量士試験（午前・択一式）の受験生を助ける先生です。
@@ -65,23 +80,27 @@ function cors(origin: string | null, env: Env): Record<string, string> {
   if (!origin || !allowed.includes(origin)) return {};
   return {
     'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Expose-Headers': 'X-Remaining',
+    'Access-Control-Expose-Headers': 'X-Remaining, X-Plan',
     'Vary': 'Origin',
   };
 }
 
-function reply(status: number, body: string, headers: Record<string, string>) {
-  return new Response(body, { status, headers: { ...headers, 'Content-Type': 'text/plain; charset=utf-8' } });
-}
+const text = (status: number, body: string, headers: Record<string, string>) =>
+  new Response(body, { status, headers: { ...headers, 'Content-Type': 'text/plain; charset=utf-8' } });
+const json = (status: number, body: unknown, headers: Record<string, string>) =>
+  new Response(JSON.stringify(body), { status, headers: { ...headers, 'Content-Type': 'application/json; charset=utf-8' } });
 
-// 日本時間の日付（回数は日本の0時に戻す）
-const today = () => new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
+// 日本時間の日付・月（回数は日本の0時・1日に戻す）
+const jst = () => new Date(Date.now() + 9 * 3600_000).toISOString();
+const today = () => jst().slice(0, 10);
+const thisMonth = () => jst().slice(0, 7);
 
-async function bump(kv: KVNamespace, key: string): Promise<number> {
-  const n = Number((await kv.get(key)) || 0) + 1;
-  await kv.put(key, String(n), { expirationTtl: 2 * 86400 });
+async function count(kv: KVNamespace, key: string) { return Number((await kv.get(key)) || 0); }
+async function bump(kv: KVNamespace, key: string, ttlDays: number) {
+  const n = (await count(kv, key)) + 1;
+  await kv.put(key, String(n), { expirationTtl: ttlDays * 86400 });
   return n;
 }
 
@@ -91,78 +110,212 @@ function validMessages(m: unknown): m is Anthropic.MessageParam[] {
     x && typeof x === 'object' &&
     x.role === (i % 2 === 0 ? 'user' : 'assistant') &&
     typeof x.content === 'string' && x.content.length > 0 &&
-    // 過去の AI の答えは長くてよいが、受験生の質問は短く
     x.content.length <= (x.role === 'user' ? MAX_CHARS : 8000));
+}
+
+const stripeOf = (env: Env) => new Stripe(env.STRIPE_SECRET_KEY, { httpClient: Stripe.createFetchHttpClient() });
+
+function newCode(): string {
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 読み間違えやすい I O 0 1 を除く
+  const b = crypto.getRandomValues(new Uint8Array(16));
+  const s = [...b].map((x) => abc[x % abc.length]).join('');
+  return s.match(/.{4}/g)!.join('-');
+}
+
+async function getCode(env: Env, code: unknown): Promise<CodeRec | null> {
+  if (typeof code !== 'string' || !CODE.test(code)) return null;
+  const v = await env.LIMITS.get(`code:${code}`);
+  return v ? (JSON.parse(v) as CodeRec) : null;
+}
+
+// 支払い1件につきコードは1つ。画面（/code）と webhook のどちらが先に来ても同じコードになる
+async function ensureCode(env: Env, subId: string, customer: string): Promise<string> {
+  const have = await env.LIMITS.get(`sub:${subId}`);
+  if (have) return have;
+  const code = newCode();
+  const rec: CodeRec = { sub: subId, customer, active: true, created: Date.now() };
+  await env.LIMITS.put(`code:${code}`, JSON.stringify(rec));
+  await env.LIMITS.put(`sub:${subId}`, code);
+  return code;
+}
+
+async function setActive(env: Env, subId: string, active: boolean) {
+  const code = await env.LIMITS.get(`sub:${subId}`);
+  if (!code) return;
+  const rec = await getCode(env, code);
+  if (!rec || rec.active === active) return;
+  await env.LIMITS.put(`code:${code}`, JSON.stringify({ ...rec, active }));
+}
+
+async function turnstileOk(env: Env, token: unknown, ip: string) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (typeof token !== 'string' || !token) return false;
+  const form = new FormData();
+  form.append('secret', env.TURNSTILE_SECRET); form.append('response', token); form.append('remoteip', ip);
+  const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
+  return ((await r.json()) as { success: boolean }).success === true;
+}
+
+async function ask(req: Request, env: Env, h: Record<string, string>): Promise<Response> {
+  let body: { qid?: unknown; messages?: unknown; code?: unknown; turnstile?: unknown };
+  try { body = await req.json(); } catch { return text(400, '送信内容を読めませんでした。', h); }
+  const { qid, messages, code } = body;
+  if (typeof qid !== 'string' || !QID.test(qid) || !validMessages(messages)) {
+    return text(400, '質問の形が正しくありません（1回の質問は800字まで、やりとりは6往復まで）。', h);
+  }
+
+  const day = today(), month = thisMonth();
+  const ip = req.headers.get('CF-Connecting-IP') || 'unknown';
+  let dayKey: string, monthKey: string | null = null, plan: 'paid' | 'free', limitDay: number;
+
+  if (code) {
+    const rec = await getCode(env, code);
+    if (!rec) return text(403, '利用コードが見つかりません。入力を確かめてください。', { ...h, 'X-Plan': 'none' });
+    if (!rec.active) return text(403, 'この利用コードは停止中です（解約済み、またはお支払いが確認できていません）。', { ...h, 'X-Plan': 'stopped' });
+    plan = 'paid'; limitDay = Number(env.PAID_PER_DAY);
+    dayKey = `pd:${code}:${day}`; monthKey = `pm:${code}:${month}`;
+    if (await count(env.LIMITS, dayKey) >= limitDay) return text(429, `今日の質問回数（${limitDay}回）を使い切りました。明日の0時にまた使えます。`, { ...h, 'X-Remaining': '0', 'X-Plan': plan });
+    if (await count(env.LIMITS, monthKey) >= Number(env.PAID_PER_MONTH)) return text(429, `今月の質問回数（${env.PAID_PER_MONTH}回）を使い切りました。来月1日にまた使えます。`, { ...h, 'X-Remaining': '0', 'X-Plan': plan });
+  } else {
+    plan = 'free'; limitDay = Number(env.FREE_PER_IP);
+    dayKey = `ip:${day}:${ip}`;
+    if (await count(env.LIMITS, dayKey) >= limitDay) return text(429, `無料の質問（1日${limitDay}回）を使い切りました。`, { ...h, 'X-Remaining': '0', 'X-Plan': plan });
+    if (await count(env.LIMITS, `free:${day}`) >= Number(env.FREE_TOTAL)) return text(429, '今日は無料の質問が混み合い、受付を締め切りました。', { ...h, 'X-Remaining': '0', 'X-Plan': plan });
+    if (!(await turnstileOk(env, body.turnstile, ip))) return text(403, '確認に失敗しました。ページを開き直してお試しください。', { ...h, 'X-Plan': plan });
+  }
+
+  const qRes = await fetch(`${env.SITE_URL}/data/q/${qid}.json`, { cf: { cacheTtl: 3600, cacheEverything: true } });
+  if (!qRes.ok) return text(404, 'この問題のデータが見つかりませんでした。', h);
+  const q = (await qRes.json()) as Question;
+
+  // 数えてから問い合わせる（失敗しても1回と数える＝甘くしない）
+  const n = await bump(env.LIMITS, dayKey, 2);
+  if (monthKey) await bump(env.LIMITS, monthKey, 40);
+  else await bump(env.LIMITS, `free:${day}`, 2);
+  const remaining = String(Math.max(0, limitDay - n));
+
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const params = {
+    model: env.AI_MODEL,
+    max_tokens: 2500,
+    output_config: { effort: env.AI_EFFORT as 'low' | 'medium' | 'high' },
+    // 問題と解説（毎回同じ）を先頭に置いてキャッシュに乗せる。続く往復は messages 側
+    system: [
+      { type: 'text' as const, text: SYSTEM_RULES },
+      { type: 'text' as const, text: questionBlock(q), cache_control: { type: 'ephemeral' as const } },
+    ],
+    messages,
+  };
+  const stream = FALLBACK_MODELS.has(env.AI_MODEL)
+    ? client.beta.messages.stream({ ...params, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' })
+    : client.beta.messages.stream(params);
+
+  const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
+  const w = writable.getWriter();
+  const enc = new TextEncoder();
+  (async () => {
+    try {
+      for await (const ev of stream) {
+        if (ev.type === 'content_block_delta' && ev.delta.type === 'text_delta') await w.write(enc.encode(ev.delta.text));
+      }
+      const fin = await stream.finalMessage();
+      if (fin.stop_reason === 'refusal') await w.write(enc.encode('\n\n（この質問にはお答えできませんでした。問題の内容について聞き直してください。）'));
+      else if (fin.stop_reason === 'max_tokens') await w.write(enc.encode('\n\n（長くなったのでここで切れました。続きは「続けて」と聞いてください。）'));
+    } catch (err) {
+      console.error(err instanceof Anthropic.APIError ? `API ${err.status}: ${err.message}` : err);
+      await w.write(enc.encode('\n\n（AI との通信に失敗しました。少し時間をおいて試してください。）'));
+    } finally {
+      await w.close();
+    }
+  })();
+  return new Response(readable, {
+    headers: { ...h, 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Remaining': remaining, 'X-Plan': plan },
+  });
 }
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
-    const h = cors(req.headers.get('Origin'), env);
-    if (req.method === 'OPTIONS') return new Response(null, { status: h['Access-Control-Allow-Origin'] ? 204 : 403, headers: h });
     const url = new URL(req.url);
-    if (url.pathname !== '/ask' || req.method !== 'POST') return reply(404, 'not found', h);
-    if (!h['Access-Control-Allow-Origin']) return reply(403, 'このサイトからのみ使えます。', h);
 
-    let body: { qid?: unknown; messages?: unknown };
-    try { body = await req.json(); } catch { return reply(400, '送信内容を読めませんでした。', h); }
-    const { qid, messages } = body;
-    if (typeof qid !== 'string' || !QID.test(qid) || !validMessages(messages)) {
-      return reply(400, '質問の形が正しくありません（1回の質問は800字まで、やりとりは6往復まで）。', h);
+    // Stripe からの知らせ（ブラウザ経由ではないので CORS の外）
+    if (url.pathname === '/stripe-webhook' && req.method === 'POST') {
+      const stripe = stripeOf(env);
+      let event: Stripe.Event;
+      try {
+        event = await stripe.webhooks.constructEventAsync(await req.text(), req.headers.get('Stripe-Signature') || '',
+          env.STRIPE_WEBHOOK_SECRET, undefined, Stripe.createSubtleCryptoProvider());
+      } catch { return new Response('bad signature', { status: 400 }); }
+      if (event.type === 'checkout.session.completed') {
+        const s = event.data.object;
+        if (s.mode === 'subscription' && typeof s.subscription === 'string' && typeof s.customer === 'string') await ensureCode(env, s.subscription, s.customer);
+      } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
+        const sub = event.data.object;
+        // active と trialing だけ使える。past_due（支払い失敗の猶予中）・canceled などは止める
+        await setActive(env, sub.id, event.type === 'customer.subscription.updated' && (sub.status === 'active' || sub.status === 'trialing'));
+      }
+      return new Response('ok');
     }
 
-    // 回数の止め。先に全体、次に IP。数えてから問い合わせる（失敗しても1回と数える＝甘くしない）
-    const day = today();
-    const ip = req.headers.get('CF-Connecting-IP') || 'unknown';
-    const perIp = Number(env.DAILY_PER_IP), total = Number(env.DAILY_TOTAL);
-    const usedIp = Number((await env.LIMITS.get(`ip:${day}:${ip}`)) || 0);
-    if (usedIp >= perIp) return reply(429, `今日の質問回数（${perIp}回）を使い切りました。明日の0時にまた使えます。`, { ...h, 'X-Remaining': '0' });
-    const usedAll = Number((await env.LIMITS.get(`all:${day}`)) || 0);
-    if (usedAll >= total) return reply(429, '今日は質問が混み合い、受付を締め切りました。明日またお試しください。', { ...h, 'X-Remaining': '0' });
+    const h = cors(req.headers.get('Origin'), env);
+    if (req.method === 'OPTIONS') return new Response(null, { status: h['Access-Control-Allow-Origin'] ? 204 : 403, headers: h });
+    if (!h['Access-Control-Allow-Origin']) return text(403, 'このサイトからのみ使えます。', h);
 
-    const qRes = await fetch(`${env.SITE_URL}/data/q/${qid}.json`, { cf: { cacheTtl: 3600, cacheEverything: true } });
-    if (!qRes.ok) return reply(404, 'この問題のデータが見つかりませんでした。', h);
-    const q = (await qRes.json()) as Question;
-
-    const n = await bump(env.LIMITS, `ip:${day}:${ip}`);
-    await bump(env.LIMITS, `all:${day}`);
-    const remaining = String(Math.max(0, perIp - n));
-
-    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-    const params = {
-      model: env.AI_MODEL,
-      max_tokens: 4000,
-      output_config: { effort: env.AI_EFFORT as 'low' | 'medium' | 'high' },
-      // 問題と解説（毎回同じ）を先頭に置いてキャッシュに乗せる。続く往復は messages 側
-      system: [
-        { type: 'text' as const, text: SYSTEM_RULES },
-        { type: 'text' as const, text: questionBlock(q), cache_control: { type: 'ephemeral' as const } },
-      ],
-      messages,
-    };
-    const stream = FALLBACK_MODELS.has(env.AI_MODEL)
-      ? client.beta.messages.stream({ ...params, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' })
-      : client.beta.messages.stream(params);
-
-    const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
-    const w = writable.getWriter();
-    const enc = new TextEncoder();
-    (async () => {
-      try {
-        for await (const ev of stream) {
-          if (ev.type === 'content_block_delta' && ev.delta.type === 'text_delta') await w.write(enc.encode(ev.delta.text));
-        }
-        const fin = await stream.finalMessage();
-        if (fin.stop_reason === 'refusal') await w.write(enc.encode('\n\n（この質問にはお答えできませんでした。問題の内容について聞き直してください。）'));
-        else if (fin.stop_reason === 'max_tokens') await w.write(enc.encode('\n\n（長くなったのでここで切れました。続きは「続けて」と聞いてください。）'));
-      } catch (err) {
-        console.error(err instanceof Anthropic.APIError ? `API ${err.status}: ${err.message}` : err);
-        await w.write(enc.encode('\n\n（AI との通信に失敗しました。少し時間をおいて試してください。）'));
-      } finally {
-        await w.close();
-      }
-    })();
-    return new Response(readable, {
-      headers: { ...h, 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Remaining': remaining },
-    });
+    if (url.pathname === '/ask' && req.method === 'POST') return ask(req, env, h);
+    try {
+      return await billing(req, url, env, h);
+    } catch (err) {
+      console.error(err instanceof Stripe.errors.StripeError ? `Stripe ${err.type}: ${err.message}` : err);
+      return json(502, { error: '決済の処理に失敗しました。少し時間をおいてお試しください。' }, h);
+    }
   },
 };
+
+// 支払い・コードまわり（Stripe を呼ぶもの）
+async function billing(req: Request, url: URL, env: Env, h: Record<string, string>): Promise<Response> {
+  {
+
+    if (url.pathname === '/checkout' && req.method === 'POST') {
+      const s = await stripeOf(env).checkout.sessions.create({
+        mode: 'subscription',
+        line_items: [{ price: env.STRIPE_PRICE_ID, quantity: 1 }],
+        success_url: `${env.SITE_URL}/ai/thanks/?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${env.SITE_URL}/ai/`,
+        locale: 'ja',
+      });
+      return json(200, { url: s.url }, h);
+    }
+
+    if (url.pathname === '/code' && req.method === 'GET') {
+      const id = url.searchParams.get('session_id') || '';
+      if (!/^cs_[A-Za-z0-9_]+$/.test(id)) return json(400, { error: '支払いの番号が正しくありません。' }, h);
+      const s = await stripeOf(env).checkout.sessions.retrieve(id);
+      if (s.status !== 'complete' || typeof s.subscription !== 'string' || typeof s.customer !== 'string') {
+        return json(409, { error: 'お支払いの完了がまだ確認できません。少し待ってから再読み込みしてください。' }, h);
+      }
+      return json(200, { code: await ensureCode(env, s.subscription, s.customer) }, h);
+    }
+
+    if (url.pathname === '/status' && req.method === 'POST') {
+      const { code } = (await req.json().catch(() => ({}))) as { code?: unknown };
+      const rec = await getCode(env, code);
+      if (!rec) return json(404, { error: '利用コードが見つかりません。' }, h);
+      const usedDay = await count(env.LIMITS, `pd:${code}:${today()}`);
+      const usedMonth = await count(env.LIMITS, `pm:${code}:${thisMonth()}`);
+      return json(200, {
+        active: rec.active,
+        todayLeft: Math.max(0, Number(env.PAID_PER_DAY) - usedDay),
+        monthLeft: Math.max(0, Number(env.PAID_PER_MONTH) - usedMonth),
+      }, h);
+    }
+
+    if (url.pathname === '/portal' && req.method === 'POST') {
+      const { code } = (await req.json().catch(() => ({}))) as { code?: unknown };
+      const rec = await getCode(env, code);
+      if (!rec) return json(404, { error: '利用コードが見つかりません。' }, h);
+      const p = await stripeOf(env).billingPortal.sessions.create({ customer: rec.customer, return_url: `${env.SITE_URL}/ai/` });
+      return json(200, { url: p.url }, h);
+    }
+
+    return text(404, 'not found', h);
+  }
+}

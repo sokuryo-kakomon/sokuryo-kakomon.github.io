@@ -1,9 +1,42 @@
 import { useEffect, useRef, useState } from 'react';
+import { useStore } from '@nanostores/react';
 import type { Question } from '../../lib/types';
+import { $aiCode, AI_ENDPOINT } from '../../store/ai';
 
 // 「AI に質問」。中継サーバー（worker/）の URL が PUBLIC_AI_ENDPOINT に入っていれば、
 // その場で AI とやりとりする。入っていなければ、従来どおり質問文をコピーして外の AI に貼る形。
-const ENDPOINT: string | undefined = import.meta.env.PUBLIC_AI_ENDPOINT;
+const ENDPOINT = AI_ENDPOINT;
+// 無料の質問は Cloudflare Turnstile で人間か確かめる（キーが無ければ省く）
+const TURNSTILE_KEY: string | undefined = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
+
+declare global {
+  interface Window { turnstile?: { render: (el: HTMLElement, o: object) => string; reset: (id: string) => void } }
+}
+
+function useTurnstile(enabled: boolean) {
+  const box = useRef<HTMLDivElement>(null);
+  const id = useRef<string | null>(null);
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    if (!enabled || !TURNSTILE_KEY || !box.current) return;
+    const draw = () => {
+      if (!window.turnstile || !box.current || id.current) return;
+      id.current = window.turnstile.render(box.current, {
+        sitekey: TURNSTILE_KEY, appearance: 'interaction-only', callback: (t: string) => setToken(t),
+        'expired-callback': () => setToken(''),
+      });
+    };
+    if (window.turnstile) draw();
+    else {
+      const sc = document.createElement('script');
+      sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      sc.async = true; sc.onload = draw; document.head.appendChild(sc);
+    }
+  }, [enabled]);
+  // トークンは1回きりなので、使ったら取り直す
+  const used = () => { setToken(''); if (id.current && window.turnstile) window.turnstile.reset(id.current); };
+  return { box, token, used, needed: enabled && !!TURNSTILE_KEY };
+}
 
 export function buildPrompt(q: Question) {
   const lines = [`【測量士試験 ${q.yearLabel} 午前 第${q.num}問（${q.category}）】`, '', q.statementText, ''];
@@ -30,6 +63,9 @@ function Chat({ q }: { q: Question }) {
   const [busy, setBusy] = useState(false);
   const [remaining, setRemaining] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
+  const [upsell, setUpsell] = useState(false);
+  const code = useStore($aiCode);
+  const ts = useTurnstile(!code);
   const endRef = useRef<HTMLDivElement>(null);
   useEffect(() => { endRef.current?.scrollIntoView({ block: 'end' }); }, [msgs]);
 
@@ -38,16 +74,18 @@ function Chat({ q }: { q: Question }) {
     if (!t || busy) return;
     const history: Msg[] = [...msgs, { role: 'user', content: t }];
     setMsgs([...history, { role: 'assistant', content: '' }]);
-    setInput(''); setBusy(true); setNotice('');
+    setInput(''); setBusy(true); setNotice(''); setUpsell(false);
     try {
       const res = await fetch(`${ENDPOINT}/ask`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ qid: q.id, messages: history }),
+        body: JSON.stringify({ qid: q.id, messages: history, code: code || undefined, turnstile: code ? undefined : ts.token }),
       });
+      if (!code) ts.used();
       const rem = res.headers.get('X-Remaining');
       if (rem !== null) setRemaining(rem);
       if (!res.ok || !res.body) {
         setNotice(await res.text());
+        if (res.status === 429 && res.headers.get('X-Plan') === 'free') setUpsell(true);
         setMsgs(history.slice(0, -1)); // 送れなかった質問は入力欄へ戻す
         setInput(t);
         return;
@@ -76,7 +114,7 @@ function Chat({ q }: { q: Question }) {
         {msgs.length === 0 && (
           <div className="flex flex-wrap gap-2">
             {suggestions(q).map((s) => (
-              <button key={s} type="button" className="btn btn-ghost btn-sm" onClick={() => ask(s)}>{s}</button>
+              <button key={s} type="button" className="btn btn-ghost btn-sm" disabled={ts.needed && !ts.token} onClick={() => ask(s)}>{s}</button>
             ))}
           </div>
         )}
@@ -91,14 +129,18 @@ function Chat({ q }: { q: Question }) {
         <div ref={endRef} />
       </div>
       {notice && <p className="text-sm text-[#a33] mb-2">{notice}</p>}
+      {upsell && (
+        <p className="text-sm mb-2"><a href="/ai/" className="btn btn-primary btn-sm no-underline">有料プラン（月980円・1日20回）を見る</a></p>
+      )}
+      <div ref={ts.box} />
       <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); ask(input); }}>
         <input className="flex-1 border border-line rounded-dojo px-3 py-2 text-sm bg-white" maxLength={800}
           placeholder={full ? 'この問題のやりとりは上限に達しました' : '例：選択肢3はなぜ誤り？'}
           value={input} onChange={(e) => setInput(e.target.value)} disabled={busy || full} />
-        <button className="btn btn-primary btn-sm" disabled={busy || full || !input.trim()}>送る</button>
+        <button className="btn btn-primary btn-sm" disabled={busy || full || !input.trim() || (ts.needed && !ts.token)}>送る</button>
       </form>
       <p className="text-[.7rem] text-ink-faint mt-2 leading-snug">
-        AI の答えは誤ることがあります。正解は国土地理院の発表が正です。1日5回まで無料{remaining !== null && `（今日の残り ${remaining} 回）`}。質問の内容は回答の作成にだけ使い、保存しません。
+        AI の答えは誤ることがあります。正解は国土地理院の発表が正です。{code ? '有料プラン' : <>無料は1日3回まで（<a href="/ai/">有料プラン</a>は1日20回）</>}{remaining !== null && `・今日の残り ${remaining} 回`}。質問の内容は回答の作成にだけ使い、保存しません。
       </p>
     </>
   );
