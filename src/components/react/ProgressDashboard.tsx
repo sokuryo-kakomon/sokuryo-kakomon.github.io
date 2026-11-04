@@ -3,7 +3,7 @@ import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, QuestionIndex, Site } from '../../lib/types';
 import { showExam } from '../../lib/examui';
-import { $progress, $bookmarks, isWeak, resetProgress, summarize } from '../../store/progress';
+import { $progress, $bookmarks, $days, isWeak, resetProgress, streak, summarize } from '../../store/progress';
 
 const S = siteJson as unknown as Site;
 
@@ -23,6 +23,7 @@ export default function ProgressDashboard() {
   const [exam, setExam] = useState<Exam>('shi');
   const prog = useStore($progress);
   const bms = useStore($bookmarks);
+  const days = useStore($days);
   useEffect(() => {
     fetch('/data/index.json').then((r) => r.json()).then(setFull);
     if (new URLSearchParams(location.search).get('exam') === 'hoshi') setExam('hoshi');
@@ -36,6 +37,7 @@ export default function ProgressDashboard() {
 
   const ids = (f: (x: QuestionIndex) => boolean) => index.filter(f).map((x) => x.id);
   const all = summarize(index.map((x) => x.id), prog);
+  const st = streak(days, prog);
   const weak = index.filter((x) => isWeak(prog[x.id]));
   const marked = index.filter((x) => bms.includes(x.id));
   const recent = index.filter((x) => prog[x.id]?.at).sort((a, b) => prog[b.id].at! - prog[a.id].at!).slice(0, 8);
@@ -65,6 +67,7 @@ export default function ProgressDashboard() {
           <div><div className="text-xs text-ink-soft">解答済み</div><div className="serif text-4xl">{all.answered}<span className="text-lg text-ink-soft"> / {all.total}問</span></div></div>
           <div><div className="text-xs text-ink-soft">正答率</div><div className="serif text-4xl text-moss-deep">{all.rate}<span className="text-lg">%</span></div></div>
           <div><div className="text-xs text-ink-soft">要復習</div><div className="serif text-4xl text-shu">{all.weak}<span className="text-lg">問</span></div></div>
+          <div title={st.n > 0 && !st.today ? '今日解くと続きます' : undefined}><div className="text-xs text-ink-soft">連続</div><div className="serif text-4xl text-moss-deep">{st.n}<span className="text-lg">日</span></div></div>
           <div className="ml-auto flex gap-2">
             <a className="btn btn-primary btn-sm" href={`/practice/?${q}mode=weak`}>要復習を解く</a>
             <a className="btn btn-ghost btn-sm" href={`/practice/?${q}mode=unanswered`}>未回答を解く</a>

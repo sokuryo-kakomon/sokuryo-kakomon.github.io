@@ -26,6 +26,10 @@ const codec = {
 
 export const $progress = persistentAtom<Progress>('sokuryo_q_v2', {}, codec);
 export const $bookmarks = persistentAtom<string[]>('sokuryo_bm_v1', [], codec);
+// 解いた日（YYYY-MM-DD）の記録。Rec.at は問題ごとに最後の1回しか残らないので、連続日数はこちらで数える
+export const $days = persistentAtom<string[]>('sokuryo_days_v1', [], codec);
+
+const dayKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 export function recordAnswer(qid: string, userAnswer: number, correctAnswer: number): Rec {
   const prev = $progress.get()[qid];
@@ -41,12 +45,16 @@ export function recordAnswer(qid: string, userAnswer: number, correctAnswer: num
     at: Date.now(),
   };
   $progress.set({ ...$progress.get(), [qid]: rec });
+  const today = dayKey(new Date());
+  const days = $days.get();
+  if (!days.includes(today)) $days.set([...days, today].slice(-400));
   return rec;
 }
 
 export function resetProgress() {
   $progress.set({});
   $bookmarks.set([]);
+  $days.set([]);
 }
 
 export function toggleBookmark(qid: string) {
@@ -73,4 +81,16 @@ export function summarize(ids: string[], prog: Progress) {
 
 export function onProgressChange(fn: (p: Progress) => void) {
   return $progress.listen(fn);
+}
+
+// 何日続けて解いているか。今日まだ解いていなければ昨日までの連続を数える（今日解けば続く）
+export function streak(days: string[], prog: Progress, now = new Date()) {
+  const set = new Set(days);
+  for (const r of Object.values(prog)) if (r?.at) set.add(dayKey(new Date(r.at)));
+  const d = new Date(now);
+  const today = set.has(dayKey(d));
+  if (!today) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (set.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
+  return { n, today };
 }
