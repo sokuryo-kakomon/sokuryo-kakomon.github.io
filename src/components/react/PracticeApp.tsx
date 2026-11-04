@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, Question, QuestionIndex, Site } from '../../lib/types';
@@ -40,6 +40,9 @@ export default function PracticeApp() {
   const [cur, setCur] = useState<Question | null>(null);
   const [cache] = useState(() => new Map<string, Question>());
   const [finished, setFinished] = useState(false);
+  // トップの「ランダム10問」用: ?n=10 で問題数を絞り、?go=1 で条件を選ばずにすぐ始める
+  const [limit, setLimit] = useState(0);
+  const autoGo = useRef(false);
   const prog = useStore($progress);
   const bms = useStore($bookmarks);
 
@@ -51,6 +54,8 @@ export default function PracticeApp() {
     if (p.get('cat')) setCat(p.get('cat')!);
     const m = p.get('mode') as Mode | null;
     if (m && MODES.some((x) => x.v === m)) setMode(m);
+    if (Number(p.get('n')) > 0) setLimit(Number(p.get('n')));
+    autoGo.current = p.get('go') === '1';
   }, []);
 
   const filtered = useMemo(() => {
@@ -69,9 +74,13 @@ export default function PracticeApp() {
   const start = () => {
     let ids = filtered.map((x) => x.id);
     if (mode === 'random') ids = shuffle(ids);
+    if (limit) ids = ids.slice(0, limit);
     setSession(ids); setI(0); setResults({}); setFinished(false);
     window.scrollTo(0, 0);
   };
+  useEffect(() => {
+    if (index && autoGo.current) { autoGo.current = false; start(); }
+  }, [index]);
   const quit = () => { setSession(null); setCur(null); setFinished(false); };
 
   useEffect(() => {
@@ -201,7 +210,7 @@ export default function PracticeApp() {
         <div className="text-xs text-ink-faint mt-1">{MODES.find((m) => m.v === mode)?.hint}</div>
       </div>
       <div className="card p-5 flex flex-wrap items-center gap-4">
-        <div className="serif text-3xl">{filtered.length}<span className="text-base text-ink-soft"> 問</span></div>
+        <div className="serif text-3xl">{limit ? Math.min(limit, filtered.length) : filtered.length}<span className="text-base text-ink-soft"> 問</span></div>
         <button className="btn btn-primary text-lg px-8" disabled={filtered.length === 0} onClick={start}>演習を始める</button>
         {filtered.length === 0 && <span className="text-sm text-ink-soft">この条件に当てはまる問題はありません。</span>}
       </div>

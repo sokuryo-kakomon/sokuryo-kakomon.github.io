@@ -12,27 +12,39 @@ const span = yearSpan(exam);
 const ys = ex.years.filter((y) => ex.questions.some((q) => q.year === y.id));
 const cats = categoriesOf(exam).filter((c) => c.count > 0);
 const exq = exam === 'shi' ? '' : 'exam=hoshi&';
-const pill = 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-line bg-card text-ink no-underline hover:border-moss hover:text-moss';
+const tile = 'border border-line rounded-dojo text-ink no-underline hover:border-moss hover:text-moss';
 ---
 <section class="relative overflow-hidden">
   <div class="absolute -right-10 -top-16 text-[22rem] leading-none serif text-paper-deep select-none pointer-events-none" aria-hidden="true">{bg}</div>
-  <div class="relative max-w-6xl mx-auto px-4 pt-12 pb-10 md:pt-20 md:pb-14">
-    <ExamTabs exam={exam} />
-    <h1 class="text-4xl md:text-6xl leading-tight mb-4">{ex.name}の過去問、<br />{span.n}年分・全{ex.questions.length}問。</h1>
-    <p class="text-lg text-ink-soft mb-6"><span class="inline-block">{exam === 'shi' ? '午前（択一式）の' : ''}全問に解説。</span><span class="inline-block">登録不要・無料。</span></p>
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-      <a href={`/practice/${exam === 'shi' ? '' : '?exam=hoshi'}`} class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
-      <a href="#" id="resume" class="text-ink-soft no-underline hover:text-moss" hidden>続きから ›</a>
+  <div class="relative max-w-6xl mx-auto px-4 pt-12 pb-10 md:pt-20 md:pb-14 grid gap-10 lg:grid-cols-2 lg:gap-14 lg:items-center">
+    <div>
+      <ExamTabs exam={exam} />
+      <h1 class="text-4xl md:text-6xl lg:text-5xl xl:text-[3.5rem] leading-tight mb-4"><span class="inline-block">{ex.name}の過去問、</span><br /><span class="inline-block">{span.n}年分・全{ex.questions.length}問。</span></h1>
+      <p class="text-lg text-ink-soft mb-6"><span class="inline-block">{exam === 'shi' ? '午前（択一式）の' : ''}全問に解説。</span><span class="inline-block">登録不要・無料。</span></p>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <a href={`/practice/${exam === 'shi' ? '' : '?exam=hoshi'}`} class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
+        <a href="#" id="resume" class="text-ink-soft no-underline hover:text-moss" hidden>続きから ›</a>
+      </div>
+      <p class="text-sm text-ink-soft mt-4" id="countdown" title="例年の日程（5月第3日曜）からの推定"></p>
     </div>
-    <p class="text-sm text-ink-soft mt-4" id="countdown" title="例年の日程（5月第3日曜）からの推定"></p>
 
-    <h2 id="select" class="text-xs tracking-[0.2em] text-ink-soft font-normal mt-10 mb-3 scroll-mt-20">年度で解く</h2>
-    <div class="flex flex-wrap gap-2">
-      {ys.map((y) => <a href={`${ex.base}/${y.id}/`} class={pill} title={y.label}>{y.short}</a>)}
-    </div>
-    <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mt-8 mb-3">分野で解く</h2>
-    <div class="flex flex-wrap gap-2">
-      {cats.map((c) => <a href={`/practice/?${exq}cat=${c.slug}`} class={pill}><span>{c.icon}</span>{c.name}</a>)}
+    <!-- 右のカード: ランダム10問・年度・分野（年度が主、分野は小さく） -->
+    <div id="select" class="bg-card border border-line rounded-2xl p-5 md:p-7 shadow-lift scroll-mt-20">
+      <a href={`/practice/?${exq}mode=random&n=10&go=1`} class="flex items-center justify-between rounded-dojo border border-moss px-4 py-3 mb-6 font-bold text-moss-deep no-underline hover:bg-moss-pale">
+        ランダム10問を解く<span class="text-xs font-normal text-ink-soft">全年度から ›</span>
+      </a>
+      <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">年度で解く</h2>
+      <div class="grid grid-cols-5 gap-2 mb-6">
+        {ys.map((y) => (
+          <a href={`${ex.base}/${y.id}/`} class={tile + ' text-center pt-2 pb-1.5 leading-tight'}>
+            <b class="block serif text-lg font-semibold">{y.short}</b><span class="text-[0.65rem] text-ink-soft">{y.label.replace('年度', '')}</span>
+          </a>
+        ))}
+      </div>
+      <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">分野で解く</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        {cats.map((c) => <a href={`/practice/?${exq}cat=${c.slug}`} class={tile + ' text-center text-sm py-2 px-1'}>{c.name}</a>)}
+      </div>
     </div>
   </div>
 </section>
