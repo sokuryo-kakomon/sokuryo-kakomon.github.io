@@ -2,12 +2,13 @@
 import ExamTabs from '../components/ExamTabs.astro';
 import Base from '../layouts/Base.astro';
 import ExamSelect from '../components/ExamSelect.astro';
-import { SITE_NAME, categories, shiQuestions, site } from '../lib/data';
+import { SITE_NAME, categories, shiQuestions, site, yearSpan } from '../lib/data';
 
 // トップは測量士（午前）。測量士補は /hoshi/
 const total = shiQuestions.length;
-const title = `${SITE_NAME}｜令和4〜8年 全問解説`;
-const description = `測量士 過去問（午前・択一式）令和4〜8年度 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
+const span = yearSpan('shi');
+const title = `${SITE_NAME}｜${span.short} 全問解説`;
+const description = `測量士 過去問（午前・択一式）${span.long} 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
 const steps = [
   { n: '一', t: '年度か分野を選ぶ', d: '年度ごとに通しで解くか、苦手な分野だけ絞るか。未回答・要復習だけを出すこともできます。' },
   { n: '二', t: '解答を選ぶ', d: '選択肢を押すとその場で正誤が出ます。結果は端末に自動で記録され、登録は要りません。' },
@@ -34,7 +35,7 @@ const jsonLd = {
       <div class="eyebrow mb-4">測量士試験（午前・択一式）対策</div>
       <h1 class="text-4xl md:text-6xl leading-tight mb-5">解くたびに、<br class="md:hidden" />腑に落ちる。</h1>
       <p class="max-w-2xl text-lg text-ink-soft leading-relaxed mb-7">
-        令和4〜8年度の全{total}問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
+        {span.long}の全{total}問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
       </p>
       <div class="flex flex-wrap gap-3 mb-6">
         <a href="/practice/" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
@@ -97,7 +98,7 @@ const jsonLd = {
         </ul>
       </div>
       <div class="mt-8 md:mt-0">
-        <h2 class="text-2xl mb-3">5年分{total}問の出題分野</h2>
+        <h2 class="text-2xl mb-3">{span.n}年分{total}問の出題分野</h2>
         <p class="text-sm text-ink-soft mb-3">当サイトの分類で集計したものです。分野の偏りをつかむ目安にしてください。</p>
         <div class="qhtml"><div class="tbl-wrap"><table>
           <thead><tr><th>分野</th><th class="text-right">問題数</th><th class="text-right">割合</th></tr></thead>

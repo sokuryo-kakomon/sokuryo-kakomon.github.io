@@ -1,5 +1,5 @@
 ---
-import { SITE_NAME, examOfPath } from '../lib/data';
+import { SITE_NAME, examOfPath, yearSpan } from '../lib/data';
 interface Props { withSidebar?: boolean }
 const { withSidebar = false } = Astro.props;
 const path = Astro.url.pathname;
@@ -22,7 +22,7 @@ const nav = [
         <span class="text-[.7rem] font-sans tracking-wider text-ink-soft">測量士・測量士補</span>
         <span class="text-lg">過去問ドリル</span>
       </span>
-      <span class="hidden lg:inline text-[.72rem] text-ink-soft font-sans font-normal tracking-wider">過去問 5年分の演習と解説</span>
+      <span class="hidden lg:inline text-[.72rem] text-ink-soft font-sans font-normal tracking-wider">過去問 {yearSpan().n}年分の演習と解説</span>
     </a>
     <nav class="ml-auto flex items-center gap-0.5 text-sm">
       {nav.map((n) => (
