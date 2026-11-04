@@ -13,8 +13,8 @@ const prev = q.prev ? byId.get(q.prev)! : null;
 const next = q.next ? byId.get(q.next)! : null;
 const yearUrl = `${ex.base}/${q.year}/`;
 const title = ex.id === 'shi'
-  ? `測量士 令和${q.yearNum}年 午前 第${q.num}問（${q.category}）｜${SITE_NAME}`
-  : `測量士補 令和${q.yearNum}年 第${q.num}問（${q.category}）｜${SITE_NAME}`;
+  ? `測量士 ${q.yearLabel.replace(/度$/, '')} 午前 第${q.num}問（${q.category}）｜${SITE_NAME}`
+  : `測量士補 ${q.yearLabel.replace(/度$/, '')} 第${q.num}問（${q.category}）｜${SITE_NAME}`;
 const crumbs = ex.id === 'shi'
   ? [['トップ', '/'], [q.yearLabel, yearUrl]]
   : [['トップ', '/'], ['測量士補', '/hoshi/'], [q.yearLabel, yearUrl]];

@@ -9,7 +9,6 @@ import type { Question, Site, Guides, StaticPage, QuestionIndex, Exam, Year, Cat
 // （questions.json は 700KB あり、クライアントへ丸ごと送りたくない）。
 
 export const SITE_NAME = '測量士・測量士補 過去問ドリル';
-export const SITE_TAGLINE = '測量士・測量士補試験の過去問 5年分の演習と解説';
 
 export const site = siteJson as Site;
 export const guides = guidesJson as Guides;
@@ -27,6 +26,13 @@ export const EXAMS: Record<Exam, ExamInfo> = {
   shi: { id: 'shi', name: '測量士', full: '測量士試験', base: '', part: '午前（択一式）', years: site.years, questions: shiQuestions },
   hoshi: { id: 'hoshi', name: '測量士補', full: '測量士補試験', base: '/hoshi', part: '択一式', years: site.hoshiYears, questions: hoshiQuestions },
 };
+// 載せている年度の幅（例 long「平成30年度〜令和8年度」・short「平成30〜令和8年」）と年数
+export function yearSpan(exam: Exam = 'shi') {
+  const ys = EXAMS[exam].years.filter((y) => EXAMS[exam].questions.some((q) => q.year === y.id));
+  const [newest, oldest] = [ys[0], ys[ys.length - 1]];
+  return { long: `${oldest.label}〜${newest.label}`, short: `${oldest.label.replace('年度', '')}〜${newest.label.replace('度', '')}`, n: ys.length };
+}
+export const SITE_TAGLINE = `測量士・測量士補試験の過去問 ${yearSpan('shi').n}年分の演習と解説`;
 export const examOfPath = (path: string): Exam => (path.startsWith('/hoshi') ? 'hoshi' : 'shi');
 
 // 測量士の名前のまま使っている所が多いので、years / categories は測量士のもの

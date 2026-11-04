@@ -2,12 +2,13 @@
 import ExamTabs from '../../components/ExamTabs.astro';
 import Base from '../../layouts/Base.astro';
 import ExamSelect from '../../components/ExamSelect.astro';
-import { SITE_NAME, hoshiQuestions, shiQuestions, site } from '../../lib/data';
+import { SITE_NAME, hoshiQuestions, shiQuestions, site, yearSpan } from '../../lib/data';
 
 // 測量士補のトップ。使い方・記録の仕組みは測量士と同じ
 const total = hoshiQuestions.length;
-const title = `測量士補 過去問 令和4〜8年 全問解説｜${SITE_NAME}`;
-const description = `測量士補試験の過去問 令和4〜8年度 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
+const span = yearSpan('hoshi');
+const title = `測量士補 過去問 ${span.short} 全問解説｜${SITE_NAME}`;
+const description = `測量士補試験の過去問 ${span.long} 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
 const features = [
   { t: '「なぜ」まで書く解説', d: '公式に配布されるのは問題と正解番号だけ。誤りの選択肢も一つずつ、どこが・なぜ誤りかを示します。' },
   { t: '計算は途中式を省かない', d: '関数電卓を使わず、問題に付く関数表と四則演算・√だけで解ける手順で書きます。' },
@@ -26,7 +27,7 @@ const jsonLd = {
       <div class="eyebrow mb-4">測量士補試験（択一式）対策</div>
       <h1 class="text-4xl md:text-6xl leading-tight mb-5">解くたびに、<br class="md:hidden" />腑に落ちる。</h1>
       <p class="max-w-2xl text-lg text-ink-soft leading-relaxed mb-7">
-        令和4〜8年度の全{total}問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
+        {span.long}の全{total}問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
       </p>
       <div class="flex flex-wrap gap-3 mb-6">
         <a href="/practice/?exam=hoshi" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
