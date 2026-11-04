@@ -1,7 +1,6 @@
 ---
-import ExamTabs from '../../components/ExamTabs.astro';
 import Base from '../../layouts/Base.astro';
-import ExamSelect from '../../components/ExamSelect.astro';
+import TopHome from '../../components/TopHome.astro';
 import { SITE_NAME, hoshiQuestions, shiQuestions, site, yearSpan } from '../../lib/data';
 
 // 測量士補のトップ。使い方・記録の仕組みは測量士と同じ
@@ -20,58 +19,17 @@ const jsonLd = {
 };
 ---
 <Base title={title} description={description} path="/hoshi/" jsonLd={jsonLd}>
-  <section class="relative overflow-hidden">
-    <div class="absolute -right-10 -top-16 text-[22rem] leading-none serif text-paper-deep select-none pointer-events-none" aria-hidden="true">補</div>
-    <div class="relative max-w-6xl mx-auto px-4 pt-14 pb-12 md:pt-24 md:pb-20">
-      <ExamTabs exam="hoshi" />
-      <div class="eyebrow mb-4">測量士補試験（択一式）対策</div>
-      <h1 class="text-4xl md:text-6xl leading-tight mb-5">測量士補の過去問、<br />{span.n}年分・全{total}問。</h1>
-      <p class="max-w-2xl text-lg text-ink-soft leading-relaxed mb-7">
-        {span.long}の全問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
-      </p>
-      <div class="flex flex-wrap gap-3 mb-6">
-        <a href="/practice/?exam=hoshi" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
-        <a href="#select" class="btn btn-ghost text-lg px-6 py-3">年度・分野を選ぶ</a>
-      </div>
-      <div class="text-sm text-ink-soft" id="countdown"></div>
-      <div class="flex flex-wrap gap-2 mt-6 text-sm">
-        {['登録不要・無料', `全${total}問に詳細解説`, '成績を自動記録', '条文をタップで参照'].map((t) => (
-          <span class="px-3 py-1 rounded-full bg-card border border-line">{t}</span>
+  <TopHome exam="hoshi" bg="補">
+    <section>
+      <h2 class="text-2xl mb-4">このサイトの特長</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {features.map((f) => (
+          <div class="card p-5">
+            <h3 class="text-base mb-2 leading-snug">{f.t}</h3>
+            <p class="text-sm text-ink-soft leading-relaxed">{f.d}</p>
+          </div>
         ))}
       </div>
-    </div>
-  </section>
-
-  <section class="max-w-6xl mx-auto px-4 pb-14">
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {features.map((f) => (
-        <div class="card p-5">
-          <h3 class="text-base mb-2 leading-snug">{f.t}</h3>
-          <p class="text-sm text-ink-soft leading-relaxed">{f.d}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <ExamSelect exam="hoshi" />
-
-  <section class="max-w-6xl mx-auto px-4 py-14 text-center">
-    <div class="serif text-2xl mb-1">継続は、合格への近道。</div>
-    <p class="text-sm text-ink-soft mb-5">1日数問でも、解いた分だけ成績表に積み上がります。</p>
-    <a href="/practice/?exam=hoshi" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
-  </section>
-
-  <script>
-    // 次回試験（例年5月第3日曜。測量士と同じ日）までの日数
-    const el = document.getElementById('countdown');
-    if (el) {
-      const third = (y: number) => { const d = new Date(y, 4, 1); const off = (7 - d.getDay()) % 7; return new Date(y, 4, 1 + off + 14); };
-      const now = new Date(); now.setHours(0, 0, 0, 0);
-      let ex = third(now.getFullYear());
-      if (ex < now) ex = third(now.getFullYear() + 1);
-      const days = Math.round((ex.getTime() - now.getTime()) / 86400000);
-      const reiwa = ex.getFullYear() - 2018;
-      el.textContent = `令和${reiwa}年度試験（${ex.getFullYear()}年${ex.getMonth() + 1}月${ex.getDate()}日 ・ 例年の日程からの推定）まで、あと ${days} 日`;
-    }
-  </script>
+    </section>
+  </TopHome>
 </Base>

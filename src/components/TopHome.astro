@@ -1,0 +1,73 @@
+---
+import ExamTabs from './ExamTabs.astro';
+import { EXAMS, categoriesOf, yearSpan } from '../lib/data';
+import type { Exam } from '../lib/types';
+
+// 測量士（/）と測量士補（/hoshi/）のトップの1画面目。
+// 見出し・ボタン・年度と分野の札だけを出し、長い説明は下の「このサイトについて」（slot）にたたむ。
+interface Props { exam: Exam; bg: string }
+const { exam, bg } = Astro.props;
+const ex = EXAMS[exam];
+const span = yearSpan(exam);
+const ys = ex.years.filter((y) => ex.questions.some((q) => q.year === y.id));
+const cats = categoriesOf(exam).filter((c) => c.count > 0);
+const exq = exam === 'shi' ? '' : 'exam=hoshi&';
+const pill = 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-line bg-card text-ink no-underline hover:border-moss hover:text-moss';
+---
+<section class="relative overflow-hidden">
+  <div class="absolute -right-10 -top-16 text-[22rem] leading-none serif text-paper-deep select-none pointer-events-none" aria-hidden="true">{bg}</div>
+  <div class="relative max-w-6xl mx-auto px-4 pt-12 pb-10 md:pt-20 md:pb-14">
+    <ExamTabs exam={exam} />
+    <h1 class="text-4xl md:text-6xl leading-tight mb-4">{ex.name}の過去問、<br />{span.n}年分・全{ex.questions.length}問。</h1>
+    <p class="text-lg text-ink-soft mb-6">{exam === 'shi' ? '午前（択一式）の' : ''}全問に解説。登録不要・無料。</p>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+      <a href={`/practice/${exam === 'shi' ? '' : '?exam=hoshi'}`} class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
+      <a href="#" id="resume" class="text-ink-soft no-underline hover:text-moss" hidden>続きから ›</a>
+    </div>
+    <p class="text-sm text-ink-soft mt-4" id="countdown" title="例年の日程（5月第3日曜）からの推定"></p>
+
+    <h2 id="select" class="text-xs tracking-[0.2em] text-ink-soft font-normal mt-10 mb-3 scroll-mt-20">年度で解く</h2>
+    <div class="flex flex-wrap gap-2">
+      {ys.map((y) => <a href={`${ex.base}/${y.id}/`} class={pill} title={y.label}>{y.short}</a>)}
+    </div>
+    <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mt-8 mb-3">分野で解く</h2>
+    <div class="flex flex-wrap gap-2">
+      {cats.map((c) => <a href={`/practice/?${exq}cat=${c.slug}`} class={pill}><span>{c.icon}</span>{c.name}</a>)}
+    </div>
+  </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4">
+  <details class="border-t border-line pt-4 text-ink-soft">
+    <summary class="cursor-pointer text-ink">このサイトについて</summary>
+    <div class="mt-6 space-y-10"><slot /></div>
+  </details>
+</section>
+
+<script define:vars={{ exam, name: ex.full }}>
+  // 試験（例年5月第3日曜）までの日数
+  const third = (y) => { const d = new Date(y, 4, 1); return new Date(y, 4, 1 + ((7 - d.getDay()) % 7) + 14); };
+  const now = new Date(); now.setHours(0, 0, 0, 0);
+  let day = third(now.getFullYear());
+  if (day < now) day = third(now.getFullYear() + 1);
+  const left = Math.round((day.getTime() - now.getTime()) / 86400000);
+  document.getElementById('countdown').textContent = `令和${day.getFullYear() - 2018}年度 ${name}まで あと ${left} 日`;
+
+  // 続きから: この試験で最後に解いた問題の次へ（記録が無ければ出さない）
+  try {
+    const prog = JSON.parse(localStorage.getItem('sokuryo_q_v2') || '{}');
+    let last = null, at = -1;
+    for (const [id, r] of Object.entries(prog)) {
+      if (id.startsWith('h-') !== (exam === 'hoshi') || !r || !r.answered) continue;
+      if ((r.at || 0) > at) { at = r.at || 0; last = id; }
+    }
+    const m = last && last.match(/^(?:h-)?([rh]\d{2})-q(\d+)$/);
+    if (m) {
+      const base = exam === 'hoshi' ? '/hoshi' : '';
+      const n = Number(m[2]);
+      const a = document.getElementById('resume');
+      a.href = n < 28 ? `${base}/${m[1]}/q${n + 1}/` : `${base}/${m[1]}/`;
+      a.hidden = false;
+    }
+  } catch (e) { /* 記録が読めなければ出さない */ }
+</script>
