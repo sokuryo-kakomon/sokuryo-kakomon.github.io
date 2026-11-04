@@ -2,11 +2,10 @@
 import ExamTabs from '../components/ExamTabs.astro';
 import Base from '../layouts/Base.astro';
 import ExamSelect from '../components/ExamSelect.astro';
-import { SITE_NAME, categories, shiQuestions, hoshiQuestions, site } from '../lib/data';
+import { SITE_NAME, categories, shiQuestions, site } from '../lib/data';
 
 // トップは測量士（午前）。測量士補は /hoshi/
 const total = shiQuestions.length;
-const hoshiTotal = hoshiQuestions.length;
 const title = `${SITE_NAME}｜令和4〜8年 全問解説`;
 const description = `測量士 過去問（午前・択一式）令和4〜8年度 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
 const steps = [
@@ -39,15 +38,8 @@ const jsonLd = {
       </p>
       <div class="flex flex-wrap gap-3 mb-6">
         <a href="/practice/" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
-        <a href="/guide/" class="btn btn-ghost text-lg px-6 py-3">分野別ガイドを読む</a>
+        <a href="#select" class="btn btn-ghost text-lg px-6 py-3">年度・分野を選ぶ</a>
       </div>
-      {hoshiTotal > 0 && (
-        <a href="/hoshi/" class="card no-underline text-ink flex items-center gap-4 p-4 mb-6 max-w-xl hover:bg-paper-deep/60">
-          <span class="serif text-3xl text-moss">補</span>
-          <span class="min-w-0 flex-1"><b>測量士補試験</b>の過去問 {hoshiTotal}問も解説つきで解けます<span class="block text-xs text-ink-soft">令和4〜8年度・同じ使い方・成績も一緒に記録</span></span>
-          <span class="text-moss">→</span>
-        </a>
-      )}
       <div class="text-sm text-ink-soft" id="countdown"></div>
       <div class="flex flex-wrap gap-2 mt-6 text-sm">
         {['登録不要・無料', `全${total}問に詳細解説`, '成績を自動記録', '条文をタップで参照'].map((t) => (
