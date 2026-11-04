@@ -47,7 +47,7 @@ const exq = exam === 'shi' ? '' : 'exam=hoshi&';
             <div class="text-xs text-ink-soft">{c.count}問 ・ {Math.round((c.count / total) * 100)}%</div>
           </div>
           <a href={`/practice/?${exq}cat=${c.slug}`} class="btn btn-primary btn-sm">解く</a>
-          <a href={`/guide/${c.slug}/`} class="btn btn-ghost btn-sm">ガイド</a>
+          {exam === 'shi' && <a href={`/guide/${c.slug}/`} class="btn btn-ghost btn-sm">ガイド</a>}
         </article>
       ))}
     </div>

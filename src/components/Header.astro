@@ -3,11 +3,13 @@ import { SITE_NAME, examOfPath } from '../lib/data';
 interface Props { withSidebar?: boolean }
 const { withSidebar = false } = Astro.props;
 const path = Astro.url.pathname;
+const hoshi = examOfPath(path) === 'hoshi';
+// exam: 測量士補で見ているときは ?exam=hoshi を付ける。演習・成績表のページでは下の script が付ける
 const nav = [
-  { href: '/practice/', label: '演習', mobile: true },
-  { href: examOfPath(path) === 'hoshi' ? '/hoshi/#select' : '/#select', label: '年度・分野', mobile: false },
-  { href: '/guide/', label: 'ガイド', mobile: true },
-  { href: '/progress/', label: '成績表', mobile: true },
+  { href: '/practice/', label: '演習', mobile: true, exam: true },
+  { href: hoshi ? '/hoshi/#select' : '/#select', label: '年度・分野', mobile: false, exam: false },
+  { href: '/guide/', label: 'ガイド', mobile: true, exam: false },
+  { href: '/progress/', label: '成績表', mobile: true, exam: true },
 ];
 ---
 <header class="sticky top-0 z-50 border-b border-line bg-paper/92 backdrop-blur">
@@ -24,11 +26,12 @@ const nav = [
     </a>
     <nav class="ml-auto flex items-center gap-0.5 text-sm">
       {nav.map((n) => (
-        <a href={n.href}
+        <a href={n.exam && hoshi ? n.href + '?exam=hoshi' : n.href} data-exam-link={n.exam ? n.href : undefined}
           class={'px-2.5 py-1.5 rounded-dojo no-underline text-ink hover:bg-paper-deep whitespace-nowrap'
             + (n.mobile ? '' : ' hidden sm:inline')
             + (!n.href.endsWith('#select') && path.startsWith(n.href) ? ' font-bold text-moss-deep' : '')}>{n.label}</a>
       ))}
     </nav>
   </div>
+  <script is:inline>if (document.documentElement.dataset.exam === 'hoshi') document.querySelectorAll('a[data-exam-link]').forEach((a) => { a.href = a.dataset.examLink + '?exam=hoshi'; });</script>
 </header>

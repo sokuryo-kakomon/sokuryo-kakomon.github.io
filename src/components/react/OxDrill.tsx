@@ -6,6 +6,7 @@ import type { OxItem } from '../../lib/ox';
 import { $progress, isWeak } from '../../store/progress';
 import { $ox, $oxDay, FREE_OX_PER_DAY, countOx, oxUsedToday, recordOx } from '../../store/drill';
 import { $aiCode, checkPaid, type PaidState } from '../../store/ai';
+import { showExam } from '../../lib/examui';
 
 // 一問一答（肢ごとの○×）。過去問の肢を1つずつ「正しい／誤り」で答える。
 // 材料は解説で正誤を確かめ済みの肢だけ（/data/ox.json。src/lib/ox.ts で作る）。
@@ -151,7 +152,7 @@ export default function OxDrill() {
         <div className="font-bold mb-2">試験</div>
         <div className="flex flex-wrap gap-2 mb-5">
           {(['shi', 'hoshi'] as Exam[]).map((e) => (
-            <button key={e} className={sel + (exam === e ? on : off)} onClick={() => setExam(e)}>{EXAM_NAME[e]}</button>
+            <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); showExam(e); }}>{EXAM_NAME[e]}</button>
           ))}
         </div>
         <div className="font-bold mb-2">分野</div>
