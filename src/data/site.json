@@ -52,8 +52,8 @@
    "examDate": "2023年5月21日",
    "ad": 2023,
    "pdf": {
-    "questions": "https://www.gsi.go.jp/common/000245774.pdf",
-    "answers": "https://www.gsi.go.jp/common/000246793.pdf"
+    "questions": "https://www.gsi.go.jp/common/000249816.pdf",
+    "answers": "https://www.gsi.go.jp/common/000250861.pdf"
    },
    "count": 28
   },
@@ -62,11 +62,11 @@
    "num": 4,
    "label": "令和4年度",
    "short": "R4",
-   "examDate": "2022年5月22日",
+   "examDate": "2022年5月15日",
    "ad": 2022,
    "pdf": {
-    "questions": "https://www.gsi.go.jp/common/000235078.pdf",
-    "answers": "https://www.gsi.go.jp/common/000236078.pdf"
+    "questions": "https://www.gsi.go.jp/common/000240135.pdf",
+    "answers": "https://www.gsi.go.jp/common/000241385.pdf"
    },
    "count": 28
   }
