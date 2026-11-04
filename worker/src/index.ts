@@ -272,14 +272,16 @@ export default {
 
 // 支払い・コードまわり（Stripe を呼ぶもの）
 async function billing(req: Request, url: URL, env: Env, h: Record<string, string>): Promise<Response> {
+  // 戻り先は、許可した送り元（CORS で確かめ済み）のサイト。手元の試験でも本番でも同じ形で戻れる
+  const base = h['Access-Control-Allow-Origin'] || env.SITE_URL;
   {
 
     if (url.pathname === '/checkout' && req.method === 'POST') {
       const s = await stripeOf(env).checkout.sessions.create({
         mode: 'subscription',
         line_items: [{ price: env.STRIPE_PRICE_ID, quantity: 1 }],
-        success_url: `${env.SITE_URL}/ai/thanks/?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${env.SITE_URL}/ai/`,
+        success_url: `${base}/ai/thanks/?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${base}/ai/`,
         locale: 'ja',
       });
       return json(200, { url: s.url }, h);
@@ -312,7 +314,7 @@ async function billing(req: Request, url: URL, env: Env, h: Record<string, strin
       const { code } = (await req.json().catch(() => ({}))) as { code?: unknown };
       const rec = await getCode(env, code);
       if (!rec) return json(404, { error: '利用コードが見つかりません。' }, h);
-      const p = await stripeOf(env).billingPortal.sessions.create({ customer: rec.customer, return_url: `${env.SITE_URL}/ai/` });
+      const p = await stripeOf(env).billingPortal.sessions.create({ customer: rec.customer, return_url: `${base}/ai/` });
       return json(200, { url: p.url }, h);
     }
 
