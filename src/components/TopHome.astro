@@ -51,7 +51,20 @@ const pill = 'inline-flex items-center gap-1.5 px-4 py-2 rounded-full border bor
   let day = third(now.getFullYear());
   if (day < now) day = third(now.getFullYear() + 1);
   const left = Math.round((day.getTime() - now.getTime()) / 86400000);
-  document.getElementById('countdown').textContent = `令和${day.getFullYear() - 2018}年度 ${name}まで あと ${left} 日`;
+  let line = `令和${day.getFullYear() - 2018}年度 ${name}まで あと ${left} 日`;
+
+  // 連続日数（store/progress.ts の streak と同じ数え方。2日以上のときだけ出す）
+  try {
+    const key = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const set = new Set(JSON.parse(localStorage.getItem('sokuryo_days_v1') || '[]'));
+    for (const r of Object.values(JSON.parse(localStorage.getItem('sokuryo_q_v2') || '{}'))) if (r && r.at) set.add(key(new Date(r.at)));
+    const d = new Date();
+    if (!set.has(key(d))) d.setDate(d.getDate() - 1);
+    let n = 0;
+    while (set.has(key(d))) { n++; d.setDate(d.getDate() - 1); }
+    if (n >= 2) line += ` ・ ${n}日連続`;
+  } catch (e) { /* 記録が読めなければ出さない */ }
+  document.getElementById('countdown').textContent = line;
 
   // 続きから: この試験で最後に解いた問題の次へ（記録が無ければ出さない）
   try {

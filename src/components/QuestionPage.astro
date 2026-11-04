@@ -39,9 +39,9 @@ const exq = ex.id === 'shi' ? '' : 'exam=hoshi&';
   <QuestionCard client:load q={q} lawRefs={site.lawRefs} />
 
   <nav class="flex justify-between gap-3 mt-6">
-    {prev ? <a class="btn btn-ghost flex-1" href={prev.url}>← 第{prev.num}問</a> : <span class="btn btn-ghost flex-1 is-disabled">← 前の問題</span>}
+    {prev ? <a class="btn btn-ghost flex-1" data-key="prev" href={prev.url}>← 第{prev.num}問</a> : <span class="btn btn-ghost flex-1 is-disabled">← 前の問題</span>}
     <a class="btn btn-ghost" href={yearUrl}>一覧</a>
-    {next ? <a class="btn btn-ghost flex-1" href={next.url}>第{next.num}問 →</a> : <span class="btn btn-ghost flex-1 is-disabled">次の問題 →</span>}
+    {next ? <a class="btn btn-ghost flex-1" data-key="next" href={next.url}>第{next.num}問 →</a> : <span class="btn btn-ghost flex-1 is-disabled">次の問題 →</span>}
   </nav>
   <div class="mt-4 text-center text-sm">
     {/* 分野別ガイドは測量士向けしかない */}

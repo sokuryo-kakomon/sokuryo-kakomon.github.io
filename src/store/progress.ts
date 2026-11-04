@@ -26,6 +26,10 @@ const codec = {
 
 export const $progress = persistentAtom<Progress>('sokuryo_q_v2', {}, codec);
 export const $bookmarks = persistentAtom<string[]>('sokuryo_bm_v1', [], codec);
+// 解いた日（YYYY-MM-DD）の記録。Rec.at は問題ごとに最後の1回しか残らないので、連続日数はこちらで数える
+export const $days = persistentAtom<string[]>('sokuryo_days_v1', [], codec);
+
+const dayKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 export function recordAnswer(qid: string, userAnswer: number, correctAnswer: number): Rec {
   const prev = $progress.get()[qid];
@@ -41,12 +45,16 @@ export function recordAnswer(qid: string, userAnswer: number, correctAnswer: num
     at: Date.now(),
   };
   $progress.set({ ...$progress.get(), [qid]: rec });
+  const today = dayKey(new Date());
+  const days = $days.get();
+  if (!days.includes(today)) $days.set([...days, today].slice(-400));
   return rec;
 }
 
 export function resetProgress() {
   $progress.set({});
   $bookmarks.set([]);
+  $days.set([]);
 }
 
 export function toggleBookmark(qid: string) {
@@ -77,10 +85,10 @@ export function onProgressChange(fn: (p: Progress) => void) {
 
 // 成績の書き出し・読み込み。記録は端末にしか無いので、機種変更や別のブラウザへ移すときに使う。
 // 読み込みは上書きでなく合わせる：同じ問題は新しく解いた方を残し、印・○× も合わせる。
-export interface Backup { app: 'sokuryo-kakomon'; v: 1; at: string; progress: Progress; bookmarks: string[]; ox?: Record<string, { at: number }> }
+export interface Backup { app: 'sokuryo-kakomon'; v: 1; at: string; progress: Progress; bookmarks: string[]; days?: string[]; ox?: Record<string, { at: number }> }
 
 export function makeBackup(ox: Record<string, { at: number }>): Backup {
-  return { app: 'sokuryo-kakomon', v: 1, at: new Date().toISOString(), progress: $progress.get(), bookmarks: $bookmarks.get(), ox };
+  return { app: 'sokuryo-kakomon', v: 1, at: new Date().toISOString(), progress: $progress.get(), bookmarks: $bookmarks.get(), days: $days.get(), ox };
 }
 
 function newer<T extends { at?: number }>(a: Record<string, T>, b: Record<string, T>) {
@@ -94,6 +102,19 @@ export function mergeBackup<O extends { at: number }>(b: Backup, ox: Record<stri
   if (b?.app !== 'sokuryo-kakomon' || typeof b.progress !== 'object') throw new Error('このサイトの書き出しファイルではありません。');
   $progress.set(newer($progress.get(), b.progress));
   $bookmarks.set([...new Set([...$bookmarks.get(), ...(b.bookmarks || [])])]);
+  $days.set([...new Set([...$days.get(), ...(b.days || [])])].sort().slice(-400));
   if (b.ox) setOx(newer(ox, b.ox as Record<string, O>));
   return Object.keys(b.progress).length;
+}
+
+// 何日続けて解いているか。今日まだ解いていなければ昨日までの連続を数える（今日解けば続く）
+export function streak(days: string[], prog: Progress, now = new Date()) {
+  const set = new Set(days);
+  for (const r of Object.values(prog)) if (r?.at) set.add(dayKey(new Date(r.at)));
+  const d = new Date(now);
+  const today = set.has(dayKey(d));
+  if (!today) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (set.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
+  return { n, today };
 }

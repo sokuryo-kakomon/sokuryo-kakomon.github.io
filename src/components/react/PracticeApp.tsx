@@ -162,10 +162,10 @@ export default function PracticeApp() {
           <div className="card p-6 text-ink-soft">読み込み中…</div>
         )}
         <div className="flex justify-between gap-3">
-          <button type="button" className="btn btn-ghost flex-1" disabled={i === 0} onClick={() => { setI(i - 1); window.scrollTo(0, 0); }}>← 前の問題</button>
+          <button type="button" data-key="prev" className="btn btn-ghost flex-1" disabled={i === 0} onClick={() => { setI(i - 1); window.scrollTo(0, 0); }}>← 前の問題</button>
           {i < session.length - 1
-            ? <button type="button" className={'btn flex-1 ' + (answeredHere ? 'btn-primary' : 'btn-ghost')} onClick={() => { setI(i + 1); window.scrollTo(0, 0); }}>次の問題 →</button>
-            : <button type="button" className="btn btn-primary flex-1" onClick={() => setFinished(true)}>結果を見る</button>}
+            ? <button type="button" data-key="next" className={'btn flex-1 ' + (answeredHere ? 'btn-primary' : 'btn-ghost')} onClick={() => { setI(i + 1); window.scrollTo(0, 0); }}>次の問題 →</button>
+            : <button type="button" data-key="next" className="btn btn-primary flex-1" onClick={() => setFinished(true)}>結果を見る</button>}
         </div>
       </div>
     );
