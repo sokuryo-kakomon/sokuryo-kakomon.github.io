@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, QuestionIndex, Site } from '../../lib/types';
+import { showExam } from '../../lib/examui';
 import { $progress, $bookmarks, isWeak, resetProgress, summarize, makeBackup, mergeBackup } from '../../store/progress';
 import { $ox } from '../../store/drill';
 
@@ -53,7 +54,7 @@ export default function ProgressDashboard() {
       {hasHoshi && (
         <div className="inline-grid grid-cols-2 gap-1 p-1 rounded-dojo bg-paper-deep text-sm">
           {(['shi', 'hoshi'] as Exam[]).map((e) => (
-            <button key={e} type="button" onClick={() => setExam(e)}
+            <button key={e} type="button" onClick={() => { setExam(e); showExam(e); }}
               className={'px-5 py-1.5 rounded-dojo ' + (exam === e ? 'bg-card text-ink font-bold shadow-sm' : 'text-ink-soft')}>
               {e === 'shi' ? '測量士' : '測量士補'}
             </button>

@@ -39,6 +39,8 @@ const url = site.url + path;
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet" />
   <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${site.adsenseClient}`} crossorigin="anonymous"></script>
   {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  {/* 演習・成績表など両方の試験で使うページで、?exam=hoshi なら横と上のメニューを測量士補にする（描く前に決める） */}
+  <script is:inline>if (/[?&]exam=hoshi(&|$)/.test(location.search)) document.documentElement.dataset.exam = 'hoshi';</script>
   <slot name="head" />
 </head>
 <body class="min-h-screen bg-paper text-ink font-sans">

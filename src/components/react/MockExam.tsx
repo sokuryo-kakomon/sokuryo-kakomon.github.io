@@ -5,6 +5,7 @@ import type { Exam, Question, QuestionIndex, Site } from '../../lib/types';
 import { $progress, isWeak, recordAnswer, type Progress } from '../../store/progress';
 import { $mogiTrial } from '../../store/drill';
 import { $aiCode, checkPaid, type PaidState } from '../../store/ai';
+import { showExam } from '../../lib/examui';
 
 // 模擬試験。過去問から本番と同じ分野の並び・同じ問題数・同じ時間で1回分を組み、最後にまとめて採点する。
 // 中身は「間違えた問題」を優先して選ぶ（直近で不正解 → 要復習 → 未回答 → 正解済みの古い順）。
@@ -75,7 +76,7 @@ export default function MockExam() {
     fetch('/data/index.json').then((r) => r.json()).then(setIndex);
     if (new URLSearchParams(location.search).get('exam') === 'hoshi') setExam('hoshi');
     // 途中で閉じた回があれば続きから
-    try { const saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved?.ids) { setRun(saved); setExam(saved.exam); } } catch { /* 無ければ新しく */ }
+    try { const saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved?.ids) { setRun(saved); setExam(saved.exam); showExam(saved.exam); } } catch { /* 無ければ新しく */ }
   }, []);
   useEffect(() => { checkPaid(code).then(setPaid); }, [code]);
   useEffect(() => { if (run && !graded) try { localStorage.setItem(KEY, JSON.stringify(run)); } catch { /* 保存できなくても続けられる */ } }, [run, graded]);
@@ -260,7 +261,7 @@ export default function MockExam() {
       <div className="card p-5">
         <div className="font-bold mb-2">試験</div>
         <div className="flex flex-wrap gap-2 mb-5">
-          {(['shi', 'hoshi'] as Exam[]).map((e) => <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); setCat('all'); }}>{EXAM[e].name}</button>)}
+          {(['shi', 'hoshi'] as Exam[]).map((e) => <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); setCat('all'); showExam(e); }}>{EXAM[e].name}</button>)}
         </div>
         <div className="font-bold mb-2">範囲</div>
         <div className="flex flex-wrap gap-2">

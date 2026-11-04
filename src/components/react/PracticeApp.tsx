@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, Question, QuestionIndex, Site } from '../../lib/types';
+import { showExam } from '../../lib/examui';
 import { $progress, $bookmarks, isWeak, toggleBookmark } from '../../store/progress';
 import QuestionCard from './QuestionCard';
 
@@ -180,7 +181,7 @@ export default function PracticeApp() {
         <div className="font-bold mb-2">試験</div>
         <div className="flex flex-wrap gap-2 mb-5">
           {(['shi', 'hoshi'] as Exam[]).filter((e) => index.some((x) => x.exam === e)).map((e) => (
-            <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); setYear('all'); }}>{EXAM_NAME[e]}</button>
+            <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); setYear('all'); showExam(e); }}>{EXAM_NAME[e]}</button>
           ))}
         </div>
         <div className="font-bold mb-2">年度</div>

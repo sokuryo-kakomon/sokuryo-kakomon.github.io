@@ -44,8 +44,9 @@ const exq = ex.id === 'shi' ? '' : 'exam=hoshi&';
     {next ? <a class="btn btn-ghost flex-1" href={next.url}>第{next.num}問 →</a> : <span class="btn btn-ghost flex-1 is-disabled">次の問題 →</span>}
   </nav>
   <div class="mt-4 text-center text-sm">
-    <a href={`/guide/${q.categorySlug}/`}>📚 「{q.category}」の分野別ガイドを読む</a>
-    <span class="mx-2 text-ink-faint">｜</span>
+    {/* 分野別ガイドは測量士向けしかない */}
+    {ex.id === 'shi' && <><a href={`/guide/${q.categorySlug}/`}>📚 「{q.category}」の分野別ガイドを読む</a>
+    <span class="mx-2 text-ink-faint">｜</span></>}
     <a href={`/practice/?${exq}cat=${q.categorySlug}`}>この分野を通しで解く</a>
   </div>
   <div class="mt-8"><AmazonBox /></div>
