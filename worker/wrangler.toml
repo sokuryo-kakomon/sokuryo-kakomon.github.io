@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 # 回数の数え（日付ごと）。初回は `npx wrangler kv namespace create LIMITS` で作り、出た id をここへ
 [[kv_namespaces]]
 binding = "LIMITS"
-id = "REPLACE_WITH_KV_ID"
+id = "a9f19529d06b4aaf9654f1b4e2442363"
 
 [vars]
 SITE_URL = "https://sokuryo-kakomon.com"
@@ -19,4 +19,4 @@ PAID_PER_DAY = "20"
 PAID_PER_MONTH = "200"
 # 秘密の値は `npx wrangler secret put 名前` で入れる（ここには書かない）:
 #   ANTHROPIC_API_KEY / STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET / TURNSTILE_SECRET
-STRIPE_PRICE_ID = "REPLACE_WITH_PRICE_ID"
+STRIPE_PRICE_ID = "price_1UXrTGAXzwRlMsAQxcassehy"
