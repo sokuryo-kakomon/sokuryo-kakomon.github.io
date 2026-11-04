@@ -4,7 +4,7 @@ import { EXAMS, categoriesOf, yearSpan } from '../lib/data';
 import type { Exam } from '../lib/types';
 
 // 測量士（/）と測量士補（/hoshi/）のトップの1画面目。
-// 見出し・ボタン・年度と分野の札だけを出し、長い説明は下の「このサイトについて」（slot）にたたむ。
+// 見出し・ボタン・年度と分野の札を1画面目に出し、説明（slot）はその下に開いたまま並べる。
 interface Props { exam: Exam; bg: string }
 const { exam, bg } = Astro.props;
 const ex = EXAMS[exam];
@@ -34,11 +34,9 @@ const tile = 'border border-line rounded-dojo text-ink no-underline hover:border
         ランダム10問を解く<span class="text-xs font-normal text-ink-soft">全年度から ›</span>
       </a>
       <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">年度で解く</h2>
-      <div class="grid grid-cols-5 gap-2 mb-6">
+      <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-6">
         {ys.map((y) => (
-          <a href={`${ex.base}/${y.id}/`} class={tile + ' text-center pt-2 pb-1.5 leading-tight'}>
-            <b class="block serif text-lg font-semibold">{y.short}</b><span class="text-[0.65rem] text-ink-soft">{y.label.replace('年度', '')}</span>
-          </a>
+          <a href={`${ex.base}/${y.id}/`} class={tile + ' text-center py-3 serif font-semibold'}>{y.label.replace('年度', '')}</a>
         ))}
       </div>
       <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">分野で解く</h2>
@@ -49,11 +47,8 @@ const tile = 'border border-line rounded-dojo text-ink no-underline hover:border
   </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4">
-  <details class="border-t border-line pt-4 text-ink-soft">
-    <summary class="cursor-pointer text-ink">このサイトについて</summary>
-    <div class="mt-6 space-y-10"><slot /></div>
-  </details>
+<section class="max-w-6xl mx-auto px-4 pb-6">
+  <div class="border-t border-line pt-10 space-y-10"><slot /></div>
 </section>
 
 <script define:vars={{ exam, name: ex.full }}>
