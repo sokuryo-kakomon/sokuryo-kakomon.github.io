@@ -26,6 +26,7 @@ const tile = 'border border-line rounded-dojo text-ink no-underline hover:border
         <a href="#" id="resume" class="text-ink-soft no-underline hover:text-moss" hidden>続きから ›</a>
       </div>
       <p class="text-sm text-ink-soft mt-4" id="countdown" title="例年の日程（5月第3日曜）からの推定"></p>
+      <a href="#about" class="lg:hidden inline-block mt-3 text-xs text-ink-soft no-underline">つかい方・解説について ↓</a>
     </div>
 
     <!-- 右のカード: ランダム10問・年度・分野（年度が主、分野は小さく） -->
@@ -33,10 +34,10 @@ const tile = 'border border-line rounded-dojo text-ink no-underline hover:border
       <a href={`/practice/?${exq}mode=random&n=10&go=1`} class="flex items-center justify-between rounded-dojo border border-moss px-4 py-3 mb-6 font-bold text-moss-deep no-underline hover:bg-moss-pale">
         ランダム10問を解く<span class="text-xs font-normal text-ink-soft">全年度から ›</span>
       </a>
-      <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">年度で解く</h2>
+      <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">年度で解く<span class="tracking-normal ml-2 text-ink-faint">（R＝令和・H＝平成）</span></h2>
       <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-6">
         {ys.map((y) => (
-          <a href={`${ex.base}/${y.id}/`} class={tile + ' text-center py-3 serif font-semibold'}>{y.label.replace('年度', '')}</a>
+          <a href={`${ex.base}/${y.id}/`} class={tile + ' text-center py-3 serif font-semibold text-lg'} title={y.label}>{y.short}</a>
         ))}
       </div>
       <h2 class="text-xs tracking-[0.2em] text-ink-soft font-normal mb-3">分野で解く</h2>
@@ -47,7 +48,7 @@ const tile = 'border border-line rounded-dojo text-ink no-underline hover:border
   </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4 pb-6">
+<section id="about" class="max-w-6xl mx-auto px-4 pb-6 scroll-mt-16">
   <div class="border-t border-line pt-10 space-y-10"><slot /></div>
 </section>
 
@@ -86,7 +87,9 @@ const tile = 'border border-line rounded-dojo text-ink no-underline hover:border
       const base = exam === 'hoshi' ? '/hoshi' : '';
       const n = Number(m[2]);
       const a = document.getElementById('resume');
+      const yr = m[1].toUpperCase().replace(/^([RH])0?/, '$1');
       a.href = n < 28 ? `${base}/${m[1]}/q${n + 1}/` : `${base}/${m[1]}/`;
+      a.textContent = n < 28 ? `続きから ${yr} 問${n + 1} ›` : `続きから ${yr} ›`;
       a.hidden = false;
     }
   } catch (e) { /* 記録が読めなければ出さない */ }
