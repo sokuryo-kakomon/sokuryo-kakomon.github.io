@@ -52,6 +52,23 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
     window.addEventListener('keydown', k);
     return () => window.removeEventListener('keydown', k);
   }, []);
+  // PC のキー操作: 1〜5（記号が a〜e の問題は a〜e も）で解答、Enter・→ で次の問題、← で前の問題（data-key の付いたボタンを押す）
+  const pickRef = useRef<(key: string) => void>(() => {});
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing || law || zoom) return;
+      const t = document.activeElement;
+      if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+      if (/^[1-5a-e]$/.test(e.key)) { pickRef.current(e.key); return; }
+      const dir = e.key === 'ArrowRight' || e.key === 'Enter' ? 'next' : e.key === 'ArrowLeft' ? 'prev' : null;
+      // Enter は押しているボタンの上ではそのボタンに任せる
+      if (!dir || (e.key === 'Enter' && t && /^(A|BUTTON|SUMMARY)$/.test(t.tagName))) return;
+      const b = document.querySelector<HTMLElement>(`[data-key="${dir}"]:not([disabled])`);
+      if (b) { e.preventDefault(); b.click(); }
+    };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, [law, zoom]);
 
   const answered = picked !== null;
   const ok = answered && picked === q.answer;
@@ -61,6 +78,11 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
     setRevealed(true);
     const rec = recordAnswer(q.id, v, q.answer);
     onAnswered?.(v === q.answer, rec);
+  };
+  pickRef.current = (key: string) => {
+    const c = q.choices.find((c) => c.key === key) ?? (/\d/.test(key) ? q.choices.find((c) => c.value === Number(key)) : undefined);
+    if (c) pick(c.value);
+    else if (q.choiceStyle === 'none' && /\d/.test(key)) pick(Number(key));
   };
   const cls = (v: number, extra = '') =>
     'choice' + extra + (answered ? (v === q.answer ? ' is-correct' : v === picked ? ' is-wrong' : ' is-muted') : '');
@@ -109,7 +131,7 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
       </div>
 
       <div className="mt-4">
-        <div className="text-sm font-bold text-moss-deep mb-1">👇 解答を選ぶ</div>
+        <div className="text-sm font-bold text-moss-deep mb-1">👇 解答を選ぶ<span className="hidden md:inline font-normal text-xs text-ink-faint ml-2">キー 1〜5 で選択・Enter で次へ</span></div>
         {q.choiceStyle === 'sentence' && q.choices.map((c) => (
           <button key={c.key} type="button" className={cls(c.value)} disabled={answered} onClick={() => pick(c.value)}>
             <span className="mark">{markText(c.value)}</span>
