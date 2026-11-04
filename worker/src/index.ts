@@ -44,8 +44,8 @@ interface Question {
 
 interface CodeRec { sub: string; customer: string; active: boolean; created: number }
 
-// 測量士は r07-q1、測量士補は h-r07-q1
-const QID = /^(h-)?r\d{2}-q\d{1,2}$/;
+// 測量士は r07-q1・h30-q1、測量士補は h-r07-q1・h-h30-q1
+const QID = /^(h-)?[rh]\d{2}-q\d{1,2}$/;
 const CODE = /^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/;
 const MAX_TURNS = 12;
 const MAX_CHARS = 800;
