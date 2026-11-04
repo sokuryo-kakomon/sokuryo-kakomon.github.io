@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, QuestionIndex, Site } from '../../lib/types';
-import { $progress, $bookmarks, isWeak, resetProgress, summarize } from '../../store/progress';
+import { $progress, $bookmarks, isWeak, resetProgress, summarize, makeBackup, mergeBackup } from '../../store/progress';
+import { $ox } from '../../store/drill';
 
 const S = siteJson as unknown as Site;
 
@@ -101,8 +102,37 @@ export default function ProgressDashboard() {
         </div>
       )}
 
+      <div className="card p-5">
+        <h2 className="text-lg mb-1">記録の書き出し・読み込み</h2>
+        <p className="text-sm text-ink-soft mb-3">記録はこの端末のブラウザにだけ保存しています。スマホを替える・別のブラウザで続けるときは、ここで書き出したファイルを移して読み込んでください。読み込むと、今の記録と合わせます（同じ問題は新しく解いた方を残します）。</p>
+        <div className="flex flex-wrap gap-2">
+          <button className="btn btn-ghost btn-sm" onClick={() => {
+            const blob = new Blob([JSON.stringify(makeBackup($ox.get()))], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `sokuryo-kiroku-${new Date().toLocaleDateString('sv-SE')}.json`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+          }}>書き出す</button>
+          <label className="btn btn-ghost btn-sm cursor-pointer">
+            読み込む
+            <input type="file" accept="application/json,.json" className="hidden" onChange={async (e) => {
+              const f = e.target.files?.[0];
+              e.target.value = '';
+              if (!f) return;
+              try {
+                const n = mergeBackup(JSON.parse(await f.text()), $ox.get(), (o) => $ox.set(o));
+                alert(`${n}問ぶんの記録を合わせました。`);
+              } catch (err) {
+                alert('読み込めませんでした。' + (err instanceof Error ? err.message : ''));
+              }
+            }} />
+          </label>
+        </div>
+      </div>
+
       <div className="text-right">
-        <button className="btn btn-ghost btn-sm text-shu" onClick={() => { if (confirm('学習記録をすべて消します。元に戻せません。よろしいですか？')) resetProgress(); }}>記録をすべて消す</button>
+        <button className="btn btn-ghost btn-sm text-shu" onClick={() => { if (confirm('学習記録をすべて消します。元に戻せません。よろしいですか？')) { resetProgress(); $ox.set({}); } }}>記録をすべて消す</button>
       </div>
     </div>
   );

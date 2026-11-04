@@ -19,7 +19,7 @@ export default function AiPlan() {
     });
   }, [code]);
 
-  if (!AI_ENDPOINT) return <p className="text-sm text-ink-soft">AI に質問は準備中です。</p>;
+  if (!AI_ENDPOINT) return <p className="text-sm text-ink-soft">有料プランは準備中です。</p>;
 
   const buy = async () => {
     setBusy(true); setMsg('');

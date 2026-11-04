@@ -74,3 +74,26 @@ export function summarize(ids: string[], prog: Progress) {
 export function onProgressChange(fn: (p: Progress) => void) {
   return $progress.listen(fn);
 }
+
+// 成績の書き出し・読み込み。記録は端末にしか無いので、機種変更や別のブラウザへ移すときに使う。
+// 読み込みは上書きでなく合わせる：同じ問題は新しく解いた方を残し、印・○× も合わせる。
+export interface Backup { app: 'sokuryo-kakomon'; v: 1; at: string; progress: Progress; bookmarks: string[]; ox?: Record<string, { at: number }> }
+
+export function makeBackup(ox: Record<string, { at: number }>): Backup {
+  return { app: 'sokuryo-kakomon', v: 1, at: new Date().toISOString(), progress: $progress.get(), bookmarks: $bookmarks.get(), ox };
+}
+
+function newer<T extends { at?: number }>(a: Record<string, T>, b: Record<string, T>) {
+  const out = { ...a };
+  for (const [k, v] of Object.entries(b)) if (!out[k] || (v.at ?? 0) > (out[k].at ?? 0)) out[k] = v;
+  return out;
+}
+
+// 戻り値は読み込んだ問題の数。形が違えば例外
+export function mergeBackup<O extends { at: number }>(b: Backup, ox: Record<string, O>, setOx: (o: Record<string, O>) => void): number {
+  if (b?.app !== 'sokuryo-kakomon' || typeof b.progress !== 'object') throw new Error('このサイトの書き出しファイルではありません。');
+  $progress.set(newer($progress.get(), b.progress));
+  $bookmarks.set([...new Set([...$bookmarks.get(), ...(b.bookmarks || [])])]);
+  if (b.ox) setOx(newer(ox, b.ox as Record<string, O>));
+  return Object.keys(b.progress).length;
+}
