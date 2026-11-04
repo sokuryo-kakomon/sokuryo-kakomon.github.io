@@ -1,4 +1,4 @@
-// 測量士 過去問ドリル の「AI に質問」中継サーバー（Cloudflare Workers）。
+// 測量士・測量士補 過去問ドリル の「AI に質問」中継サーバー（Cloudflare Workers）。
 //
 //   POST /ask       {qid, messages, code?, turnstile?} → Claude の答えを text/plain で少しずつ返す
 //   POST /checkout  → Stripe の支払い画面（月額980円）の URL
@@ -34,7 +34,7 @@ export interface Env {
 }
 
 interface Question {
-  id: string; yearLabel: string; num: number; category: string; answer: number;
+  id: string; title: string; yearLabel: string; num: number; category: string; answer: number;
   statementText: string;
   items: { key: string; text: string }[];
   choices: { key: string; text: string }[];
@@ -44,13 +44,14 @@ interface Question {
 
 interface CodeRec { sub: string; customer: string; active: boolean; created: number }
 
-const QID = /^r\d{2}-q\d{1,2}$/;
+// 測量士は r07-q1、測量士補は h-r07-q1
+const QID = /^(h-)?r\d{2}-q\d{1,2}$/;
 const CODE = /^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/;
 const MAX_TURNS = 12;
 const MAX_CHARS = 800;
 const FALLBACK_MODELS = new Set(['claude-opus-5-5', 'claude-opus-5', 'claude-fable-5-1']);
 
-const SYSTEM_RULES = `あなたは測量士試験（午前・択一式）の受験生を助ける先生です。
+const SYSTEM_RULES = `あなたは測量士試験・測量士補試験（択一式）の受験生を助ける先生です。
 下に示す1問について、受験生の質問に日本語で答えてください。
 
 答え方:
@@ -60,10 +61,10 @@ const SYSTEM_RULES = `あなたは測量士試験（午前・択一式）の受�
 - 解説に「規則の改正あり」とある問題は、今の規則と試験当時の規則の違いに触れる。
 - 計算は途中式を省かない。試験では関数表と貸与の電卓（√とメモリーが使える一般電卓）だけを使う前提で説明する。
 - 確かでないことは「確かではない」と言う。
-- この問題や測量士試験と関係のない依頼には、短く断ってこの問題の話に戻す。`;
+- この問題や測量士・測量士補試験と関係のない依頼には、短く断ってこの問題の話に戻す。`;
 
 function questionBlock(q: Question): string {
-  const lines = [`【${q.yearLabel} 午前 第${q.num}問（${q.category}）】`, '', q.statementText];
+  const lines = [`【${q.title}】`, '', q.statementText];
   if (q.items.length) lines.push('', ...q.items.map((i) => `${i.key}. ${i.text}`));
   if (q.choices.length) lines.push('', ...q.choices.map((c) => `${c.key}. ${c.text}`));
   // 表はセルを「|」で区切った行にして渡す

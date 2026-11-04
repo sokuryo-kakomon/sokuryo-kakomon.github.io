@@ -13,7 +13,7 @@ const qs = g.questionIds.map((id) => byId.get(id)!);
 const title = pageTitle(`${g.name}｜測量士試験 分野別ガイドと過去問${qs.length}問`);
 const jsonLd = {
   '@context': 'https://schema.org', '@type': 'Article', headline: `${g.name} ― 測量士試験 分野別ガイド`, description: g.description,
-  url: site.url + g.url, inLanguage: 'ja', author: { '@type': 'Person', name: '測量士 過去問ドリル 運営者' },
+  url: site.url + g.url, inLanguage: 'ja', author: { '@type': 'Person', name: '測量士・測量士補 過去問ドリル 運営者' },
 };
 ---
 <App title={title} description={g.description} path={g.url} ogType="article" jsonLd={jsonLd}>

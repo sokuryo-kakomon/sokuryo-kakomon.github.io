@@ -6,8 +6,11 @@ export interface Choice { key: string; html: string; text: string; value: number
 export interface Item { key: string | null; html: string; text: string }
 export interface Figure { src: string; essential: boolean }
 
+export type Exam = 'shi' | 'hoshi';
+
 export interface Question {
-  id: string;            // "r07-q1"
+  id: string;            // "r07-q1"（測量士補は "h-r07-q1"）
+  exam?: Exam;           // 無ければ測量士（questions.json は持たず、読み込み時に付ける）
   year: string;          // "r07"
   yearNum: number;
   yearLabel: string;     // "令和7年度"
@@ -35,7 +38,7 @@ export interface Question {
 }
 
 export interface QuestionIndex {
-  id: string; year: string; num: number; category: string; categorySlug: string; excerpt: string; url: string;
+  id: string; exam: Exam; year: string; num: number; category: string; categorySlug: string; excerpt: string; url: string;
 }
 
 export interface Year {
@@ -51,7 +54,7 @@ export interface LawRefs {
 }
 export interface Site {
   name: string; legacyName: string; url: string; adsenseClient: string; amazonTag: string;
-  years: Year[]; categories: Category[]; lawRefs: LawRefs;
+  years: Year[]; hoshiYears: Year[]; categories: Category[]; lawRefs: LawRefs;
   source: { name: string; url: string };
 }
 export interface Guide {

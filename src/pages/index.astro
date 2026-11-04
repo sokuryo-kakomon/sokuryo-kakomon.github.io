@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProgressBar from '../components/react/ProgressBar';
-import { SITE_NAME, SITE_TAGLINE, years, categories, questions, site } from '../lib/data';
+import ExamSelect from '../components/ExamSelect.astro';
+import { SITE_NAME, categories, shiQuestions, hoshiQuestions, site } from '../lib/data';
 
-const total = questions.length;
-const allIds = questions.map((q) => q.id);
+// トップは測量士（午前）。測量士補は /hoshi/
+const total = shiQuestions.length;
+const hoshiTotal = hoshiQuestions.length;
 const title = `${SITE_NAME}｜令和4〜8年 全問解説`;
 const description = `測量士 過去問（午前・択一式）令和4〜8年度 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
 const steps = [
@@ -38,6 +39,13 @@ const jsonLd = {
         <a href="/practice/" class="btn btn-primary text-lg px-8 py-3">演習を始める</a>
         <a href="/guide/" class="btn btn-ghost text-lg px-6 py-3">分野別ガイドを読む</a>
       </div>
+      {hoshiTotal > 0 && (
+        <a href="/hoshi/" class="card no-underline text-ink flex items-center gap-4 p-4 mb-6 max-w-xl hover:bg-paper-deep/60">
+          <span class="serif text-3xl text-moss">補</span>
+          <span class="min-w-0 flex-1"><b>測量士補試験</b>の過去問 {hoshiTotal}問も解説つきで解けます<span class="block text-xs text-ink-soft">令和4〜8年度・同じ使い方・成績も一緒に記録</span></span>
+          <span class="text-moss">→</span>
+        </a>
+      )}
       <div class="text-sm text-ink-soft" id="countdown"></div>
       <div class="flex flex-wrap gap-2 mt-6 text-sm">
         {['登録不要・無料', `全${total}問に詳細解説`, '成績を自動記録', '条文をタップで参照'].map((t) => (
@@ -60,46 +68,7 @@ const jsonLd = {
   </section>
 
   <!-- 演習を選ぶ -->
-  <section id="select" class="bg-paper-deep/50 border-y border-line scroll-mt-16">
-    <div class="max-w-6xl mx-auto px-4 py-14">
-      <div class="text-center mb-8">
-        <div class="eyebrow mb-2">演習を選ぶ</div>
-        <h2 class="text-3xl">年度別・分野別</h2>
-      </div>
-      <div class="card p-4 max-w-xl mx-auto mb-8"><ProgressBar client:load ids={allIds} label="あなたの進捗（この端末）" /></div>
-
-      <h3 class="text-lg mb-3">年度別に通しで解く</h3>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-        {years.map((y) => (
-          <article class="card p-5 flex flex-col">
-            <h4 class="serif text-xl">{y.label}</h4>
-            <div class="text-xs text-ink-soft mb-3">{y.examDate}実施 ・ 全{y.count}問</div>
-            <a href={`/practice/?year=${y.id}`} class="btn btn-primary btn-sm mb-2">この年度を解く</a>
-            <div class="flex gap-3 text-xs mt-auto">
-              <a href={`/${y.id}/`}>問題一覧</a>
-              {y.pdf.questions && <a href={y.pdf.questions} target="_blank" rel="noopener">公式問題PDF</a>}
-              {y.pdf.answers && <a href={y.pdf.answers} target="_blank" rel="noopener">公式解答PDF</a>}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <h3 class="text-lg mb-3">分野別に固める</h3>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map((c) => (
-          <article class="card p-4 flex items-center gap-3">
-            <span class="text-2xl">{c.icon}</span>
-            <div class="min-w-0 flex-1">
-              <div class="font-bold">{c.name}</div>
-              <div class="text-xs text-ink-soft">{c.count}問 ・ {Math.round((c.count / total) * 100)}%</div>
-            </div>
-            <a href={`/practice/?cat=${c.slug}`} class="btn btn-primary btn-sm">解く</a>
-            <a href={`/guide/${c.slug}/`} class="btn btn-ghost btn-sm">ガイド</a>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+  <ExamSelect exam="shi" />
 
   <!-- つかい方 -->
   <section id="howto" class="max-w-6xl mx-auto px-4 py-14 scroll-mt-16">

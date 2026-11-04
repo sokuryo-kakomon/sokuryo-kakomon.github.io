@@ -39,7 +39,7 @@ function useTurnstile(enabled: boolean) {
 }
 
 export function buildPrompt(q: Question) {
-  const lines = [`【測量士試験 ${q.yearLabel} 午前 第${q.num}問（${q.category}）】`, '', q.statementText, ''];
+  const lines = [`【${q.title}】`, '', q.statementText, ''];
   if (q.items.length) { lines.push(...q.items.map((i) => `${i.key}. ${i.text}`)); lines.push(''); }
   if (q.choices.length) lines.push(...q.choices.map((c) => `${c.key}. ${c.text}`));
   lines.push('', `正解：${q.answer}`, '',
