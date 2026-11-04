@@ -24,7 +24,7 @@ const jsonLd = {
     <div class="relative max-w-6xl mx-auto px-4 pt-14 pb-12 md:pt-24 md:pb-20">
       <ExamTabs exam="hoshi" />
       <div class="eyebrow mb-4">測量士補試験（択一式）対策</div>
-      <h1 class="text-4xl md:text-6xl leading-tight mb-5">測量士補の過去問を、<br />解説つきで。</h1>
+      <h1 class="text-4xl md:text-6xl leading-tight mb-5">解くたびに、<br class="md:hidden" />腑に落ちる。</h1>
       <p class="max-w-2xl text-lg text-ink-soft leading-relaxed mb-7">
         令和4〜8年度の全{total}問を、「なぜその答えになるのか」まで解説。解答を選ぶとその場で判定、成績は自動で記録。登録不要、すべて無料で使えます。
       </p>
@@ -33,6 +33,11 @@ const jsonLd = {
         <a href="#select" class="btn btn-ghost text-lg px-6 py-3">年度・分野を選ぶ</a>
       </div>
       <div class="text-sm text-ink-soft" id="countdown"></div>
+      <div class="flex flex-wrap gap-2 mt-6 text-sm">
+        {['登録不要・無料', `全${total}問に詳細解説`, '成績を自動記録', '条文をタップで参照'].map((t) => (
+          <span class="px-3 py-1 rounded-full bg-card border border-line">{t}</span>
+        ))}
+      </div>
     </div>
   </section>
 
