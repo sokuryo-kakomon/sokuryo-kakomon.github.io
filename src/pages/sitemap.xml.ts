@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { questions, guides, site } from '../lib/data';
+import { questions, hoshiQuestions, guides, site } from '../lib/data';
 
 // Search Console に登録済みの /sitemap.xml をそのまま使い続ける。
 // 成績表は個人の記録なので載せない。
@@ -7,6 +7,8 @@ export const GET: APIRoute = () => {
   const urls = [
     '/', '/practice/', '/guide/', '/about/', '/privacy/', '/ai/', '/tokushoho/',
     ...site.years.map((y) => `/${y.id}/`),
+    ...(hoshiQuestions.length ? ['/hoshi/'] : []),
+    ...site.hoshiYears.filter((y) => hoshiQuestions.some((q) => q.year === y.id)).map((y) => `/hoshi/${y.id}/`),
     ...guides.guides.map((g) => g.url),
     ...questions.map((q) => q.url),
   ];

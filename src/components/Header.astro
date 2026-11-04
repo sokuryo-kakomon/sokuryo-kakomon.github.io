@@ -1,11 +1,11 @@
 ---
-import { SITE_NAME } from '../lib/data';
+import { SITE_NAME, examOfPath } from '../lib/data';
 interface Props { withSidebar?: boolean }
 const { withSidebar = false } = Astro.props;
 const path = Astro.url.pathname;
 const nav = [
   { href: '/practice/', label: '演習', mobile: true },
-  { href: '/#select', label: '年度・分野', mobile: false },
+  { href: examOfPath(path) === 'hoshi' ? '/hoshi/#select' : '/#select', label: '年度・分野', mobile: false },
   { href: '/guide/', label: 'ガイド', mobile: true },
   { href: '/progress/', label: '成績表', mobile: true },
 ];
@@ -14,15 +14,20 @@ const nav = [
   <div class="max-w-6xl mx-auto px-4 h-14 flex items-center gap-2">
     {withSidebar && <button id="sb-toggle" type="button" class="lg:hidden btn btn-ghost btn-sm px-2.5" aria-label="メニュー">☰</button>}
     <a href="/" class="serif text-xl text-ink no-underline flex items-baseline gap-2 min-w-0">
-      <span class="whitespace-nowrap">{SITE_NAME}</span>
-      <span class="hidden sm:inline text-[.72rem] text-ink-soft font-sans font-normal tracking-wider">午前択一 5年分140問の演習と解説</span>
+      <span class="hidden md:inline whitespace-nowrap">{SITE_NAME}</span>
+      {/* スマホでは名前が長く右のメニューにかぶるので2段にする */}
+      <span class="md:hidden flex flex-col leading-tight whitespace-nowrap">
+        <span class="text-[.7rem] font-sans tracking-wider text-ink-soft">測量士・測量士補</span>
+        <span class="text-lg">過去問ドリル</span>
+      </span>
+      <span class="hidden lg:inline text-[.72rem] text-ink-soft font-sans font-normal tracking-wider">過去問 5年分の演習と解説</span>
     </a>
     <nav class="ml-auto flex items-center gap-0.5 text-sm">
       {nav.map((n) => (
         <a href={n.href}
           class={'px-2.5 py-1.5 rounded-dojo no-underline text-ink hover:bg-paper-deep whitespace-nowrap'
             + (n.mobile ? '' : ' hidden sm:inline')
-            + (n.href !== '/#select' && path.startsWith(n.href) ? ' font-bold text-moss-deep' : '')}>{n.label}</a>
+            + (!n.href.endsWith('#select') && path.startsWith(n.href) ? ' font-bold text-moss-deep' : '')}>{n.label}</a>
       ))}
     </nav>
   </div>
