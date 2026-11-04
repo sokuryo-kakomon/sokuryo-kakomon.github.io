@@ -1,4 +1,5 @@
 ---
+import ExamTabs from '../../components/ExamTabs.astro';
 import Base from '../../layouts/Base.astro';
 import ExamSelect from '../../components/ExamSelect.astro';
 import { SITE_NAME, hoshiQuestions, shiQuestions, site } from '../../lib/data';
@@ -21,7 +22,7 @@ const jsonLd = {
   <section class="relative overflow-hidden">
     <div class="absolute -right-10 -top-16 text-[22rem] leading-none serif text-paper-deep select-none pointer-events-none" aria-hidden="true">補</div>
     <div class="relative max-w-6xl mx-auto px-4 pt-14 pb-12 md:pt-24 md:pb-20">
-      <nav class="text-sm text-ink-soft mb-4"><a href="/">トップ</a> ／ 測量士補</nav>
+      <ExamTabs exam="hoshi" />
       <div class="eyebrow mb-4">測量士補試験（択一式）対策</div>
       <h1 class="text-4xl md:text-6xl leading-tight mb-5">測量士補の過去問を、<br />解説つきで。</h1>
       <p class="max-w-2xl text-lg text-ink-soft leading-relaxed mb-7">
