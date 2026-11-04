@@ -104,6 +104,9 @@
   .choice.is-correct .mark { background: var(--color-moss); border-color: var(--color-moss); color: #fff; }
   .choice.is-wrong { border-color: var(--color-shu); background: var(--color-shu-pale); }
   .choice.is-wrong .mark { background: var(--color-shu); border-color: var(--color-shu); color: #fff; }
+  /* 模擬試験：選んだ肢（正誤はまだ出さない） */
+  .choice.is-picked { border-color: var(--color-ai); background: var(--color-ai-pale); }
+  .choice.is-picked .mark { background: var(--color-ai); border-color: var(--color-ai); color: #fff; }
   .choice.is-muted { opacity: .55; }
   .choice-combo { width: auto; display: inline-flex; padding: .45rem .9rem; margin: .25rem .35rem .25rem 0; }
   .choice-num { width: 3.2rem; justify-content: center; font-family: var(--font-serif); font-size: 1.2rem; }

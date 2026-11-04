@@ -5,7 +5,7 @@ import { questions, hoshiQuestions, guides, site } from '../lib/data';
 // 成績表は個人の記録なので載せない。
 export const GET: APIRoute = () => {
   const urls = [
-    '/', '/practice/', '/guide/', '/about/', '/privacy/', '/ai/', '/tokushoho/',
+    '/', '/practice/', '/mogi/', '/ox/', '/guide/', '/about/', '/privacy/', '/ai/', '/tokushoho/',
     ...site.years.map((y) => `/${y.id}/`),
     ...(hoshiQuestions.length ? ['/hoshi/'] : []),
     ...site.hoshiYears.filter((y) => hoshiQuestions.some((q) => q.year === y.id)).map((y) => `/hoshi/${y.id}/`),
