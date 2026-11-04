@@ -1,32 +1,50 @@
 import questionsJson from '../data/questions.json';
+import hoshiJson from '../data/questions_hoshi.json';
 import siteJson from '../data/site.json';
 import guidesJson from '../data/guides.json';
 import pagesJson from '../data/pages.json';
-import type { Question, Site, Guides, StaticPage, QuestionIndex } from './types';
+import type { Question, Site, Guides, StaticPage, QuestionIndex, Exam, Year, Category } from './types';
 
 // サーバー側（ビルド時）専用。React の island からは import しない
 // （questions.json は 700KB あり、クライアントへ丸ごと送りたくない）。
 
-export const SITE_NAME = '測量士 過去問ドリル';
-export const SITE_TAGLINE = '測量士試験（午前・択一）5年分140問の演習と解説';
+export const SITE_NAME = '測量士・測量士補 過去問ドリル';
+export const SITE_TAGLINE = '測量士・測量士補試験の過去問 5年分の演習と解説';
 
-export const questions = questionsJson as Question[];
 export const site = siteJson as Site;
 export const guides = guidesJson as Guides;
 export const pages = pagesJson as Record<'about' | 'privacy', StaticPage>;
 
+// 測量士（午前）は旧サイトから続く /r07/q1/、測量士補は /hoshi/r07/q1/。
+export const shiQuestions = (questionsJson as Question[]).map((q) => ({ ...q, exam: 'shi' as const }));
+export const hoshiQuestions = (hoshiJson as Question[]).map((q) => ({ ...q, exam: 'hoshi' as const }));
+export const questions: Question[] = [...shiQuestions, ...hoshiQuestions];
+
+export interface ExamInfo {
+  id: Exam; name: string; full: string; base: string; part: string; years: Year[]; questions: Question[];
+}
+export const EXAMS: Record<Exam, ExamInfo> = {
+  shi: { id: 'shi', name: '測量士', full: '測量士試験', base: '', part: '午前（択一式）', years: site.years, questions: shiQuestions },
+  hoshi: { id: 'hoshi', name: '測量士補', full: '測量士補試験', base: '/hoshi', part: '択一式', years: site.hoshiYears, questions: hoshiQuestions },
+};
+export const examOfPath = (path: string): Exam => (path.startsWith('/hoshi') ? 'hoshi' : 'shi');
+
+// 測量士の名前のまま使っている所が多いので、years / categories は測量士のもの
 export const years = site.years;
 export const categories = site.categories;
 export const byId = new Map(questions.map((q) => [q.id, q]));
 
-export const ofYear = (y: string) => questions.filter((q) => q.year === y);
-export const ofCategory = (slug: string) => questions.filter((q) => q.categorySlug === slug);
-export const yearById = (y: string) => years.find((x) => x.id === y)!;
+export const ofYear = (y: string, exam: Exam = 'shi') => EXAMS[exam].questions.filter((q) => q.year === y);
+export const ofCategory = (slug: string, exam: Exam = 'shi') => EXAMS[exam].questions.filter((q) => q.categorySlug === slug);
+export const yearById = (y: string, exam: Exam = 'shi') => EXAMS[exam].years.find((x) => x.id === y)!;
 export const categoryBySlug = (s: string) => categories.find((c) => c.slug === s);
+// 分野ごとの問題数（試験ごと）。site.json の count は測量士のもの
+export const categoriesOf = (exam: Exam): Category[] =>
+  categories.map((c) => ({ ...c, count: EXAMS[exam].questions.filter((q) => q.categorySlug === c.slug).length }));
 
 export function toIndex(q: Question): QuestionIndex {
   return {
-    id: q.id, year: q.year, num: q.num, category: q.category, categorySlug: q.categorySlug,
+    id: q.id, exam: q.exam ?? 'shi', year: q.year, num: q.num, category: q.category, categorySlug: q.categorySlug,
     excerpt: q.statementText.slice(0, 64), url: q.url,
   };
 }

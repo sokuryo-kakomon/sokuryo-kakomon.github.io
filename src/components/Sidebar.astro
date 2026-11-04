@@ -1,19 +1,32 @@
 ---
-import { years, categories, questions } from '../lib/data';
+import { EXAMS, categoriesOf, examOfPath } from '../lib/data';
 import ProgressBar from './react/ProgressBar';
 import AmazonBox from './AmazonBox.astro';
 const path = Astro.url.pathname;
-const allIds = questions.map((q) => q.id);
+// /hoshi/ 以下は測量士補、それ以外は測量士の年度・分野を出す
+const exam = examOfPath(path);
+const ex = EXAMS[exam];
+const ids = ex.questions.map((q) => q.id);
+const ys = ex.years.filter((y) => ex.questions.some((q) => q.year === y.id));
+const cats = categoriesOf(exam).filter((c) => c.count > 0);
+const exq = exam === 'shi' ? '' : '?exam=hoshi';
+const hasHoshi = EXAMS.hoshi.questions.length > 0;
 const active = (h: string) => path === h || (h !== '/' && path.startsWith(h));
 ---
 <aside class="sidebar bg-paper lg:bg-transparent w-72 shrink-0 p-4 lg:p-0 lg:sticky lg:top-20">
-  <div class="card p-4 mb-4"><ProgressBar client:load ids={allIds} label="全体の進捗" compact /></div>
-  <a href="/practice/" class="btn btn-primary w-full mb-5">演習を始める</a>
+  {hasHoshi && (
+    <div class="grid grid-cols-2 gap-1 p-1 mb-4 rounded-dojo bg-paper-deep text-sm">
+      <a href="/" class={'text-center py-1.5 rounded-dojo no-underline ' + (exam === 'shi' ? 'bg-card text-ink font-bold shadow-sm' : 'text-ink-soft')}>測量士</a>
+      <a href="/hoshi/" class={'text-center py-1.5 rounded-dojo no-underline ' + (exam === 'hoshi' ? 'bg-card text-ink font-bold shadow-sm' : 'text-ink-soft')}>測量士補</a>
+    </div>
+  )}
+  <div class="card p-4 mb-4"><ProgressBar client:load ids={ids} label={`${ex.name}の進捗`} compact /></div>
+  <a href={`/practice/${exq}`} class="btn btn-primary w-full mb-5">演習を始める</a>
 
   <div class="text-xs tracking-widest text-ink-faint px-2 mb-1">年度別</div>
   <div class="space-y-0.5">
-    {years.map((y) => (
-      <a href={`/${y.id}/`} class={'sb-link' + (active(`/${y.id}/`) ? ' is-active' : '')}>
+    {ys.map((y) => (
+      <a href={`${ex.base}/${y.id}/`} class={'sb-link' + (active(`${ex.base}/${y.id}/`) ? ' is-active' : '')}>
         <span>{y.label}</span><span class="sb-count">{y.count}問</span>
       </a>
     ))}
@@ -21,7 +34,7 @@ const active = (h: string) => path === h || (h !== '/' && path.startsWith(h));
 
   <div class="text-xs tracking-widest text-ink-faint px-2 mt-5 mb-1">分野別</div>
   <div class="space-y-0.5">
-    {categories.map((c) => (
+    {cats.map((c) => (
       <a href={`/guide/${c.slug}/`} class={'sb-link' + (active(`/guide/${c.slug}/`) ? ' is-active' : '')}>
         <span>{c.icon} {c.name}</span><span class="sb-count">{c.count}問</span>
       </a>

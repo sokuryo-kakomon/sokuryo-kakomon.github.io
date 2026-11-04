@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
-import type { Question, QuestionIndex, Site } from '../../lib/types';
+import type { Exam, Question, QuestionIndex, Site } from '../../lib/types';
 import { $progress, $bookmarks, isWeak, toggleBookmark } from '../../store/progress';
 import QuestionCard from './QuestionCard';
 
@@ -9,6 +9,8 @@ import QuestionCard from './QuestionCard';
 // 問題本文は /data/q/<id>.json を1問ずつ取りに行く（全140問を最初に読むと約900KBになるため）。
 
 const S = siteJson as unknown as Site;
+const EXAM_NAME: Record<Exam, string> = { shi: '測量士（午前）', hoshi: '測量士補' };
+const yearsOf = (e: Exam) => (e === 'hoshi' ? S.hoshiYears : S.years);
 type Mode = 'order' | 'random' | 'unanswered' | 'wrong' | 'weak' | 'bookmark';
 const MODES: { v: Mode; label: string; hint: string }[] = [
   { v: 'order', label: '出題順', hint: '年度・問番号の順に' },
@@ -27,6 +29,7 @@ function shuffle<T>(a: T[]) {
 
 export default function PracticeApp() {
   const [index, setIndex] = useState<QuestionIndex[] | null>(null);
+  const [exam, setExam] = useState<Exam>('shi');
   const [year, setYear] = useState('all');
   const [cat, setCat] = useState('all');
   const [mode, setMode] = useState<Mode>('order');
@@ -42,6 +45,7 @@ export default function PracticeApp() {
   useEffect(() => {
     fetch('/data/index.json').then((r) => r.json()).then(setIndex);
     const p = new URLSearchParams(location.search);
+    if (p.get('exam') === 'hoshi') setExam('hoshi');
     if (p.get('year')) setYear(p.get('year')!);
     if (p.get('cat')) setCat(p.get('cat')!);
     const m = p.get('mode') as Mode | null;
@@ -51,6 +55,7 @@ export default function PracticeApp() {
   const filtered = useMemo(() => {
     if (!index) return [];
     return index.filter((x) =>
+      x.exam === exam &&
       (year === 'all' || x.year === year) &&
       (cat === 'all' || x.categorySlug === cat) &&
       (mode === 'unanswered' ? !prog[x.id]?.answered
@@ -58,7 +63,7 @@ export default function PracticeApp() {
         : mode === 'weak' ? isWeak(prog[x.id])
         : mode === 'bookmark' ? bms.includes(x.id)
         : true));
-  }, [index, year, cat, mode, prog, bms]);
+  }, [index, exam, year, cat, mode, prog, bms]);
 
   const start = () => {
     let ids = filtered.map((x) => x.id);
@@ -122,7 +127,7 @@ export default function PracticeApp() {
             <ul className="divide-y divide-line">
               {wrong.map((x) => (
                 <li key={x.id} className="py-2 text-sm flex gap-3">
-                  <a href={x.url} className="font-bold shrink-0 no-underline">{S.years.find((y) => y.id === x.year)?.short} 第{x.num}問</a>
+                  <a href={x.url} className="font-bold shrink-0 no-underline">{x.exam === 'hoshi' ? '補 ' : ''}{yearsOf(x.exam).find((y) => y.id === x.year)?.short} 第{x.num}問</a>
                   <span className="text-ink-soft min-w-0 truncate">{x.excerpt}</span>
                 </li>
               ))}
@@ -149,7 +154,7 @@ export default function PracticeApp() {
         </div>
         {cur ? (
           <>
-            <div className="text-sm text-ink-soft">{cur.yearLabel} 第{cur.num}問 ・ {cur.categoryIcon} {cur.category} ・ <a href={cur.url}>この問題のページ</a></div>
+            <div className="text-sm text-ink-soft">{cur.exam === 'hoshi' ? '測量士補 ' : ''}{cur.yearLabel} 第{cur.num}問 ・ {cur.categoryIcon} {cur.category} ・ <a href={cur.url}>この問題のページ</a></div>
             <QuestionCard q={cur} lawRefs={S.lawRefs} mode="practice" onAnswered={(ok) => setResults((r) => ({ ...r, [id]: ok }))} />
           </>
         ) : (
@@ -172,15 +177,21 @@ export default function PracticeApp() {
   return (
     <div className="space-y-5">
       <div className="card p-5">
+        <div className="font-bold mb-2">試験</div>
+        <div className="flex flex-wrap gap-2 mb-5">
+          {(['shi', 'hoshi'] as Exam[]).filter((e) => index.some((x) => x.exam === e)).map((e) => (
+            <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); setYear('all'); }}>{EXAM_NAME[e]}</button>
+          ))}
+        </div>
         <div className="font-bold mb-2">年度</div>
         <div className="flex flex-wrap gap-2">
           <button className={sel + (year === 'all' ? on : off)} onClick={() => setYear('all')}>すべて</button>
-          {S.years.map((y) => <button key={y.id} className={sel + (year === y.id ? on : off)} onClick={() => setYear(y.id)}>{y.label}</button>)}
+          {yearsOf(exam).filter((y) => index.some((x) => x.exam === exam && x.year === y.id)).map((y) => <button key={y.id} className={sel + (year === y.id ? on : off)} onClick={() => setYear(y.id)}>{y.label}</button>)}
         </div>
         <div className="font-bold mt-5 mb-2">分野</div>
         <div className="flex flex-wrap gap-2">
           <button className={sel + (cat === 'all' ? on : off)} onClick={() => setCat('all')}>すべて</button>
-          {S.categories.map((c) => <button key={c.slug} className={sel + (cat === c.slug ? on : off)} onClick={() => setCat(c.slug)}>{c.icon} {c.name}</button>)}
+          {S.categories.filter((c) => index.some((x) => x.exam === exam && x.categorySlug === c.slug)).map((c) => <button key={c.slug} className={sel + (cat === c.slug ? on : off)} onClick={() => setCat(c.slug)}>{c.icon} {c.name}</button>)}
         </div>
         <div className="font-bold mt-5 mb-2">出し方</div>
         <div className="flex flex-wrap gap-2">
