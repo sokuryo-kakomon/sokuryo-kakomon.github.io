@@ -1,7 +1,7 @@
 ---
 import App from '../layouts/App.astro';
 import QuestionCard from './react/QuestionCard';
-import AmazonBox from './AmazonBox.astro';
+import BookNote from './BookNote.astro';
 import { byId, site, SITE_NAME, EXAMS } from '../lib/data';
 import type { Question } from '../lib/types';
 
@@ -37,6 +37,7 @@ const exq = ex.id === 'shi' ? '' : 'exam=hoshi&';
   <h1 class="text-xl md:text-2xl mb-4 leading-snug">{q.title}<span class="block text-sm font-sans font-normal text-ink-soft mt-1">解答と解説</span></h1>
 
   <QuestionCard client:load q={q} lawRefs={site.lawRefs} />
+  <BookNote q={q} />
 
   <nav class="flex justify-between gap-3 mt-6">
     {prev ? <a class="btn btn-ghost flex-1" data-key="prev" href={prev.url}>← 第{prev.num}問</a> : <span class="btn btn-ghost flex-1 is-disabled">← 前の問題</span>}
@@ -49,5 +50,4 @@ const exq = ex.id === 'shi' ? '' : 'exam=hoshi&';
     <span class="mx-2 text-ink-faint">｜</span></>}
     <a href={`/practice/?${exq}cat=${q.categorySlug}`}>この分野を通しで解く</a>
   </div>
-  <div class="mt-8"><AmazonBox /></div>
 </App>
