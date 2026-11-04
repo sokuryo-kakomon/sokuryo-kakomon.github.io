@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useStore } from '@nanostores/react';
 import type { Question } from '../../lib/types';
 import { $aiCode, AI_ENDPOINT } from '../../store/ai';
@@ -49,6 +49,50 @@ export function buildPrompt(q: Question) {
 }
 
 type Msg = { role: 'user' | 'assistant'; content: string };
+
+// AI の答えの簡単な Markdown（見出し・箇条書き・太字・表）を表示用に組み立てる。HTML は通さない。
+function inline(s: string) {
+  return s.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((t, i) =>
+    t.startsWith('**') && t.endsWith('**') && t.length > 4 ? <strong key={i} className="text-ink">{t.slice(2, -2)}</strong>
+      : t.startsWith('`') && t.endsWith('`') && t.length > 2 ? <code key={i} className="text-[.85em] bg-paper px-1 rounded">{t.slice(1, -1)}</code>
+        : t);
+}
+
+function Rich({ text }: { text: string }) {
+  const out: ReactNode[] = [];
+  const lines = text.split('\n');
+  for (let i = 0; i < lines.length;) {
+    const l = lines[i];
+    if (!l.trim()) { i++; continue; }
+    const h = l.match(/^#{1,4}\s+(.*)/);
+    if (h) { out.push(<div key={i} className="font-bold text-moss mt-3 mb-1 first:mt-0">{inline(h[1])}</div>); i++; continue; }
+    if (/^\s*([-*・]|\d+[.)])\s+/.test(l)) {
+      const ordered = /^\s*\d/.test(l);
+      const items: string[] = [];
+      while (i < lines.length && /^\s*([-*・]|\d+[.)])\s+/.test(lines[i])) items.push(lines[i++].replace(/^\s*([-*・]|\d+[.)])\s+/, ''));
+      const Tag = ordered ? 'ol' : 'ul';
+      out.push(<Tag key={i} className={(ordered ? 'list-decimal' : 'list-disc') + ' pl-5 my-1.5 space-y-1 marker:text-moss'}>
+        {items.map((t, k) => <li key={k}>{inline(t)}</li>)}</Tag>);
+      continue;
+    }
+    if (l.trim().startsWith('|')) {
+      const rows: string[][] = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        const cells = lines[i++].trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
+        if (!cells.every((c) => /^:?-+:?$/.test(c))) rows.push(cells);
+      }
+      out.push(<div key={i} className="overflow-x-auto my-2"><table className="text-xs border-collapse">
+        <tbody>{rows.map((r, k) => <tr key={k}>{r.map((c, m) =>
+          k === 0 ? <th key={m} className="border border-line px-2 py-1 bg-paper">{inline(c)}</th>
+            : <td key={m} className="border border-line px-2 py-1">{inline(c)}</td>)}</tr>)}</tbody></table></div>);
+      continue;
+    }
+    const para: string[] = [];
+    while (i < lines.length && lines[i].trim() && !/^(#{1,4}\s|\s*([-*・]|\d+[.)])\s|\s*\|)/.test(lines[i])) para.push(lines[i++]);
+    out.push(<p key={i} className="my-1.5 first:mt-0">{para.map((t, k) => <span key={k}>{k > 0 && <br />}{inline(t)}</span>)}</p>);
+  }
+  return <>{out}</>;
+}
 
 function suggestions(q: Question) {
   const s = ['この問題のポイントを3行で', '解説の分からない所をもっと噛み砕いて'];
@@ -120,10 +164,13 @@ function Chat({ q }: { q: Question }) {
         )}
         {msgs.map((m, i) => (
           <div key={i} className={m.role === 'user' ? 'text-right' : ''}>
-            <div className={'inline-block text-left text-sm whitespace-pre-wrap rounded-dojo px-3 py-2 max-w-[92%] ' +
-              (m.role === 'user' ? 'bg-moss-pale' : 'bg-paper border border-line')}>
-              {m.content || (busy && i === msgs.length - 1 ? '考えています…' : '')}
-            </div>
+            {m.role === 'user' ? (
+              <div className="inline-block text-left text-sm whitespace-pre-wrap rounded-dojo px-3 py-2 max-w-[92%] bg-moss-pale">{m.content}</div>
+            ) : (
+              <div className="text-left text-[.9rem] leading-relaxed text-ink bg-white border border-line border-l-4 border-l-moss rounded-dojo px-4 py-3">
+                {m.content ? <Rich text={m.content} /> : (busy && i === msgs.length - 1 ? <span className="text-ink-faint">考えています…</span> : '')}
+              </div>
+            )}
           </div>
         ))}
         <div ref={endRef} />
