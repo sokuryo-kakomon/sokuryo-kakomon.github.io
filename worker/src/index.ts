@@ -26,6 +26,7 @@ export interface Env {
   SITE_URL: string;
   ALLOWED_ORIGINS: string;
   AI_MODEL: string;
+  AI_MODEL_FREE: string;
   AI_EFFORT: string;
   FREE_PER_IP: string;
   FREE_TOTAL: string;
@@ -195,9 +196,11 @@ async function ask(req: Request, env: Env, h: Record<string, string>): Promise<R
   else await bump(env.LIMITS, `free:${day}`, 2);
   const remaining = String(Math.max(0, limitDay - n));
 
+  // 無料は Sonnet、有料（利用コードあり）は Opus
+  const model = plan === 'paid' ? env.AI_MODEL : env.AI_MODEL_FREE;
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
   const params = {
-    model: env.AI_MODEL,
+    model,
     max_tokens: 2500,
     output_config: { effort: env.AI_EFFORT as 'low' | 'medium' | 'high' },
     // 問題と解説（毎回同じ）を先頭に置いてキャッシュに乗せる。続く往復は messages 側
@@ -207,7 +210,7 @@ async function ask(req: Request, env: Env, h: Record<string, string>): Promise<R
     ],
     messages,
   };
-  const stream = FALLBACK_MODELS.has(env.AI_MODEL)
+  const stream = FALLBACK_MODELS.has(model)
     ? client.beta.messages.stream({ ...params, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' })
     : client.beta.messages.stream(params);
 
