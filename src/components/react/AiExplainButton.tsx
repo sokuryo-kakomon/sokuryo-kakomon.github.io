@@ -177,7 +177,7 @@ function Chat({ q }: { q: Question }) {
       </div>
       {notice && <p className="text-sm text-[#a33] mb-2">{notice}</p>}
       {upsell && (
-        <p className="text-sm mb-2"><a href="/ai/" className="btn btn-primary btn-sm no-underline">有料プラン（月980円・1日20回）を見る</a></p>
+        <p className="text-sm mb-2"><a href="/ai/" className="btn btn-primary btn-sm no-underline">有料プラン（月980円・より賢い AI・1日20回）を見る</a></p>
       )}
       <div ref={ts.box} />
       <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); ask(input); }}>
@@ -187,7 +187,7 @@ function Chat({ q }: { q: Question }) {
         <button className="btn btn-primary btn-sm" disabled={busy || full || !input.trim() || (ts.needed && !ts.token)}>送る</button>
       </form>
       <p className="text-[.7rem] text-ink-faint mt-2 leading-snug">
-        AI の答えは誤ることがあります。正解は国土地理院の発表が正です。{code ? '有料プラン' : <>無料は1日3回まで（<a href="/ai/">有料プラン</a>は1日20回）</>}{remaining !== null && `・今日の残り ${remaining} 回`}。質問の内容は回答の作成にだけ使い、保存しません。
+        AI の答えは誤ることがあります。正解は国土地理院の発表が正です。{code ? '有料プラン（最上位の AI が答えます）' : <>無料は標準の AI で1日3回まで（<a href="/ai/">有料プラン</a>は最上位の AI で1日20回）</>}{remaining !== null && `・今日の残り ${remaining} 回`}。質問の内容は回答の作成にだけ使い、保存しません。
       </p>
     </>
   );
