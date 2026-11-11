@@ -1,18 +1,21 @@
 ---
 import Base from '../../layouts/Base.astro';
 import TopHome from '../../components/TopHome.astro';
-import { SITE_NAME, hoshiQuestions, shiQuestions, site, yearSpan } from '../../lib/data';
+import { SITE_NAME, categoriesOf, hoshiQuestions, shiQuestions, site, yearSpan } from '../../lib/data';
 
-// 測量士補のトップ。使い方・記録の仕組みは測量士と同じ
+// 測量士補のトップ。並び・見た目は測量士のトップ（/）とそろえる
 const total = hoshiQuestions.length;
 const span = yearSpan('hoshi');
+const cats = categoriesOf('hoshi');
+const top4 = [...cats].sort((a, b) => b.count - a.count).slice(0, 4);
+const top4Share = Math.round(top4.reduce((s, c) => s + c.count, 0) / total * 10);
 const title = `測量士補 過去問 ${span.short} 全問解説｜${SITE_NAME}`;
 const description = `測量士補試験の過去問 ${span.long} 全${total}問を、途中の考え方まで書いた解説つきで演習できます。解答を選ぶと即判定、年度別・分野別の成績を自動記録。登録不要・無料。`;
-const features = [
-  { t: '「なぜ」まで書く解説', d: '公式に配布されるのは問題と正解番号だけ。誤りの選択肢も一つずつ、どこが・なぜ誤りかを示します。' },
-  { t: '計算は途中式を省かない', d: '関数電卓を使わず、問題に付く関数表と四則演算・√だけで解ける手順で書きます。' },
-  { t: '成績は端末に自動保存', d: '年度別・分野別の正答率、間違えた問題を成績表にまとめます。登録不要です。' },
-  { t: '合格したら測量士へ', d: `同じサイトで測量士（午前）の過去問 ${shiQuestions.length}問も解けます。記録もそのまま続きます。` },
+const steps = [
+  { n: '一', t: '年度か分野を選ぶ', d: '年度ごとに通しで解くか、苦手な分野だけ絞るか。未回答・要復習だけを出すこともできます。' },
+  { n: '二', t: '解答を選ぶ', d: '選択肢を押すとその場で正誤が出ます。結果は端末に自動で記録され、登録は要りません。' },
+  { n: '三', t: '解説を読む', d: '正解の理由だけでなく、誤りの選択肢が「どこが、なぜ」誤りかまで。計算は途中式を省かずに書いています。' },
+  { n: '四', t: '成績表で弱点を絞る', d: '年度別・分野別の正答率と、間違えた問題の一覧。要復習の問題だけをもう一度解けます。' },
 ];
 const jsonLd = {
   '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, url: site.url + '/hoshi/', description, inLanguage: 'ja',
@@ -20,16 +23,51 @@ const jsonLd = {
 ---
 <Base title={title} description={description} path="/hoshi/" jsonLd={jsonLd}>
   <TopHome exam="hoshi" bg="補">
-    <section>
-      <h2 class="text-2xl mb-4">このサイトの特長</h2>
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {features.map((f) => (
-          <div class="card p-5">
-            <h3 class="text-base mb-2 leading-snug">{f.t}</h3>
-            <p class="text-sm text-ink-soft leading-relaxed">{f.d}</p>
-          </div>
-        ))}
+  <!-- つかい方 -->
+  <section id="howto">
+    <h2 class="text-2xl mb-4">このサイトのつかい方</h2>
+    <ol class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {steps.map((s) => (
+        <li class="card p-5">
+          <div class="serif text-3xl text-moss mb-1">{s.n}</div>
+          <h3 class="text-base mb-1">{s.t}</h3>
+          <p class="text-sm text-ink-soft leading-relaxed">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 解説の方針 -->
+  <section>
+    <div class="card p-6 md:p-8 md:grid md:grid-cols-2 md:gap-10">
+      <div>
+        <h2 class="text-2xl mb-3">解説の書き方について</h2>
+        <p class="text-ink-soft leading-relaxed mb-3">
+          測量士補試験で公式に配布されるのは<b>問題と正解番号だけ</b>で、「なぜその答えになるのか」までは示されません。とくに計算問題は、正解の数字を見ただけでは自分の解き方のどこが間違っていたのか分かりません。当サイトは、その<b>途中の考え方</b>を一問ずつ書き残すことを目的に作っています。
+        </p>
+        <ul class="text-sm text-ink-soft leading-relaxed space-y-2 list-disc pl-5">
+          <li><b class="text-ink">正解以外の選択肢も説明します。</b>「どこが、なぜ誤りなのか」を選択肢ごとに書いています。誤りの選択肢を切れるようになることが、択一式では得点に直結します。</li>
+          <li><b class="text-ink">根拠の条文を示します。</b>法規の問題では、測量法や作業規程の準則の該当条文を明記し、その場で条文を確認できるようにしています。</li>
+          <li><b class="text-ink">関数電卓なしで解ける手順で書きます。</b>試験では関数電卓が使えないため、問題に付く関数表と四則演算・√だけで答えに届く手順に分けています。</li>
+          <li><b class="text-ink">合格したら測量士へ。</b>同じサイトで<a href="/">測量士（午前）の過去問 {shiQuestions.length}問</a>も解けます。成績の記録もそのまま続きます。</li>
+        </ul>
       </div>
-    </section>
+      <div class="mt-8 md:mt-0">
+        <h2 class="text-2xl mb-3">{span.n}年分{total}問の出題分野</h2>
+        <p class="text-sm text-ink-soft mb-3">当サイトの分類で集計したものです。分野の偏りをつかむ目安にしてください。</p>
+        <div class="qhtml"><div class="tbl-wrap"><table>
+          <thead><tr><th>分野</th><th class="text-right">問題数</th><th class="text-right">割合</th></tr></thead>
+          <tbody>
+            {cats.map((c) => (
+              <tr><td><a href={`/guide/${c.slug}/`} class="no-underline">{c.icon} {c.name}</a></td><td class="text-right">{c.count}問</td><td class="text-right">{(c.count / total * 100).toFixed(1)}%</td></tr>
+            ))}
+          </tbody>
+        </table></div></div>
+        <p class="text-sm text-ink-soft leading-relaxed mt-3">
+          <b class="text-ink">{top4.map((c) => c.name).join('、')}</b>の4分野で全体の約{top4Share}割を占めます。計算問題は解き方の型が決まっているため演習量がそのまま得点になり、<b class="text-ink">法規・測量の基準</b>は条文の言い回しを覚えているかで決まるので短時間で仕上げやすい分野です。
+        </p>
+      </div>
+    </div>
+  </section>
   </TopHome>
 </Base>
