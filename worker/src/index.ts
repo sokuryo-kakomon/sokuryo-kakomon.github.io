@@ -178,10 +178,9 @@ async function getCode(env: Env, code: unknown): Promise<CodeRec | null> {
 }
 
 // 同じ Stripe アカウントに3サイトの商品がある。支払いの印（metadata.site）がこのサイトの物かを見る。
-// 印の無い支払いは、印を付け始める前の測量士のものだけ。
+// 印の無い支払い（ここの登記簿など、同じアカウントの別の商売）は受けない。
 const siteKey = (env: Env) => env.SITE_KEY || 'sokuryo';
-const isMine = (env: Env, meta: Record<string, string> | null | undefined) =>
-  meta?.site ? meta.site === siteKey(env) : siteKey(env) === 'sokuryo';
+const isMine = (env: Env, meta: Record<string, string> | null | undefined) => meta?.site === siteKey(env);
 
 // 支払い1件につきコードは1つ。画面（/code）と webhook のどちらが先に来ても同じコードになる
 async function ensureCode(env: Env, subId: string, customer: string): Promise<string> {
