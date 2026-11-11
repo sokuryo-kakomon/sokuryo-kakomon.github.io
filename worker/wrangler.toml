@@ -14,10 +14,10 @@ ALLOWED_ORIGINS = "https://sokuryo-kakomon.com,http://127.0.0.1:4321,http://127.
 AI_MODEL = "claude-opus-5-5"
 AI_MODEL_FREE = "claude-sonnet-5-5"
 AI_EFFORT = "medium"
-FREE_PER_IP = "3"
-FREE_TOTAL = "100"
-PAID_PER_DAY = "20"
-PAID_PER_MONTH = "200"
+FREE_PER_IP = "2"
+FREE_TOTAL = "60"
+PAID_PER_DAY = "15"
+PAID_PER_MONTH = "90"
 # 秘密の値は `npx wrangler secret put 名前` で入れる（ここには書かない）:
 #   ANTHROPIC_API_KEY / STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET / TURNSTILE_SECRET
 STRIPE_PRICE_ID = "price_1UXsA0AStZo8t4laPGrmcfeW"
