@@ -21,3 +21,44 @@ PAID_PER_MONTH = "90"
 # 秘密の値は `npx wrangler secret put 名前` で入れる（ここには書かない）:
 #   ANTHROPIC_API_KEY / STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET / TURNSTILE_SECRET
 STRIPE_PRICE_ID = "price_1UXsA0AStZo8t4laPGrmcfeW"
+
+# ---- 宅建・行政書士（同じコードを別の Worker として出す。vars は env ごとに全部書く決まり）----
+# 出し方: npx.cmd wrangler deploy --env takken ／ --env gyosei
+# 秘密（env ごとに入れる）: npx.cmd wrangler secret put 名前 --env takken
+#   ANTHROPIC_API_KEY / STRIPE_SECRET_KEY（測量士と同じ Stripe アカウント）/ STRIPE_WEBHOOK_SECRET（Worker ごとに別）/ TURNSTILE_SECRET
+
+[env.takken]
+name = "takken-ai"
+[[env.takken.kv_namespaces]]
+binding = "LIMITS"
+id = "ed73b7fddf3a42f687b9dd3aca0fe2f9"
+[env.takken.vars]
+SITE_KEY = "takken"
+SITE_URL = "https://takken-kakomon-drill.com"
+ALLOWED_ORIGINS = "https://takken-kakomon-drill.com,http://127.0.0.1:4321,http://127.0.0.1:4322,http://localhost:4321,http://localhost:4322"
+AI_MODEL = "claude-opus-5-5"
+AI_MODEL_FREE = "claude-sonnet-5-5"
+AI_EFFORT = "medium"
+FREE_PER_IP = "2"
+FREE_TOTAL = "30"
+PAID_PER_DAY = "15"
+PAID_PER_MONTH = "90"
+STRIPE_PRICE_ID = "price_TAKKEN_KOKONI"
+
+[env.gyosei]
+name = "gyosei-ai"
+[[env.gyosei.kv_namespaces]]
+binding = "LIMITS"
+id = "bcaeb818f4234ab09da46e630efcad9f"
+[env.gyosei.vars]
+SITE_KEY = "gyosei"
+SITE_URL = "https://gyosei-kakomon-drill.com"
+ALLOWED_ORIGINS = "https://gyosei-kakomon-drill.com,http://127.0.0.1:4321,http://127.0.0.1:4322,http://localhost:4321,http://localhost:4322"
+AI_MODEL = "claude-opus-5-5"
+AI_MODEL_FREE = "claude-sonnet-5-5"
+AI_EFFORT = "medium"
+FREE_PER_IP = "2"
+FREE_TOTAL = "30"
+PAID_PER_DAY = "15"
+PAID_PER_MONTH = "90"
+STRIPE_PRICE_ID = "price_GYOSEI_KOKONI"

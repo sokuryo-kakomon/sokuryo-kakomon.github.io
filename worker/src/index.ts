@@ -1,4 +1,6 @@
-// 測量士・測量士補 過去問ドリル の「AI に質問」中継サーバー（Cloudflare Workers）。
+// 過去問ドリル（測量士・宅建・行政書士）の「AI に質問」中継サーバー（Cloudflare Workers）。
+// 同じコードを wrangler の env ごとに別の Worker として出す（KV・Stripe の商品・許可するサイトは別々）。
+// どのサイト用かは SITE_KEY（sokuryo / takken / gyosei）で決まる。
 //
 //   POST /ask       {qid, messages, code?, turnstile?} → Claude の答えを text/plain で少しずつ返す
 //   POST /checkout  → Stripe の支払い画面（月額980円）の URL
@@ -21,6 +23,7 @@ export interface Env {
   STRIPE_SECRET_KEY: string;
   STRIPE_WEBHOOK_SECRET: string;
   STRIPE_PRICE_ID: string;
+  SITE_KEY?: string;           // sokuryo（既定）/ takken / gyosei
   TURNSTILE_SECRET?: string;   // 無ければ人間の確認を飛ばす（手元の試験用）
   LIMITS: KVNamespace;
   SITE_URL: string;
@@ -41,30 +44,63 @@ interface Question {
   choices: { key: string; text: string }[];
   tablesHtml: string[];
   explanationText: string;
+  ok?: number[];                                  // 正解と扱う番号すべて（複数正解の問）
+  kind?: 'choice' | 'tashi' | 'kijutsu';          // 行政書士: 5肢択一・多肢選択・記述
+  blanks?: Record<string, number>;                // 多肢選択の正解（空欄→語句の番号）
+  words?: { key: string; text: string }[];        // 多肢選択の語群
+  modelAnswer?: string;                           // 記述の解答例（このサイト作成）
 }
 
 interface CodeRec { sub: string; customer: string; active: boolean; created: number }
 
-// 測量士は r07-q1・h30-q1、測量士補は h-r07-q1・h-h30-q1
-const QID = /^(h-)?[rh]\d{2}-q\d{1,2}$/;
+// 測量士は r07-q1・h30-q1、測量士補は h-r07-q1、宅建の令和2・3年は r02-10-q1・r02-12-q1
+const QID = /^(h-)?[rh]\d{2}(-1[02])?-q\d{1,2}$/;
 const CODE = /^[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/;
 const MAX_TURNS = 12;
 const MAX_CHARS = 800;
 const FALLBACK_MODELS = new Set(['claude-opus-5-5', 'claude-opus-5', 'claude-fable-5-1']);
 
-const SYSTEM_RULES = `あなたは測量士試験・測量士補試験（択一式）の受験生を助ける先生です。
-下に示す1問について、受験生の質問に日本語で答えてください。
+type Site = { exam: string; authority: string; knowledge: string; extra: string[] };
+const SITES: Record<string, Site> = {
+  sokuryo: {
+    exam: '測量士試験・測量士補試験（択一式）', authority: '国土地理院', knowledge: '一般的な測量の知識',
+    extra: [
+      '解説に「規則の改正あり」とある問題は、今の規則と試験当時の規則の違いに触れる。',
+      '計算は途中式を省かない。試験では関数表と貸与の電卓（√とメモリーが使える一般電卓）だけを使う前提で説明する。',
+    ],
+  },
+  takken: {
+    exam: '宅地建物取引士試験（宅建試験）', authority: '一般財団法人 不動産適正取引推進機構', knowledge: '宅建試験で問われる法令（民法・宅建業法・法令上の制限・税など）の一般的な知識',
+    extra: ['試験の後に法改正があった論点は、試験当時の法令で答え、今の扱いが違えば一言添える。'],
+  },
+  gyosei: {
+    exam: '行政書士試験', authority: '一般財団法人 行政書士試験研究センター', knowledge: '憲法・行政法・民法・商法などの一般的な法律知識と判例',
+    extra: [
+      '試験の後に法改正があった論点は、試験当時の法令で答え、今の扱いが違えば一言添える。',
+      '判例は、解説に書かれているもの以外は裁判所名と年月日を作らない。確かでなければ「判例の立場では」と言う。',
+      '記述式の問題では、解答例は唯一の正解ではないこと、採点で見られる語句（キーワード）を意識して説明する。',
+    ],
+  },
+};
+const siteOf = (env: Env): Site => SITES[env.SITE_KEY || 'sokuryo'] ?? SITES.sokuryo;
 
-答え方:
-- 結論を先に、短く。必要なら手順を番号つきで。見出しや表は使わず、ふつうの文章と箇条書きだけで書く。
-- 正解は「国土地理院が発表した正解」として扱い、覆さない。
-- 根拠は、下の「このサイトの解説」と一般的な測量の知識に基づく。条文の番号は、解説に書かれているものだけを使い、自分で番号を作らない。
-- 解説に「規則の改正あり」とある問題は、今の規則と試験当時の規則の違いに触れる。
-- 計算は途中式を省かない。試験では関数表と貸与の電卓（√とメモリーが使える一般電卓）だけを使う前提で説明する。
-- 確かでないことは「確かではない」と言う。
-- この問題や測量士・測量士補試験と関係のない依頼には、短く断ってこの問題の話に戻す。`;
+function systemRules(env: Env): string {
+  const t = siteOf(env);
+  return [
+    `あなたは${t.exam}の受験生を助ける先生です。`,
+    '下に示す1問について、受験生の質問に日本語で答えてください。',
+    '',
+    '答え方:',
+    '- 結論を先に、短く。必要なら手順を番号つきで。見出しや表は使わず、ふつうの文章と箇条書きだけで書く。',
+    `- 正解は「${t.authority}が発表した正解」として扱い、覆さない。`,
+    `- 根拠は、下の「このサイトの解説」と${t.knowledge}に基づく。条文の番号は、解説に書かれているものだけを使い、自分で番号を作らない。`,
+    ...t.extra.map((x) => '- ' + x),
+    '- 確かでないことは「確かではない」と言う。',
+    `- この問題や${t.exam}と関係のない依頼には、短く断ってこの問題の話に戻す。`,
+  ].join('\n');
+}
 
-function questionBlock(q: Question): string {
+function questionBlock(q: Question, env: Env): string {
   const lines = [`【${q.title}】`, '', q.statementText];
   if (q.items.length) lines.push('', ...q.items.map((i) => `${i.key}. ${i.text}`));
   if (q.choices.length) lines.push('', ...q.choices.map((c) => `${c.key}. ${c.text}`));
@@ -73,7 +109,18 @@ function questionBlock(q: Question): string {
     const rows = t.split(/<\/tr>/i).map((r) => r.split(/<\/t[dh]>/i).map((c) => c.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()).filter(Boolean).join(' | ')).filter(Boolean);
     lines.push('', '（表）', ...rows);
   }
-  lines.push('', `国土地理院が発表した正解: ${q.answer}`, '', '【このサイトの解説】', q.explanationText);
+  const auth = siteOf(env).authority;
+  if (q.kind === 'tashi' && q.blanks) {
+    const w = new Map((q.words ?? []).map((x) => [x.key, x.text]));
+    if (q.words?.length) lines.push('', '（語群）', ...q.words.map((x) => `${x.key}. ${x.text}`));
+    lines.push('', `${auth}が発表した正解: ` + Object.entries(q.blanks).map(([k, v]) => `${k}=${v}（${w.get(String(v)) ?? ''}）`).join('、'));
+  } else if (q.kind === 'kijutsu') {
+    lines.push('', `解答例（このサイトが作成。${auth}は記述式の正解を公表していない）: ${q.modelAnswer ?? '（なし）'}`);
+  } else {
+    const ok = q.ok?.length ? q.ok.join('・') : String(q.answer);
+    lines.push('', `${auth}が発表した正解: ${ok}`);
+  }
+  lines.push('', '【このサイトの解説】', q.explanationText);
   return lines.join('\n');
 }
 
@@ -129,6 +176,12 @@ async function getCode(env: Env, code: unknown): Promise<CodeRec | null> {
   const v = await env.LIMITS.get(`code:${code}`);
   return v ? (JSON.parse(v) as CodeRec) : null;
 }
+
+// 同じ Stripe アカウントに3サイトの商品がある。支払いの印（metadata.site）がこのサイトの物かを見る。
+// 印の無い支払いは、印を付け始める前の測量士のものだけ。
+const siteKey = (env: Env) => env.SITE_KEY || 'sokuryo';
+const isMine = (env: Env, meta: Record<string, string> | null | undefined) =>
+  meta?.site ? meta.site === siteKey(env) : siteKey(env) === 'sokuryo';
 
 // 支払い1件につきコードは1つ。画面（/code）と webhook のどちらが先に来ても同じコードになる
 async function ensureCode(env: Env, subId: string, customer: string): Promise<string> {
@@ -205,8 +258,8 @@ async function ask(req: Request, env: Env, h: Record<string, string>): Promise<R
     output_config: { effort: env.AI_EFFORT as 'low' | 'medium' | 'high' },
     // 問題と解説（毎回同じ）を先頭に置いてキャッシュに乗せる。続く往復は messages 側
     system: [
-      { type: 'text' as const, text: SYSTEM_RULES },
-      { type: 'text' as const, text: questionBlock(q), cache_control: { type: 'ephemeral' as const } },
+      { type: 'text' as const, text: systemRules(env) },
+      { type: 'text' as const, text: questionBlock(q, env), cache_control: { type: 'ephemeral' as const } },
     ],
     messages,
   };
@@ -251,7 +304,7 @@ export default {
       } catch { return new Response('bad signature', { status: 400 }); }
       if (event.type === 'checkout.session.completed') {
         const s = event.data.object;
-        if (s.mode === 'subscription' && typeof s.subscription === 'string' && typeof s.customer === 'string') await ensureCode(env, s.subscription, s.customer);
+        if (s.mode === 'subscription' && isMine(env, s.metadata) && typeof s.subscription === 'string' && typeof s.customer === 'string') await ensureCode(env, s.subscription, s.customer);
       } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
         const sub = event.data.object;
         // active と trialing だけ使える。past_due（支払い失敗の猶予中）・canceled などは止める
@@ -284,6 +337,8 @@ async function billing(req: Request, url: URL, env: Env, h: Record<string, strin
       const s = await stripeOf(env).checkout.sessions.create({
         mode: 'subscription',
         line_items: [{ price: env.STRIPE_PRICE_ID, quantity: 1 }],
+        metadata: { site: siteKey(env) },
+        subscription_data: { metadata: { site: siteKey(env) } },
         success_url: `${base}/ai/thanks/?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${base}/ai/`,
         locale: 'ja',
@@ -295,6 +350,7 @@ async function billing(req: Request, url: URL, env: Env, h: Record<string, strin
       const id = url.searchParams.get('session_id') || '';
       if (!/^cs_[A-Za-z0-9_]+$/.test(id)) return json(400, { error: '支払いの番号が正しくありません。' }, h);
       const s = await stripeOf(env).checkout.sessions.retrieve(id);
+      if (!isMine(env, s.metadata)) return json(404, { error: 'このサイトのお支払いではありません。' }, h);
       if (s.status !== 'complete' || typeof s.subscription !== 'string' || typeof s.customer !== 'string') {
         return json(409, { error: 'お支払いの完了がまだ確認できません。少し待ってから再読み込みしてください。' }, h);
       }
