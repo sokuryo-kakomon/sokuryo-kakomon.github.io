@@ -78,7 +78,7 @@ const SITES: Record<string, Site> = {
     extra: [
       '試験の後に法改正があった論点は、試験当時の法令で答え、今の扱いが違えば一言添える。',
       '判例は、解説に書かれているもの以外は裁判所名と年月日を作らない。確かでなければ「判例の立場では」と言う。',
-      '記述式の問題では、解答例は唯一の正解ではないこと、採点で見られる語句（キーワード）を意識して説明する。',
+      '記述式の問題では、公表された正解例と同じ文でなくても、採点で見られる語句（キーワード）と要素がそろえば点になることを意識して説明する。',
     ],
   },
 };
@@ -115,7 +115,7 @@ function questionBlock(q: Question, env: Env): string {
     if (q.words?.length) lines.push('', '（語群）', ...q.words.map((x) => `${x.key}. ${x.text}`));
     lines.push('', `${auth}が発表した正解: ` + Object.entries(q.blanks).map(([k, v]) => `${k}=${v}（${w.get(String(v)) ?? ''}）`).join('、'));
   } else if (q.kind === 'kijutsu') {
-    lines.push('', `解答例（このサイトが作成。${auth}は記述式の正解を公表していない）: ${q.modelAnswer ?? '（なし）'}`);
+    lines.push('', `${auth}が公表した正解例（これだけが正解ではない。採点は語句・要素で見られる）: ${q.modelAnswer ?? '（なし）'}`);
   } else {
     const ok = q.ok?.length ? q.ok.join('・') : String(q.answer);
     lines.push('', `${auth}が発表した正解: ${ok}`);
