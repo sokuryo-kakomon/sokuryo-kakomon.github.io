@@ -248,12 +248,21 @@ export default function AiExplainButton({ q }: { q: Question }) {
       {open && (
         <div className="modal-bg" style={wide ? { padding: 0 } : undefined} onClick={() => setOpen(false)}>
           <div className="modal" style={wideStyle} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-            <button className="modal-x" onClick={() => setOpen(false)} aria-label="閉じる">×</button>
-            <div className="flex items-center gap-3 mb-2 pr-8">
-              <h3 className="text-lg">AI に質問（{q.yearLabel} 第{q.num}問）</h3>
-              <button type="button" className="ml-auto text-xs text-ink-soft border border-line rounded-dojo px-2 py-1 hover:text-ink"
-                onClick={() => setWide(!wide)} aria-label={wide ? '小さく戻す' : '全体に広げる'}>{wide ? '⤡ 小さく' : '⤢ 全画面'}</button>
+            <div className="absolute top-1 right-1 flex">
+              <button type="button" className="w-10 h-9 grid place-items-center text-ink-soft hover:bg-paper hover:text-ink rounded"
+                onClick={() => setWide(!wide)} aria-label={wide ? '元の大きさに戻す' : '全画面にする'} title={wide ? '元の大きさに戻す' : '全画面にする'}>
+                {wide ? (
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="1" y="3.5" width="9.5" height="9.5" /><path d="M3.5 3.5V1h9.5v9.5H10.5" /></svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="1.5" y="1.5" width="11" height="11" /></svg>
+                )}
+              </button>
+              <button type="button" className="w-10 h-9 grid place-items-center text-ink-soft hover:bg-[#c42b1c] hover:text-white rounded"
+                onClick={() => setOpen(false)} aria-label="閉じる" title="閉じる">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" /></svg>
+              </button>
             </div>
+            <h3 className="text-lg mb-2 pr-24">AI に質問（{q.yearLabel} 第{q.num}問）</h3>
             {ENDPOINT ? <Chat q={q} wide={wide} /> : <CopyPrompt q={q} />}
           </div>
         </div>
