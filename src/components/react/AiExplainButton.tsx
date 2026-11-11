@@ -16,7 +16,9 @@ declare global {
 function useTurnstile(enabled: boolean) {
   const box = useRef<HTMLDivElement>(null);
   const id = useRef<string | null>(null);
-  const [token, setToken] = useState('');
+  const [token, setTokenState] = useState('');
+  const tokenRef = useRef('');
+  const setToken = (t: string) => { tokenRef.current = t; setTokenState(t); };
   useEffect(() => {
     if (!enabled || !TURNSTILE_KEY || !box.current) return;
     const draw = () => {
@@ -35,7 +37,13 @@ function useTurnstile(enabled: boolean) {
   }, [enabled]);
   // トークンは1回きりなので、使ったら取り直す
   const used = () => { setToken(''); if (id.current && window.turnstile) window.turnstile.reset(id.current); };
-  return { box, token, used, needed: enabled && !!TURNSTILE_KEY };
+  // 確認が済むまで待つ（最初の数秒はまだ済んでいないので、押されたらここで待つ）
+  const wait = async (ms = 20000) => {
+    const t0 = Date.now();
+    while (!tokenRef.current && Date.now() - t0 < ms) await new Promise((r) => setTimeout(r, 200));
+    return tokenRef.current;
+  };
+  return { box, token, used, wait, needed: enabled && !!TURNSTILE_KEY };
 }
 
 export function buildPrompt(q: Question) {
@@ -101,7 +109,7 @@ function suggestions(q: Question) {
   return s.slice(0, 4);
 }
 
-function Chat({ q }: { q: Question }) {
+function Chat({ q, wide }: { q: Question; wide: boolean }) {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -120,9 +128,18 @@ function Chat({ q }: { q: Question }) {
     setMsgs([...history, { role: 'assistant', content: '' }]);
     setInput(''); setBusy(true); setNotice(''); setUpsell(false);
     try {
+      let tok: string | undefined;
+      if (!code && ts.needed) {
+        tok = ts.token || await ts.wait();
+        if (!tok) {
+          setNotice('確認が終わりませんでした。表示された確認があれば済ませてから、もう一度押してください。');
+          setMsgs(history.slice(0, -1)); setInput(t);
+          return;
+        }
+      }
       const res = await fetch(`${ENDPOINT}/ask`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ qid: q.id, messages: history, code: code || undefined, turnstile: code ? undefined : ts.token }),
+        body: JSON.stringify({ qid: q.id, messages: history, code: code || undefined, turnstile: tok }),
       });
       if (!code) ts.used();
       const rem = res.headers.get('X-Remaining');
@@ -154,13 +171,16 @@ function Chat({ q }: { q: Question }) {
   const full = msgs.length >= 12;
   return (
     <>
-      <div className="max-h-[55vh] overflow-auto space-y-3 mb-3">
+      <div className={(wide ? 'flex-1 min-h-0' : 'max-h-[55vh]') + ' overflow-auto space-y-3 mb-3'}>
         {msgs.length === 0 && (
-          <div className="flex flex-wrap gap-2">
-            {suggestions(q).map((s) => (
-              <button key={s} type="button" className="btn btn-ghost btn-sm" disabled={ts.needed && !ts.token} onClick={() => ask(s)}>{s}</button>
-            ))}
-          </div>
+          <>
+            <p className="text-xs text-ink-faint">よくある質問（押すとそのまま聞けます）</p>
+            <div className="flex flex-wrap gap-2">
+              {suggestions(q).map((s) => (
+                <button key={s} type="button" className="btn btn-ghost btn-sm" disabled={busy} onClick={() => ask(s)}>{s}</button>
+              ))}
+            </div>
+          </>
         )}
         {msgs.map((m, i) => (
           <div key={i} className={m.role === 'user' ? 'text-right' : ''}>
@@ -180,11 +200,17 @@ function Chat({ q }: { q: Question }) {
         <p className="text-sm mb-2"><a href="/ai/" className="btn btn-primary btn-sm no-underline">有料プラン（月980円・より賢い AI・1日15回）を見る</a></p>
       )}
       <div ref={ts.box} />
-      <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); ask(input); }}>
-        <input className="flex-1 border border-line rounded-dojo px-3 py-2 text-sm bg-white" maxLength={800}
-          placeholder={full ? 'この問題のやりとりは上限に達しました' : '例：選択肢3はなぜ誤り？'}
-          value={input} onChange={(e) => setInput(e.target.value)} disabled={busy || full} />
-        <button className="btn btn-primary btn-sm" disabled={busy || full || !input.trim() || (ts.needed && !ts.token)}>送る</button>
+      <form onSubmit={(e) => { e.preventDefault(); ask(input); }}>
+        <label htmlFor={`ai-q-${q.id}`} className="block text-sm font-bold text-moss mb-1">✏️ 自分の言葉で質問する</label>
+        <div className="flex gap-2 items-end">
+          <textarea id={`ai-q-${q.id}`} rows={2} autoFocus
+            className="flex-1 border-2 border-moss rounded-dojo px-3 py-2 text-[.95rem] bg-white resize-none focus:outline-none focus:ring-2 focus:ring-moss/40"
+            maxLength={800}
+            placeholder={full ? 'この問題のやりとりは上限に達しました' : 'ここに質問を書いてください（例：選択肢3はなぜ誤り？）'}
+            value={input} onChange={(e) => setInput(e.target.value)} disabled={busy || full}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); ask(input); } }} />
+          <button className="btn btn-primary" disabled={busy || full || !input.trim()}>{busy ? '…' : '送る'}</button>
+        </div>
       </form>
       <p className="text-[.7rem] text-ink-faint mt-2 leading-snug">
         AI の答えは誤ることがあります。正解は国土地理院の発表が正です。{code ? '有料プラン（最上位の AI が答えます）' : <>無料は標準の AI で1日2回まで（<a href="/ai/">有料プラン</a>は最上位の AI で1日15回）</>}{remaining !== null && `・今日の残り ${remaining} 回`}。質問の内容は回答の作成にだけ使い、保存しません。
@@ -212,17 +238,23 @@ function CopyPrompt({ q }: { q: Question }) {
 
 export default function AiExplainButton({ q }: { q: Question }) {
   const [open, setOpen] = useState(false);
+  const [wide, setWide] = useState(false);
+  const wideStyle = wide ? { maxWidth: 'none', width: '100%', height: '100%', maxHeight: 'none', display: 'flex', flexDirection: 'column' as const } : undefined;
   return (
     <>
       <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>
         🤖 AI に質問{!ENDPOINT && <span className="text-xs text-ink-faint ml-1">（準備中）</span>}
       </button>
       {open && (
-        <div className="modal-bg" onClick={() => setOpen(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+        <div className="modal-bg" style={wide ? { padding: 0 } : undefined} onClick={() => setOpen(false)}>
+          <div className="modal" style={wideStyle} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <button className="modal-x" onClick={() => setOpen(false)} aria-label="閉じる">×</button>
-            <h3 className="text-lg mb-2">AI に質問（{q.yearLabel} 第{q.num}問）</h3>
-            {ENDPOINT ? <Chat q={q} /> : <CopyPrompt q={q} />}
+            <div className="flex items-center gap-3 mb-2 pr-8">
+              <h3 className="text-lg">AI に質問（{q.yearLabel} 第{q.num}問）</h3>
+              <button type="button" className="ml-auto text-xs text-ink-soft border border-line rounded-dojo px-2 py-1 hover:text-ink"
+                onClick={() => setWide(!wide)} aria-label={wide ? '小さく戻す' : '全体に広げる'}>{wide ? '⤡ 小さく' : '⤢ 全画面'}</button>
+            </div>
+            {ENDPOINT ? <Chat q={q} wide={wide} /> : <CopyPrompt q={q} />}
           </div>
         </div>
       )}
