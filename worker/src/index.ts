@@ -154,6 +154,10 @@ async function bump(kv: KVNamespace, key: string, ttlDays: number) {
   return n;
 }
 
+// 使われ方の記録（日ごとの回数と人数だけ。IP は残さない）。2年あまり残す。
+// stat:日付:free_q（無料の質問）・free_u（無料で使った人）・paid_q・paid_u・grade（記述の採点）
+const tally = (kv: KVNamespace, day: string, what: string) => bump(kv, `stat:${day}:${what}`, 800);
+
 function validMessages(m: unknown): m is Anthropic.MessageParam[] {
   if (!Array.isArray(m) || m.length === 0 || m.length > MAX_TURNS || m.length % 2 === 0) return false;
   return m.every((x, i) =>
@@ -247,6 +251,8 @@ async function ask(req: Request, env: Env, h: Record<string, string>): Promise<R
   const n = await bump(env.LIMITS, dayKey, 2);
   if (monthKey) await bump(env.LIMITS, monthKey, 40);
   else await bump(env.LIMITS, `free:${day}`, 2);
+  await tally(env.LIMITS, day, plan === 'paid' ? 'paid_q' : 'free_q');
+  if (n === 1) await tally(env.LIMITS, day, plan === 'paid' ? 'paid_u' : 'free_u');
   const remaining = String(Math.max(0, limitDay - n));
 
   // 無料は Sonnet、有料（利用コードあり）は Opus
@@ -364,6 +370,7 @@ async function grade(req: Request, env: Env, h: Record<string, string>): Promise
   // 数えてから問い合わせる（失敗しても1回と数える＝甘くしない）
   const n = await bump(env.LIMITS, dayKey, 2);
   await bump(env.LIMITS, monthKey, 40);
+  await tally(env.LIMITS, day, 'grade');
   const remaining = String(Math.max(0, limitDay - n));
   const hh = { ...h, 'Cache-Control': 'no-store', 'X-Remaining': remaining, 'X-Plan': 'paid' };
 
