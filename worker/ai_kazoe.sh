@@ -1,5 +1,6 @@
 #!/bin/bash
-# AI の使われ方を日ごとに出す（3サイト）。使い方: bash ai_kazoe.sh
+# AI の使われ方と加入の動きを日ごとに出す（3サイト）。使い方: bash ai_kazoe.sh
+# free_q/paid_q=AI の回数 free_u/paid_u=人数 grade=採点 checkout=支払い画面へ進んだ回数 joined=加入した数
 cd "$(dirname "$0")"
 for e in sokuryo takken gyosei; do
   echo "== $e"

@@ -414,7 +414,7 @@ export default {
       } catch { return new Response('bad signature', { status: 400 }); }
       if (event.type === 'checkout.session.completed') {
         const s = event.data.object;
-        if (s.mode === 'subscription' && isMine(env, s.metadata) && typeof s.subscription === 'string' && typeof s.customer === 'string') await ensureCode(env, s.subscription, s.customer);
+        if (s.mode === 'subscription' && isMine(env, s.metadata) && typeof s.subscription === 'string' && typeof s.customer === 'string') { await ensureCode(env, s.subscription, s.customer); await tally(env.LIMITS, today(), 'joined'); }
       } else if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
         const sub = event.data.object;
         // active と trialing だけ使える。past_due（支払い失敗の猶予中）・canceled などは止める
@@ -454,6 +454,7 @@ async function billing(req: Request, url: URL, env: Env, h: Record<string, strin
         cancel_url: `${base}/ai/`,
         locale: 'ja',
       });
+      await tally(env.LIMITS, today(), 'checkout'); // 支払い画面へ進んだ回数（加入の検討）
       return json(200, { url: s.url }, h);
     }
 
