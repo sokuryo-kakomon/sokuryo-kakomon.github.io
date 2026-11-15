@@ -25,6 +25,7 @@ const exq = exam === 'shi' ? '' : 'exam=hoshi&';
   <p class="text-ink-soft text-sm mb-4">{y.examDate}実施 ・ 全{qs.length}問</p>
   <div class="flex flex-wrap gap-2 mb-6">
     <a class="btn btn-primary" href={`/practice/?${exq}year=${y.id}`}>この年度を通しで解く</a>
+    <a class="btn btn-ghost" href={`/mogi/?${exq}year=${y.id}`}>⏱ 本番と同じ時間で解く</a>
     {y.pdf.questions && <a class="btn btn-ghost btn-sm" href={y.pdf.questions} target="_blank" rel="noopener">公式問題 PDF</a>}
     {y.pdf.answers && <a class="btn btn-ghost btn-sm" href={y.pdf.answers} target="_blank" rel="noopener">公式解答 PDF</a>}
   </div>
