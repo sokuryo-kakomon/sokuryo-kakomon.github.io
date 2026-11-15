@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, QuestionIndex, Site } from '../../lib/types';
 import { showExam } from '../../lib/examui';
+import WeakSummary from './WeakSummary';
 import { $progress, $bookmarks, $days, isWeak, resetProgress, streak, summarize, makeBackup, mergeBackup } from '../../store/progress';
 import { $ox } from '../../store/drill';
 
@@ -85,6 +86,8 @@ export default function ProgressDashboard() {
         <h2 className="text-lg mb-2">分野別</h2>
         {S.categories.filter((c) => index.some((x) => x.categorySlug === c.slug)).map((c) => <Row key={c.slug} label={`${c.icon} ${c.name}`} s={summarize(ids((x) => x.categorySlug === c.slug), prog)} href={`/practice/?${q}cat=${c.slug}`} />)}
       </div>
+
+      <WeakSummary index={index} exam={exam} q={q} pass={{ n: 18, label: '基準の18問' }} note={exam === 'shi' ? '午前の択一だけです。午後（記述）は入っていません。' : undefined} />
 
       {weak.length > 0 && (
         <div className="card p-5">
