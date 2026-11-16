@@ -5,7 +5,8 @@ import { questions, hoshiQuestions, guides, site } from '../lib/data';
 // 成績表は個人の記録なので載せない。
 export const GET: APIRoute = () => {
   const urls = [
-    '/', '/practice/', '/mogi/', '/ox/', '/guide/', '/books/', '/about/', '/privacy/', '/ai/', '/tokushoho/',
+    // 演習・模擬試験・一問一答は JS の画面だけで文章が無いので noindex・ここにも載せない（11-16 AdSense 対策）
+    '/', '/guide/', '/books/', '/about/', '/privacy/', '/ai/', '/tokushoho/',
     ...site.years.map((y) => `/${y.id}/`),
     ...(hoshiQuestions.length ? ['/hoshi/'] : []),
     ...site.hoshiYears.filter((y) => hoshiQuestions.some((q) => q.year === y.id)).map((y) => `/hoshi/${y.id}/`),
