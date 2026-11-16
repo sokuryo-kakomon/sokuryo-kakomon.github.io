@@ -74,6 +74,15 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
   const answered = picked !== null;
   // 答えたら「正解！」が画面の外に出ないように（下に隠れている時だけ動かす）
   useEffect(() => { if (answered) resRef.current?.scrollIntoView({ block: 'nearest' }); }, [answered]);
+  // 答えた直後の「次の問題 →」は、キーの Enter・→ と同じく data-key="next" のボタン・リンクを押す（新しい道は作らない）
+  const [nextLabel, setNextLabel] = useState<string | null>(null);
+  useEffect(() => {
+    if (!answered) { setNextLabel(null); return; }
+    const b = document.querySelector<HTMLElement>('[data-key="next"]:not([disabled])');
+    setNextLabel(b ? (/結果/.test(b.textContent ?? '') ? '結果を見る' : '次の問題 →') : null);
+  }, [answered, q.id]);
+  const goNext = () => document.querySelector<HTMLElement>('[data-key="next"]:not([disabled])')?.click();
+  const kansu = q.statementHtml.includes('関数表');
   const ok = answered && picked === q.answer;
   const pick = (v: number) => {
     if (answered) return;
@@ -122,6 +131,14 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
             <figcaption className="text-xs text-ink-faint mt-1">図表を押すと拡大します</figcaption>
           </figure>
         )}
+        {kansu && (
+          <details className="my-3 text-sm">
+            <summary className="cursor-pointer font-bold text-moss">📐 関数表を開く</summary>
+            <img src="/sokuryo_figures/kansuhyo.png" alt="関数表（平方根・三角関数）" loading="lazy"
+              className="mt-2 max-w-full h-auto border border-line rounded-dojo bg-white cursor-zoom-in" onClick={() => setZoom('/sokuryo_figures/kansuhyo.png')} />
+            <div className="text-xs text-ink-faint mt-1">測量士試験 令和5年度 問題集の巻末より ・ 押すと拡大します</div>
+          </details>
+        )}
         {q.items.length > 0 && (
           <div className="my-3 space-y-1.5">
             {q.items.map((it) => (
@@ -161,8 +178,16 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
         {answered && (
           <div ref={resRef} className={'mt-3 px-4 py-3 rounded-dojo font-bold flex flex-wrap items-center gap-3 scroll-mb-4 ' + (ok ? 'bg-moss-pale text-moss-deep' : 'bg-shu-pale text-shu')}>
             <span>{ok ? '正解！' : `不正解 … 正解は ${answerLabel}`}</span>
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => setPicked(null)}>もう一度</button>
+            <span className="flex flex-wrap gap-2 ml-auto">
+              <button type="button" className="btn btn-ghost btn-sm" onClick={() => setPicked(null)}>もう一度</button>
+              {nextLabel && <button type="button" className="btn btn-primary btn-sm" onClick={goNext}>{nextLabel}</button>}
+            </span>
           </div>
+        )}
+        {answered && mode === 'page' && (
+          <p className="mt-2 text-sm text-ink-soft">
+            登録不要・結果はこの端末に記録されます。続けるなら → <a href={`/practice/?${q.exam === 'hoshi' ? 'exam=hoshi&' : ''}mode=random&go=1`}>ランダム10問</a> ／ <a href={`/practice/${q.exam === 'hoshi' ? '?exam=hoshi' : ''}`}>演習を始める</a>
+          </p>
         )}
       </div>
 

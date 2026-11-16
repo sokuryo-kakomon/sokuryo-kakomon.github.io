@@ -72,6 +72,8 @@ export default function MockExam() {
   const [exam, setExam] = useState<Exam>('shi');
   const [cat, setCat] = useState('all');
   const [run, setRun] = useState<Run | null>(null);
+  // 途中で閉じた回（すぐには再開せず、先に「前回の続き」の札を出す）
+  const [pending, setPending] = useState<Run | null>(null);
   const [i, setI] = useState(0);
   const [qs, setQs] = useState<Record<string, Question>>({});
   const [graded, setGraded] = useState(false);
@@ -84,10 +86,16 @@ export default function MockExam() {
     const sp = new URLSearchParams(location.search);
     if (sp.get('range') === 'weak') setCat('weak');
     if (sp.get('year')) setCat('y:' + sp.get('year'));
-    // 途中で閉じた回があれば続きから（前の作りの「分野の回・全28問の回」は続きが無いので捨てる）
+    // 途中で閉じた回があれば、先に札を出して選ばせる（前の作りの「分野の回・全28問の回」は続きが無いので捨てる）
+    // ?exam= で別の試験を開いた時は、その試験の選ぶ画面を出し、もう一方の回は消さずに小さく知らせるだけ
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (saved?.ids && (saved.cat === 'weak' || String(saved.cat).startsWith('y:'))) { setRun(saved); setExam(saved.exam); showExam(saved.exam); }
+      if (saved?.ids && (saved.cat === 'weak' || String(saved.cat).startsWith('y:'))) {
+        setPending(saved);
+        // ?exam=hoshi で測量士補を開いたのに測量士の回が残っている時だけ、選ぶ画面を出す（?exam が無ければ回の試験に合わせる）
+        if (new URLSearchParams(location.search).get('exam') !== 'hoshi') { setExam(saved.exam); showExam(saved.exam); }
+        if (saved.exam === 'hoshi' || new URLSearchParams(location.search).get('exam') !== 'hoshi') setCat(saved.cat);
+      }
       else if (saved) localStorage.removeItem(KEY);
     } catch { /* 無ければ新しく */ }
   }, []);
@@ -120,8 +128,18 @@ export default function MockExam() {
   // 選んでいる物（年度が未選択・この試験に無い年度なら最新の年度）
   const cc = cat === 'weak' || (cat.startsWith('y:') && ys.some((y) => 'y:' + y.id === cat)) ? cat : 'y:' + ys[0].id;
   const begin = () => {
+    setPending(null);
     setRun(buildRun(index, prog, exam, cc)); setI(0); setGraded(false); setNow(Date.now()); window.scrollTo(0, 0);
   };
+  const resume = (r: Run) => {
+    setPending(null); setExam(r.exam); showExam(r.exam);
+    setRun(r); setI(0); setGraded(false); setNow(Date.now()); window.scrollTo(0, 0);
+  };
+  const runName = (r: Run) => {
+    const y = (r.exam === 'hoshi' ? S.hoshiYears ?? [] : S.years).find((v) => 'y:' + v.id === r.cat);
+    return `${EXAM[r.exam].name.replace(/（.*）/, '')} ${r.cat === 'weak' ? '間違えた問題' : y?.label ?? ''}`;
+  };
+  const leftOf = (r: Run) => Math.max(0, Math.round((r.start + r.limit * 1000 - Date.now()) / 1000));
   function grade() {
     if (!run) return;
     for (const id of run.ids) {
@@ -207,14 +225,14 @@ export default function MockExam() {
       <div className="space-y-4">
         <div className="card px-3 py-2 md:px-4 md:py-3 flex items-center gap-3 text-sm sticky top-14 md:top-16 z-10">
           <span className="serif text-lg">{i + 1} <span className="text-ink-faint text-sm">/ {run.ids.length}</span></span>
-          <span className="text-ink-soft text-xs leading-tight">{run.cat === 'weak' ? '間違えた問題' : ys.find((y) => 'y:' + y.id === run.cat)?.label}<span className="hidden sm:inline">・解答済み {n}</span></span>
+          <span className="text-ink-soft text-xs leading-tight">{EXAM[run.exam].name.replace(/（.*）/, '')}・{run.cat === 'weak' ? '間違えた問題' : ys.find((y) => 'y:' + y.id === run.cat)?.label}<span className="hidden sm:inline">・解答済み {n}</span></span>
           <span className={'ml-auto font-mono text-base ' + (remain < 600 ? 'text-shu font-bold' : '')}>残り {fmt(remain)}</span>
           <button type="button" className="btn btn-primary btn-sm" onClick={() => { if (n === run.ids.length || confirm(`まだ ${run.ids.length - n}問 答えていません。採点しますか？`)) grade(); }}>採点する</button>
         </div>
         <div className="flex flex-wrap gap-1">
           {run.ids.map((x, k) => (
             <button key={x} type="button" onClick={() => { setI(k); toQ(); }}
-              className={'w-8 h-8 text-xs rounded-dojo border ' + (k === i ? 'border-moss font-bold ' : 'border-line ') + (run.answers[x] ? 'bg-moss text-white border-moss' : 'bg-card')}>{k + 1}</button>
+              className={'min-w-10 h-10 px-1 text-sm rounded-dojo border ' + (k === i ? 'border-moss font-bold ' : 'border-line ') + (run.answers[x] ? 'bg-moss text-white border-moss' : 'bg-card')}>{k + 1}</button>
           ))}
         </div>
         {q ? (
@@ -279,9 +297,24 @@ export default function MockExam() {
   const tile = 'text-left rounded-dojo border px-4 py-3 transition ';
   const on = 'bg-moss text-white border-moss';
   const off = 'bg-card border-line hover:border-ink-faint';
+  const pend = pending && pending.exam === exam ? pending : null;
+  const pendOther = pending && pending.exam !== exam ? pending : null;
   return (
     <div className="space-y-5">
+      {pend && (() => { const left = leftOf(pend); const k = Object.keys(pend.answers).length; return (
+        <div className="card p-5 border-2 border-moss">
+          <div className="font-bold text-lg mb-1">前回の続きがあります</div>
+          <p className="text-[.95rem] mb-3">{runName(pend)} ・ 解答済み {k}/{pend.ids.length}問 ・ {left > 0 ? `残り ${Math.floor(left / 3600)}:${String(Math.floor((left % 3600) / 60)).padStart(2, '0')}` : '時間切れ（開くと採点します）'}</p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="btn btn-primary text-base px-6" onClick={() => resume(pend)}>続きから解く</button>
+            <button type="button" className="btn btn-ghost" onClick={() => { if (confirm('前回の回をやめて、選び直します（記録には残りません）。')) { quit(); setPending(null); } }}>やめて選び直す</button>
+          </div>
+        </div>
+      ); })()}
       <div className="card p-5">
+        {pendOther && (
+          <p className="text-sm text-ink-soft mb-3 pb-3 border-b border-line">{runName(pendOther)}の途中の回が残っています（解答済み {Object.keys(pendOther.answers).length}問）。<button type="button" className="text-moss underline" onClick={() => resume(pendOther)}>そちらの続きから解く</button><span className="text-xs">　※ ここで新しく始めると、その回は消えます。</span></p>
+        )}
         <div className="lg:hidden flex flex-wrap items-baseline justify-between gap-2 mb-3 text-sm">
           <span className="font-bold">{EXAM[exam].name}の模擬試験</span>
           <button type="button" className="text-moss underline" onClick={() => { setExam(other); setCat('all'); showExam(other); }}>{EXAM[other].name.replace(/（.*）/, '')}に切り替える</button>
