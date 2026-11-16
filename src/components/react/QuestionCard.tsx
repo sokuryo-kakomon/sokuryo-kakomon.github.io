@@ -29,6 +29,7 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
   const prog = useStore($progress);
   const bms = useStore($bookmarks);
   const explRef = useRef<HTMLDivElement>(null);
+  const resRef = useRef<HTMLDivElement>(null);
   const prev = mounted ? prog[q.id] : undefined;
   const marked = mounted && bms.includes(q.id);
   // React 19 は dangerouslySetInnerHTML のオブジェクトが別物になるたびに innerHTML を
@@ -71,6 +72,8 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
   }, [law, zoom]);
 
   const answered = picked !== null;
+  // 答えたら「正解！」が画面の外に出ないように（下に隠れている時だけ動かす）
+  useEffect(() => { if (answered) resRef.current?.scrollIntoView({ block: 'nearest' }); }, [answered]);
   const ok = answered && picked === q.answer;
   const pick = (v: number) => {
     if (answered) return;
@@ -156,7 +159,7 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
           </div>
         )}
         {answered && (
-          <div className={'mt-3 px-4 py-3 rounded-dojo font-bold flex flex-wrap items-center gap-3 ' + (ok ? 'bg-moss-pale text-moss-deep' : 'bg-shu-pale text-shu')}>
+          <div ref={resRef} className={'mt-3 px-4 py-3 rounded-dojo font-bold flex flex-wrap items-center gap-3 scroll-mb-4 ' + (ok ? 'bg-moss-pale text-moss-deep' : 'bg-shu-pale text-shu')}>
             <span>{ok ? '正解！' : `不正解 … 正解は ${answerLabel}`}</span>
             <button type="button" className="btn btn-ghost btn-sm" onClick={() => setPicked(null)}>もう一度</button>
           </div>

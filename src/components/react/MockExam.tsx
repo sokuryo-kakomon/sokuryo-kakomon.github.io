@@ -7,7 +7,7 @@ import { $aiCode, checkPaid, type PaidState } from '../../store/ai';
 import { showExam } from '../../lib/examui';
 
 // 模擬試験。年度を選んで、その年度の問題を第1問から順に、本番と同じ時間で解き、最後にまとめて採点する（無料で何回でも）。
-// 有料プランは「間違えた問題だけで解き直し」（直近で不正解を先に、その中で古い順に、最大28問）。
+// 「間違えた問題だけ」も無料（直近で不正解を先に、その中で古い順に、最大28問）。
 // 新しい問題は作らない（答えは国土地理院の解答例のまま）。
 
 const S = siteJson as unknown as Site;
@@ -48,7 +48,7 @@ export function buildRun(index: QuestionIndex[], prog: Progress, exam: Exam, cat
     const ids = index.filter((x) => x.exam === exam && x.year === cat.slice(2)).sort((a, b) => a.num - b.num).map((x) => x.id);
     return { exam, cat, ids, answers: {}, start: Date.now(), limit: Math.round((EXAM[exam].minutes * 60 * ids.length) / FULL) };
   }
-  // 間違えた問題だけ（有料）: 直近で不正解を先に、その中で古い順に、本番の問題数まで
+  // 間違えた問題だけ（無料）: 直近で不正解を先に、その中で古い順に、本番の問題数まで
   if (cat === 'weak') {
     const ids = shuffle(index.filter((x) => x.exam === exam && needsReview(prog[x.id])))
       .sort((a, b) => tier(prog, a.id) - tier(prog, b.id) || (prog[a.id]?.at ?? 0) - (prog[b.id]?.at ?? 0)).slice(0, all.length).map((x) => x.id);
@@ -114,12 +114,10 @@ export default function MockExam() {
   const cats = useMemo(() => (index ? S.categories.filter((c) => slotsOf(index, exam).includes(c.slug)) : []), [index, exam]);
   if (!index) return <div className="card p-6 text-ink-soft">読み込み中…</div>;
 
-  const canFull = paid === 'paid';
   const ys = (exam === 'hoshi' ? S.hoshiYears ?? [] : S.years).filter((y) => index.some((x) => x.exam === exam && x.year === y.id));
   // 選んでいる物（年度が未選択・この試験に無い年度なら最新の年度）
   const cc = cat === 'weak' || (cat.startsWith('y:') && ys.some((y) => 'y:' + y.id === cat)) ? cat : 'y:' + ys[0].id;
   const begin = () => {
-    if (cc === 'weak' && !canFull) return;
     setRun(buildRun(index, prog, exam, cc)); setI(0); setGraded(false); setNow(Date.now()); window.scrollTo(0, 0);
   };
   function grade() {
@@ -158,7 +156,7 @@ export default function MockExam() {
           <p className="text-xs text-ink-faint mt-2">{EXAM[run.exam].line} {full ? 'その年度の問題を本番と同じ時間で解いた結果です。' : '過去問の組み直しなので、本番の点数を約束するものではありません。'}</p>
           <div className="flex flex-wrap justify-center gap-2 mt-5">
             <button className="btn btn-primary" onClick={quit}>ほかの年度を解く</button>
-            {run.ids.length - ok.length > 0 && <button className="btn btn-ghost" onClick={() => { quit(); setCat('weak'); }}>間違えた問題だけで解き直す（有料）</button>}
+            {run.ids.length - ok.length > 0 && <button className="btn btn-ghost" onClick={() => { quit(); setCat('weak'); }}>間違えた問題を解き直す</button>}
             <a className="btn btn-ghost" href="/progress/">成績表を見る</a>
           </div>
         </div>
@@ -203,16 +201,16 @@ export default function MockExam() {
     const picked = run.answers[id];
     return (
       <div className="space-y-4">
-        <div className="card px-4 py-3 flex flex-wrap items-center gap-3 text-sm sticky top-16 z-10">
+        <div className="card px-3 py-2 md:px-4 md:py-3 flex items-center gap-3 text-sm sticky top-14 md:top-16 z-10">
           <span className="serif text-lg">{i + 1} <span className="text-ink-faint text-sm">/ {run.ids.length}</span></span>
-          <span className="text-ink-soft">解答済み {n}</span>
+          <span className="text-ink-soft hidden sm:inline">解答済み {n}</span>
           <span className={'ml-auto font-mono text-base ' + (remain < 600 ? 'text-shu font-bold' : '')}>残り {fmt(remain)}</span>
           <button type="button" className="btn btn-primary btn-sm" onClick={() => { if (n === run.ids.length || confirm(`まだ ${run.ids.length - n}問 答えていません。採点しますか？`)) grade(); }}>採点する</button>
         </div>
         <div className="flex flex-wrap gap-1">
           {run.ids.map((x, k) => (
             <button key={x} type="button" onClick={() => { setI(k); window.scrollTo(0, 0); }}
-              className={'w-8 h-8 text-xs rounded-dojo border ' + (k === i ? 'border-moss font-bold ' : 'border-line ') + (run.answers[x] ? 'bg-moss-pale' : 'bg-card')}>{k + 1}</button>
+              className={'w-8 h-8 text-xs rounded-dojo border ' + (k === i ? 'border-moss font-bold ' : 'border-line ') + (run.answers[x] ? 'bg-moss text-white border-moss' : 'bg-card')}>{k + 1}</button>
           ))}
         </div>
         {q ? (
@@ -267,50 +265,43 @@ export default function MockExam() {
   }
 
   // ---------- 年度を選ぶ ----------
-  const sel = 'px-3 py-1.5 rounded-dojo border text-sm cursor-pointer transition ';
-  const on = 'bg-moss text-white border-moss';
-  const off = 'bg-card border-line hover:border-ink-faint';
+  // 試験は左の欄で決まる。年度を押すと、すぐ下の「始める」が その年度に変わる（スマホでは画面の下に貼り付く）
   const MIN = EXAM[exam].minutes;
   const weakN = index.filter((x) => x.exam === exam && needsReview(prog[x.id])).length;
   const yLabel = ys.find((y) => 'y:' + y.id === cc)?.label ?? '';
   const n = cc === 'weak' ? Math.min(weakN, FULL) : index.filter((x) => x.exam === exam && 'y:' + x.year === cc).length;
   const minutes = Math.round((MIN * n) / FULL);
-  const allowed = (cc === 'weak' ? canFull : true) && n > 0;
+  const other: Exam = exam === 'shi' ? 'hoshi' : 'shi';
+  const tile = 'text-left rounded-dojo border px-4 py-3 transition ';
+  const on = 'bg-moss text-white border-moss';
+  const off = 'bg-card border-line hover:border-ink-faint';
   return (
     <div className="space-y-5">
       <div className="card p-5">
-        <div className="font-bold mb-2">試験</div>
-        <div className="flex flex-wrap gap-2 mb-5">
-          {(['shi', 'hoshi'] as Exam[]).map((e) => <button key={e} className={sel + (exam === e ? on : off)} onClick={() => { setExam(e); showExam(e); }}>{EXAM[e].name}</button>)}
+        <div className="lg:hidden flex flex-wrap items-baseline justify-between gap-2 mb-3 text-sm">
+          <span className="font-bold">{EXAM[exam].name}の模擬試験</span>
+          <button type="button" className="text-moss underline" onClick={() => { setExam(other); setCat('all'); showExam(other); }}>{EXAM[other].name.replace(/（.*）/, '')}に切り替える</button>
         </div>
-        <div className="font-bold mb-2">年度を選ぶ <span className="text-sm font-normal text-ink-soft">本番と同じ{MIN}分・無料で何回でも</span></div>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="font-bold mb-1">年度を選ぶ</div>
+        <p className="text-sm text-ink-soft mb-3">その年度の問題を第1問から順に、本番と同じ{MIN}分の割合で解きます。途中では正誤を出さず、最後にまとめて採点します。無料で何回でも使えます。</p>
+        <div className="grid gap-2 grid-cols-2 lg:grid-cols-3">
           {ys.map((y) => { const k = index.filter((x) => x.exam === exam && x.year === y.id).length; return (
-            <button key={y.id} className={'text-left rounded-dojo border px-4 py-3 transition ' + (cc === 'y:' + y.id ? on : off)} onClick={() => setCat('y:' + y.id)}>
+            <button key={y.id} type="button" className={tile + (cc === 'y:' + y.id ? on : off)} onClick={() => setCat('y:' + y.id)}>
               <div className="font-bold">{y.label}</div>
               <div className="text-xs opacity-80">{k}問 ・ {Math.round((MIN * k) / FULL)}分</div>
             </button>
           ); })}
+          <button type="button" className={tile + 'col-span-2 lg:col-span-3 ' + (cc === 'weak' ? on : off)} onClick={() => setCat('weak')}>
+            <div className="font-bold">❗ 間違えた問題だけ</div>
+            <div className="text-xs opacity-80">間違えた問題・要復習（いま {weakN}問）を、間違えた問題を先に、古い順に最大{FULL}問</div>
+          </button>
         </div>
-        <p className="text-xs text-ink-faint mt-3">その年度の問題を第1問から順に、本番と同じ時間で解きます。途中では正誤を出さず、最後にまとめて採点します。</p>
-        <div className="mt-5 pt-4 border-t border-line">
-          <div className="flex items-baseline gap-2 mb-1">
-            <span className="font-bold">❗ 間違えた問題だけで解き直す</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-ai-pale text-ai font-bold">有料プラン</span>
-          </div>
-          <p className="text-sm text-ink-soft mb-2">間違えた問題・要復習の問題（いま {weakN}問）を、間違えた問題を先に、その中で古い順に、最大{FULL}問まで時間を計って解き直します。</p>
-          <button className={sel + (cc === 'weak' ? on : off)} onClick={() => setCat('weak')}>これを選ぶ（{weakN > FULL ? `${weakN}問のうち最大${FULL}問` : `${weakN}問`}）</button>
+        <div className="sticky bottom-0 -mx-5 -mb-5 mt-4 px-5 py-3 bg-card/95 backdrop-blur border-t border-line rounded-b-dojo flex flex-wrap items-center gap-3">
+          <button type="button" className="btn btn-primary text-base px-6 flex-1 sm:flex-none" disabled={n === 0} onClick={begin}>
+            {cc === 'weak' ? '間違えた問題' : yLabel}を始める（{n}問・{minutes}分）
+          </button>
+          {cc === 'weak' && n === 0 && <span className="text-sm text-ink-soft">間違えた問題はいまありません。</span>}
         </div>
-      </div>
-      <div className="card p-5 flex flex-wrap items-center gap-4">
-        <div className="serif text-2xl">{cc === 'weak' ? '間違えた問題' : yLabel}<span className="text-base text-ink-soft ml-2">{n}問 ・ {minutes}分</span></div>
-        <button className="btn btn-primary text-lg px-8" disabled={!allowed || (cc === 'weak' && paid === 'checking')} onClick={begin}>始める</button>
-        <span className="text-sm text-ink-soft">
-          {cc !== 'weak' ? '無料で何回でも解けます'
-            : paid !== 'paid' ? <>間違えた問題だけの解き直しは有料プラン（月額980円）です。<a href="/ai/">有料プランを見る →</a></>
-            : n === 0 ? '間違えた問題はいまありません。'
-            : `有料プラン：間違えた問題を先に、その中で古い順に ${n}問`}
-        </span>
       </div>
     </div>
   );
