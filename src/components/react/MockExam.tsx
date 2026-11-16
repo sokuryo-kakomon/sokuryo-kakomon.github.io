@@ -3,7 +3,6 @@ import { useStore } from '@nanostores/react';
 import siteJson from '../../data/site.json';
 import type { Exam, Question, QuestionIndex, Site } from '../../lib/types';
 import { $progress, isWeak, recordAnswer, type Progress, needsReview } from '../../store/progress';
-import { $aiCode, checkPaid, type PaidState } from '../../store/ai';
 import { showExam } from '../../lib/examui';
 
 // 模擬試験。年度を選んで、その年度の問題を第1問から順に、本番と同じ時間で解き、最後にまとめて採点する（無料で何回でも）。
@@ -77,8 +76,6 @@ export default function MockExam() {
   const [qs, setQs] = useState<Record<string, Question>>({});
   const [graded, setGraded] = useState(false);
   const [now, setNow] = useState(Date.now());
-  const [paid, setPaid] = useState<PaidState>('checking');
-  const code = useStore($aiCode);
   const prog = useStore($progress);
 
   useEffect(() => {
@@ -94,7 +91,6 @@ export default function MockExam() {
       else if (saved) localStorage.removeItem(KEY);
     } catch { /* 無ければ新しく */ }
   }, []);
-  useEffect(() => { checkPaid(code).then(setPaid); }, [code]);
   // 解いている間だけ印を付ける（下の案内を隠す）
   useEffect(() => {
     const on = !!run && !graded;
