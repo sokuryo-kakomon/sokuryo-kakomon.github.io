@@ -123,7 +123,7 @@ const yearNames = Object.fromEntries((['shi', 'hoshi'] as const).flatMap((e) => 
     const pr = JSON.parse(localStorage.getItem('sokuryo_practice_now') || 'null');
     if (pr && Array.isArray(pr.ids) && pr.results && typeof pr.results === 'object') {
       const left = pr.ids.filter((id) => !(id in pr.results)).length;
-      if (left > 0) add('/practice/' + (pr.exam === 'hoshi' ? '?exam=hoshi' : ''), `演習の続きがあります（${pr.exam === 'hoshi' ? '測量士補・' : ''}残り ${left}問） ›`);
+      if (left > 0) add('/practice/?' + (pr.exam === 'hoshi' ? 'exam=hoshi&' : '') + 'resume=1', `演習の続きがあります（${pr.exam === 'hoshi' ? '測量士補・' : ''}残り ${left}問） ›`);
     }
   } catch (e) { /* 記録が読めなければ出さない */ }
 
