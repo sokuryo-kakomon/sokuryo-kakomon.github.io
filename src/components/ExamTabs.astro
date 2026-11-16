@@ -1,10 +1,14 @@
 ---
-// トップの切り替え。測量士は / 、測量士補は /hoshi/
+// トップの試験の選び方（11-16 本人が案1を選んだ）。測量士は / 、測量士補は /hoshi/
+// 小さい切り替えだと測量士補の人が気づかないので、見出しの上に大きな2つで聞く
 interface Props { exam: 'shi' | 'hoshi' }
 const { exam } = Astro.props;
-const tab = (on: boolean) => 'text-center px-5 py-2 rounded-dojo no-underline ' + (on ? 'bg-card text-ink font-bold shadow-sm' : 'text-ink-soft hover:text-ink');
+const box = (on: boolean) => 'block text-center rounded-dojo border-2 px-3 py-2.5 no-underline ' + (on ? 'border-moss bg-moss-pale text-moss-deep' : 'border-line bg-card text-ink hover:border-moss');
 ---
-<nav class="inline-grid grid-cols-2 gap-1 p-1 mb-6 rounded-dojo bg-paper-deep text-sm md:text-base" aria-label="試験の切り替え">
-  <a href="/" class={tab(exam === 'shi')} aria-current={exam === 'shi' ? 'page' : undefined}>測量士</a>
-  <a href="/hoshi/" class={tab(exam === 'hoshi')} aria-current={exam === 'hoshi' ? 'page' : undefined}>測量士補</a>
+<nav class="mb-6 max-w-sm" aria-label="受ける試験の選択">
+  <p class="text-sm font-bold text-ink-soft mb-1.5">どちらを受けますか？</p>
+  <div class="grid grid-cols-2 gap-2">
+    <a href="/" class={box(exam === 'shi')} aria-current={exam === 'shi' ? 'page' : undefined}><b class="block text-lg">測量士</b><small class="text-xs text-ink-soft">午前 28問・150分</small></a>
+    <a href="/hoshi/" class={box(exam === 'hoshi')} aria-current={exam === 'hoshi' ? 'page' : undefined}><b class="block text-lg">測量士補</b><small class="text-xs text-ink-soft">28問・180分</small></a>
+  </div>
 </nav>
