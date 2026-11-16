@@ -119,7 +119,7 @@ export default function QuestionCard({ q, lawRefs, mode = 'page', onAnswered }: 
           <figure className="my-3">
             <img src={q.figure.src} alt={`第${q.num}問の図表`} loading="lazy"
               className="max-w-full h-auto border border-line rounded-dojo bg-white cursor-zoom-in" onClick={() => setZoom(q.figure!.src)} />
-            <figcaption className="text-xs text-ink-faint mt-1">図表をクリックすると拡大します</figcaption>
+            <figcaption className="text-xs text-ink-faint mt-1">図表を押すと拡大します</figcaption>
           </figure>
         )}
         {q.items.length > 0 && (
