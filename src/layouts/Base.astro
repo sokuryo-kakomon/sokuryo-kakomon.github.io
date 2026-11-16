@@ -45,6 +45,8 @@ const url = site.url + path;
   {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   {/* 演習・成績表など両方の試験で使うページで、?exam=hoshi なら横と上のメニューを測量士補にする（描く前に決める） */}
   <script is:inline>if (/[?&]exam=hoshi(&|$)/.test(location.search)) document.documentElement.dataset.exam = 'hoshi';</script>
+  {/* 最後に開いた試験（測量士補のページ・測量士の年度と問題のページだけで覚える。/ は覚えない）。/ の「前回は測量士補でした」に使う */}
+  <script is:inline>try { var lp = location.pathname, le = lp.indexOf('/hoshi') === 0 ? 'hoshi' : /^\/[rh]\d{2}/.test(lp) ? 'shi' : null; if (le) localStorage.setItem('sokuryo_last_exam', le); } catch (e) {}</script>
   <slot name="head" />
   <script is:inline>try { if (localStorage.getItem('narrow') === '1') document.documentElement.dataset.narrow = ''; } catch (e) {}</script>
 </head>

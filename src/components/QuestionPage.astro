@@ -3,7 +3,7 @@ import App from '../layouts/App.astro';
 import QuestionCard from './react/QuestionCard';
 import BookNote from './BookNote.astro';
 import KokonoCard from './KokonoCard.astro';
-import { byId, site, SITE_NAME, EXAMS } from '../lib/data';
+import { byId, site, SITE_NAME, EXAMS, ofYear, ofCategory } from '../lib/data';
 import type { Question } from '../lib/types';
 
 // 1問のページ。測量士は /r07/q1/、測量士補は /hoshi/r07/q1/
@@ -35,12 +35,14 @@ const exq = ex.id === 'shi' ? '' : 'exam=hoshi&';
 // 2026-11-16 に問題文・選択肢を原典（国土地理院の試験問題）どおりに直した測量士の49問（about の「修正の記録」・commit 6efe4e9〜5e737a6 の questions.json の差分）
 const FIXED_1116 = new Set(['r07-q5', 'r07-q28', 'r05-q1', 'r05-q2', 'r05-q4', 'r05-q5', 'r05-q7', 'r05-q9', 'r05-q10', 'r05-q11', 'r05-q12', 'r05-q13', 'r05-q14', 'r05-q15', 'r05-q16', 'r05-q17', 'r05-q18', 'r05-q19', 'r05-q20', 'r05-q21', 'r05-q23', 'r05-q24', 'r05-q25', 'r05-q26', 'r05-q27', 'r05-q28', 'r04-q1', 'r04-q2', 'r04-q3', 'r04-q4', 'r04-q5', 'r04-q7', 'r04-q8', 'r04-q9', 'r04-q10', 'r04-q11', 'r04-q12', 'r04-q13', 'r04-q14', 'r04-q15', 'r04-q16', 'r04-q17', 'r04-q18', 'r04-q19', 'r04-q20', 'r04-q22', 'r04-q23', 'r04-q24', 'r04-q25']);
 const fixed1116 = ex.id === 'shi' && FIXED_1116.has(q.id);
+// 答えた直後の「この年度を通しで解く」「〈分野〉だけ解く」の問題数
+const more = { yearN: ofYear(q.year, ex.id).length, catN: ofCategory(q.categorySlug, ex.id).length };
 ---
 <App title={title} description={q.description} path={q.url} ogType="article" jsonLd={jsonLd}>
   <nav class="text-sm text-ink-soft mb-2">{crumbs.map(([name, u]) => <><a href={u}>{name}</a> ／ </>)}第{q.num}問</nav>
   <h1 class="text-xl md:text-2xl mb-4 leading-snug">{q.title}<span class="block text-sm font-sans font-normal text-ink-soft mt-1">解答と解説</span></h1>
 
-  <QuestionCard client:load q={q} lawRefs={site.lawRefs} />
+  <QuestionCard client:load q={q} lawRefs={site.lawRefs} more={more} />
 
   {/* 次の問題は解説のすぐ下に（本・広告より上。検索から1問だけ見に来た人が続けて解けるように） */}
   <nav class="flex justify-between gap-3 mt-4">

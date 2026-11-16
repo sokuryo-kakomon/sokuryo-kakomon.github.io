@@ -6,9 +6,21 @@ const { exam } = Astro.props;
 const box = (on: boolean) => 'block text-center rounded-dojo border-2 px-3 py-2.5 no-underline ' + (on ? 'border-moss bg-moss-pale text-moss-deep' : 'border-line bg-card text-ink hover:border-moss');
 ---
 <nav class="mb-6 max-w-sm" aria-label="受ける試験の選択">
+  {/* 前に測量士補を開いた人が / に来た時だけ（自動では移さない。記録は Base.astro の sokuryo_last_exam） */}
+  {exam === 'shi' && <p id="last-hoshi" class="text-sm mb-2" hidden>前回は測量士補でした → <a href="/hoshi/" class="font-bold">測量士補へ</a></p>}
   <p class="text-sm font-bold text-ink-soft mb-1.5">どちらを受けますか？</p>
   <div class="grid grid-cols-2 gap-2">
-    <a href="/" class={box(exam === 'shi')} aria-current={exam === 'shi' ? 'page' : undefined}><b class="block text-lg">測量士</b><small class="text-xs text-ink-soft">午前 28問・150分</small></a>
-    <a href="/hoshi/" class={box(exam === 'hoshi')} aria-current={exam === 'hoshi' ? 'page' : undefined}><b class="block text-lg">測量士補</b><small class="text-xs text-ink-soft">28問・180分</small></a>
+    <a href="/" class={box(exam === 'shi')} aria-current={exam === 'shi' ? 'page' : undefined} data-pick="shi"><b class="block text-lg">{exam === 'shi' && <span class="sel">✓ 選択中</span>}測量士</b><small class="text-xs text-ink-soft">午前 28問・150分</small></a>
+    <a href="/hoshi/" class={box(exam === 'hoshi')} aria-current={exam === 'hoshi' ? 'page' : undefined} data-pick="hoshi"><b class="block text-lg">{exam === 'hoshi' && <span class="sel">✓ 選択中</span>}測量士補</b><small class="text-xs text-ink-soft">28問・180分</small></a>
   </div>
 </nav>
+<style>
+  .sel { display: block; width: fit-content; margin: 0 auto .15rem; padding: 0 .5rem; border-radius: 999px; background: var(--color-moss); color: #fff; font-size: .72rem; line-height: 1.5rem; font-weight: 700; }
+</style>
+<script is:inline>
+  try {
+    var lh = document.getElementById('last-hoshi');
+    if (lh && localStorage.getItem('sokuryo_last_exam') === 'hoshi') lh.hidden = false;
+    document.querySelectorAll('a[data-pick]').forEach(function (a) { a.addEventListener('click', function () { try { localStorage.setItem('sokuryo_last_exam', a.dataset.pick); } catch (e) {} }); });
+  } catch (e) {}
+</script>

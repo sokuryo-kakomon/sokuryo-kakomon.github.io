@@ -86,6 +86,8 @@ export default function MockExam() {
   const [qs, setQs] = useState<Record<string, Question>>({});
   const [graded, setGraded] = useState(false);
   const [now, setNow] = useState(Date.now());
+  // ページ内の確かめ（ブラウザの confirm の代わり）
+  const [ask, setAsk] = useState<{ text: string; sub?: string; ok: string; run: () => void } | null>(null);
   const prog = useStore($progress);
 
   useEffect(() => {
@@ -133,9 +135,10 @@ export default function MockExam() {
   if (!index) return <div className="card p-6 text-ink-soft">読み込み中…</div>;
 
   const ys = (exam === 'hoshi' ? S.hoshiYears ?? [] : S.years).filter((y) => index.some((x) => x.exam === exam && x.year === y.id));
-  // 選んでいる物（年度が未選択・この試験に無い年度なら最新の年度）
-  const cc = cat === 'weak' || (cat.startsWith('y:') && ys.some((y) => 'y:' + y.id === cat)) ? cat : 'y:' + ys[0].id;
+  // 選んでいる物（年度が未選択・この試験に無い年度なら ''＝まだ選んでいない。最初から選んだ状態にはしない）
+  const cc = cat === 'weak' || (cat.startsWith('y:') && ys.some((y) => 'y:' + y.id === cat)) ? cat : '';
   const begin = () => {
+    if (!cc) return;
     setPending(null);
     setRun(buildRun(index, prog, exam, cc)); setI(0); setGraded(false); setNow(Date.now()); window.scrollTo(0, 0);
   };
@@ -160,6 +163,20 @@ export default function MockExam() {
     window.scrollTo(0, 0);
   }
   const quit = () => { setRun(null); setGraded(false); try { localStorage.removeItem(KEY); } catch { /* 無くてよい */ } };
+  // 確かめの窓（文・大きい2つのボタン 48px）
+  const dlg = ask && (
+    <div className="modal-bg" onClick={() => setAsk(null)}>
+      <div className="modal max-w-md" onClick={(e) => e.stopPropagation()} role="alertdialog" aria-modal="true" aria-labelledby="mogi-ask">
+        <p id="mogi-ask" className="text-lg font-bold leading-relaxed">{ask.text}</p>
+        {ask.sub && <p className="text-[.95rem] text-ink-soft mt-1">{ask.sub}</p>}
+        <div className="mb-5" />
+        <div className="grid grid-cols-2 gap-3">
+          <button type="button" className="btn btn-primary min-h-12 text-base" onClick={() => { const f = ask.run; setAsk(null); f(); }}>{ask.ok}</button>
+          <button type="button" className="btn btn-ghost min-h-12 text-base" autoFocus onClick={() => setAsk(null)}>戻る</button>
+        </div>
+      </div>
+    </div>
+  );
 
   // ---------- 採点 ----------
   if (run && graded) {
@@ -236,12 +253,10 @@ export default function MockExam() {
     return (
       <div className="space-y-4">
         <div className="card px-3 py-2 md:px-4 md:py-3 flex items-center gap-3 text-sm sticky top-14 md:top-16 z-10">
-          <span className="serif text-lg whitespace-nowrap">{i + 1} <span className="text-ink-faint text-sm">/ {run.ids.length}</span></span>
-          <span className="text-ink-soft text-xs leading-tight">{EXAM[run.exam].name.replace(/（.*）/, '')}・{run.cat === 'weak' ? '間違えた問題' : ys.find((y) => 'y:' + y.id === run.cat)?.label}<span className="hidden sm:inline">・解答済み {n}</span></span>
+          <span className="text-ink-soft text-sm leading-tight">{EXAM[run.exam].name.replace(/（.*）/, '')}・{run.cat === 'weak' ? '間違えた問題' : ys.find((y) => 'y:' + y.id === run.cat)?.label}</span>
           <span className={'ml-auto font-mono text-base whitespace-nowrap ' + (remain < 600 ? 'text-shu font-bold' : '')}>残り {fmt(remain)}</span>
-          <button type="button" className="btn btn-primary btn-sm whitespace-nowrap shrink-0" onClick={() => { if (n === run.ids.length || confirm(`まだ ${run.ids.length - n}問 答えていません。採点しますか？`)) grade(); }}>採点する</button>
         </div>
-        <p className="text-xs text-ink-faint -mt-2">⏱ 閉じている間も時間は進みます</p>
+        <p className="text-sm text-ink-faint -mt-2">⏱ 閉じている間も時間は進みます</p>
         {/* 番号の一覧：スマホでは畳む（4段の番号が第1問を押し下げるため）。広い画面は今のまま並べる */}
         <details className="md:hidden card px-3 py-2" id="mogi-nums">
           <summary className="cursor-pointer text-sm font-bold text-moss select-none">問題の一覧（解答済み {n}/{run.ids.length}）</summary>
@@ -250,7 +265,7 @@ export default function MockExam() {
         <div className="hidden md:flex flex-wrap gap-1">{numBtns()}</div>
         {q ? (
           <article id="mogi-q" className="card p-5 md:p-7">
-            <div className="text-xs text-ink-faint mb-2">第{i + 1}問 ・ {q.categoryIcon} {q.category}（出典は採点のあとに出ます）</div>
+            <div className="text-sm text-ink-soft mb-2">第{i + 1}問 ・ {q.categoryIcon} {q.category}（出典は採点のあとに出ます）</div>
             <div className="qhtml">
               <p className="text-[1.04rem]" dangerouslySetInnerHTML={{ __html: q.statementHtml }} />
               {q.tablesHtml.map((t, k) => <div key={k} dangerouslySetInnerHTML={{ __html: t }} />)}
@@ -294,7 +309,12 @@ export default function MockExam() {
           <button type="button" className="btn btn-ghost flex-1" disabled={i === 0} onClick={() => { setI(i - 1); toQ(); }}>← 前の問題</button>
           <button type="button" className="btn btn-primary flex-1" disabled={i === run.ids.length - 1} onClick={() => { setI(i + 1); toQ(); }}>次の問題 →</button>
         </div>
-        <div className="text-center"><button type="button" className="btn btn-ghost btn-sm min-h-10 text-ink-soft" onClick={() => { if (confirm('この回をやめます（記録には残りません）。')) quit(); }}>この回をやめる</button></div>
+        {/* 採点は時計の隣でなく、問題を送るボタンの下に（広い画面も同じ） */}
+        <div className="text-center">
+          <button type="button" className="btn btn-primary text-base px-8 min-h-12" onClick={() => { if (n === run.ids.length) grade(); else setAsk({ text: '採点しますか？', sub: `まだ ${run.ids.length - n}問 答えていません。採点すると、この回は終わります。`, ok: '採点する', run: grade }); }}>採点する（解答済み {n}/{run.ids.length}）</button>
+        </div>
+        <div className="text-center"><button type="button" className="btn btn-ghost btn-sm min-h-10 text-ink-soft" onClick={() => setAsk({ text: 'この回をやめますか？', sub: '記録には残りません。', ok: 'やめる', run: quit })}>この回をやめる</button></div>
+        {dlg}
       </div>
     );
   }
@@ -318,10 +338,10 @@ export default function MockExam() {
         <div className="card p-5 border-2 border-moss">
           <div className="font-bold text-lg mb-1">前回の続きがあります</div>
           <p className="text-[.95rem] mb-3">{runName(pend)} ・ 解答済み {k}/{pend.ids.length}問 ・ {left > 0 ? `残り ${Math.floor(left / 3600)}:${String(Math.floor((left % 3600) / 60)).padStart(2, '0')}` : '時間切れ（開くと採点します）'}</p>
-          <p className="text-xs text-ink-faint -mt-2 mb-3">⏱ 閉じている間も時間は進みます。続きは、最後に答えた問題の次から開きます。</p>
+          <p className="text-sm text-ink-faint -mt-2 mb-3">⏱ 閉じている間も時間は進みます。続きは、最後に答えた問題の次から開きます。</p>
           <div className="flex flex-wrap gap-2">
             <button type="button" className="btn btn-primary text-base px-6" onClick={() => resume(pend)}>続きから解く</button>
-            <button type="button" className="btn btn-ghost" onClick={() => { if (confirm('前回の回をやめて、選び直します（記録には残りません）。')) { quit(); setPending(null); } }}>やめて選び直す</button>
+            <button type="button" className="btn btn-ghost" onClick={() => setAsk({ text: '前回の回をやめて、選び直しますか？', sub: '記録には残りません。', ok: 'やめる', run: () => { quit(); setPending(null); setCat('all'); } })}>やめて選び直す</button>
           </div>
         </div>
       ); })()}
@@ -337,24 +357,26 @@ export default function MockExam() {
         <p className="text-sm text-ink-soft mb-3">その年度の問題を第1問から順に、本番と同じ時間（28問なら{MIN}分）で解きます。途中では正誤を出さず、最後にまとめて採点します。無料で何回でも使えます。</p>
         <div className="grid gap-2 grid-cols-2 lg:grid-cols-3">
           {ys.map((y) => { const k = index.filter((x) => x.exam === exam && x.year === y.id).length; return (
-            <button key={y.id} type="button" className={tile + (cc === 'y:' + y.id ? on : off)} onClick={() => setCat('y:' + y.id)}>
+            <button key={y.id} type="button" className={tile + (cc === 'y:' + y.id ? on : off)} onClick={() => setCat('y:' + y.id)}
+              aria-label={`${y.label}・${k}問・${Math.round((MIN * k) / FULL)}分`} aria-pressed={cc === 'y:' + y.id}>
               <div className="font-bold">{y.label}</div>
               <div className="text-xs opacity-80">{k}問 ・ {Math.round((MIN * k) / FULL)}分</div>
             </button>
           ); })}
-          <button type="button" className={tile + 'col-span-2 lg:col-span-3 ' + (cc === 'weak' ? on : off)} onClick={() => setCat('weak')}>
+          <button type="button" className={tile + 'col-span-2 lg:col-span-3 ' + (cc === 'weak' ? on : off)} onClick={() => setCat('weak')} aria-pressed={cc === 'weak'}>
             <div className="font-bold">❗ 間違えた問題だけ</div>
             <div className="text-xs opacity-80">間違えた問題・要復習（いま {weakN}問）を、間違えた問題を先に、古い順に最大{FULL}問</div>
           </button>
         </div>
-        <p className="text-xs text-ink-soft mt-2">{cc === 'weak' ? '選んだら、下の「間違えた問題を始める」を押します。' : `年度を選んで、下の「${yLabel}を始める」を押します。`}</p>
+        <p className="text-xs text-ink-soft mt-2">{cc === 'weak' ? '選んだら、下の「間違えた問題を始める」を押します。' : cc ? `下の「${yLabel}を始める」を押すと始まります。` : '年度を選ぶと、下のボタンで始められます。'}</p>
         <div className="sticky bottom-0 -mx-5 -mb-5 mt-4 px-5 py-3 bg-card/95 backdrop-blur border-t border-line rounded-b-dojo flex flex-wrap items-center gap-3">
-          <button type="button" className="btn btn-primary text-base px-6 flex-1 sm:flex-none" disabled={n === 0} onClick={begin}>
-            {cc === 'weak' ? '間違えた問題' : yLabel}を始める（{n}問・{minutes}分）
+          <button type="button" className="btn btn-primary text-base px-6 flex-1 sm:flex-none" disabled={!cc || n === 0} onClick={begin}>
+            {!cc ? '年度を選んでください' : <>{cc === 'weak' ? '間違えた問題' : yLabel}を始める（{n}問・{minutes}分）</>}
           </button>
           {cc === 'weak' && n === 0 && <span className="text-sm text-ink-soft">間違えた問題はいまありません。</span>}
         </div>
       </div>
+      {dlg}
     </div>
   );
 }
